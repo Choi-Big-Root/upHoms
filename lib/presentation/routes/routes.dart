@@ -47,5 +47,5 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const PropertyBookNowWidget(),
     ),
   ],
-  initialLocation: '/property_book_now', //UI 작업이 완료되면 /login 고정.
+  initialLocation: '/home', //UI 작업이 완료되면 /login 고정.
 );

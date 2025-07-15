@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/custom/custom_font_weight.dart';
@@ -51,7 +52,9 @@ class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.pop();
+                              },
                               icon: const Icon(
                                 Icons.arrow_back_rounded,
                                 color: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/custom/custom_font_weight.dart';
@@ -41,7 +42,9 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
             borderRadius: BorderRadius.circular(30),
           ),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.pop();
+            },
             icon: const Icon(
               Icons.arrow_back_rounded,
               color: Color(0xFF95A1AC),
@@ -230,7 +233,9 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onTap: () {},
+                          onTap: () {
+                            context.push('/property_details');
+                          },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
