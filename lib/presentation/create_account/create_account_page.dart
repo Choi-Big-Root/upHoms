@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../core/constants.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/custom/custom_theme.dart';
 import '../../core/theme/theme_data.dart';
@@ -29,9 +30,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         decoration: BoxDecoration(
           color: colorScheme.tertiary,
           image: DecorationImage(
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
             image: Image.network(
-              'https://picsum.photos/id/300/200/400.jpg',
+              '${AppConstants.imageFolderPath}/main_bg.png',
             ).image,
           ),
         ),
@@ -74,7 +75,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             if (!(Theme.of(context).brightness ==
                                 Brightness.dark))
                               Image.network(
-                                'https://picsum.photos/id/238/200/200.jpg',
+                                '${AppConstants.imageFolderPath}/logo.png',
                                 width: 200,
                                 height: 60,
                                 fit: BoxFit.fitWidth,
@@ -82,7 +83,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             //다크 일때 로고 이미지
                             if(Theme.of(context).brightness == Brightness.dark)
                               Image.network(
-                                'https://picsum.photos/id/238/200/200.jpg',
+                                '${AppConstants.imageFolderPath}/logo.png',
                                 width: 200,
                                 height: 60,
                                 fit: BoxFit.fitWidth,
@@ -128,14 +129,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: colorScheme.lineGray!,
+                                      color: colorScheme.lineGray,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0X00000000),
+                                    borderSide: BorderSide(
+                                      color: colorScheme.lineGray,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
@@ -181,7 +182,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           children: [
                             Expanded(
                               child: TextFormField(
-                                obscureText: false,
+                                obscureText: !showPassword,
                                 decoration: InputDecoration(
                                   labelText: 'Password',
                                   labelStyle: GoogleFonts.urbanist(
@@ -193,14 +194,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: colorScheme.lineGray!,
+                                      color: colorScheme.lineGray,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0x00000000),
+                                    borderSide: BorderSide(
+                                      color: colorScheme.lineGray,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8),

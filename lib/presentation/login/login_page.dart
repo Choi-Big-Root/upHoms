@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import '../../core/constants.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
 import '../../data/datasources/user_remote_data_source.dart';
@@ -33,6 +34,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final colorScheme = context.colors;
     final textScheme = Theme.of(context).textTheme;
+    // BlocProvider: LoginBloc 인스턴스를 생성하고 위젯 트리에 제공합니다.
+    // 이 Bloc은 LoginUseCase를 사용하여 로그인 로직을 처리합니다.
     return BlocProvider(
       create: (context) => LoginBloc(
         loginUseCase: LoginUseCase(
@@ -41,6 +44,9 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+      // BlocConsumer: LoginBloc의 상태 변화를 수신하고 UI를 업데이트합니다.
+      // listener는 상태 변화에 따라 스낵바를 표시하거나 화면을 전환하는 등의 부수 효과를 처리합니다.
+      // builder는 현재 상태에 따라 UI를 빌드합니다.
       child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           state.whenOrNull(
@@ -66,9 +72,9 @@ class _LoginPageState extends State<LoginPage> {
               decoration: BoxDecoration(
                 color: colorScheme.tertiary,
                 image: DecorationImage(
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                   image: Image.network(
-                    'https://picsum.photos/id/338/200/400.jpg',
+                    '${AppConstants.imageFolderPath}/main_bg.png',
                   ).image,
                 ),
               ),
@@ -115,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if (!(Theme.of(context).brightness ==
                                       Brightness.dark))
                                     Image.network(
-                                      'https://picsum.photos/id/238/200/200.jpg',
+                                      '${AppConstants.imageFolderPath}/logo.png',
                                       width: 200,
                                       height: 60,
                                       fit: BoxFit.fitWidth,
@@ -123,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if (Theme.of(context).brightness ==
                                       Brightness.dark)
                                     Image.network(
-                                      'https://picsum.photos/id/238/200/200.jpg',
+                                      '${AppConstants.imageFolderPath}/logo.png',
                                       width: 200,
                                       height: 60,
                                       fit: BoxFit.fitWidth,
