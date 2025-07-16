@@ -2,9 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
+import '../common_widgets/breakfast_selection_grid.dart';
+import '../common_widgets/credit_card_form.dart';
+import '../common_widgets/total_widget.dart';
 
 class PropertyBookNowWidget extends StatefulWidget {
   const PropertyBookNowWidget({super.key});
@@ -14,6 +18,43 @@ class PropertyBookNowWidget extends StatefulWidget {
 }
 
 class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
+  DateTime? _selectedDate0;
+  DateTime? _selectedDate1;
+  final DateFormat _dateFormatter = DateFormat('yyyy-MM-dd');
+
+  int _guestCount = 1;
+
+  Future<void> _pickDate(BuildContext context, int key) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2050),
+    );
+
+    if (picked == null) return;
+
+    setState(() {
+      if (key == 0 && picked != _selectedDate0) {
+        _selectedDate0 = picked;
+      } else if (key == 1 && picked != _selectedDate1) {
+        _selectedDate1 = picked;
+      }
+    });
+  }
+
+  void _increment() {
+    setState(() {
+      if (_guestCount < 8) _guestCount++;
+    });
+  }
+
+  void _decrement() {
+    setState(() {
+      if (_guestCount > 0) _guestCount--;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colors;
@@ -74,7 +115,6 @@ class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
                             'Book Now',
                             style: GoogleFonts.urbanist(
                               textStyle: textScheme.headlineMedium,
-                              letterSpacing: 0.0,
                             ),
                           ),
                         ),
@@ -117,7 +157,6 @@ class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
                             '[propertyName]',
                             style: GoogleFonts.urbanist(
                               textStyle: textScheme.displaySmall,
-                              letterSpacing: 0.0,
                             ),
                           ),
                         ),
@@ -141,7 +180,6 @@ class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
                               fontWeight: CustomFontWeight.normal,
                               fontSize: 12,
                               color: const Color(0xFF8B97A2),
-                              letterSpacing: 0.0,
                             ),
                           ),
                         ),
@@ -155,8 +193,517 @@ class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
                     endIndent: 12,
                     color: colorScheme.lineGray,
                   ),
-                  //Padding(padding: )
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      24,
+                      16,
+                      24,
+                      0,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Choose Dates',
+                          style: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      16,
+                      12,
+                      16,
+                      0,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                            0,
+                            0,
+                            0,
+                            8,
+                          ),
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () {
+                              _pickDate(context, 0);
+                            },
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width * 0.44,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: colorScheme.secondaryBackground,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: colorScheme.lineGray,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsetsGeometry.fromSTEB(
+                                  12,
+                                  5,
+                                  12,
+                                  5,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      _selectedDate0 == null
+                                          ? 'Choose Date'
+                                          : _dateFormatter.format(
+                                              _selectedDate0!,
+                                            ),
+                                      style: GoogleFonts.urbanist(
+                                        textStyle: textScheme.titleSmall,
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.date_range_outlined,
+                                      color: colorScheme.grayIcon,
+                                      size: 24,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () {
+                            _pickDate(context, 1);
+                          },
+                          child: Container(
+                            width: MediaQuery.sizeOf(context).width * 0.44,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: colorScheme.secondaryBackground,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: colorScheme.lineGray,
+                                width: 1,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsetsGeometry.fromSTEB(
+                                12,
+                                5,
+                                12,
+                                5,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    _selectedDate1 == null
+                                        ? 'Choose Date'
+                                        : _dateFormatter.format(
+                                            _selectedDate1!,
+                                          ),
+                                    style: GoogleFonts.urbanist(
+                                      textStyle: textScheme.titleSmall,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.date_range_outlined,
+                                    color: colorScheme.grayIcon,
+                                    size: 24,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      24,
+                      16,
+                      24,
+                      0,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Number of Guestes',
+                          style: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12),
+                          child: Container(
+                            width: 160,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: colorScheme.secondaryBackground,
+                              borderRadius: BorderRadius.circular(40),
+                              shape: BoxShape.rectangle,
+                              border: Border.all(
+                                color: colorScheme.lineGray,
+                                width: 1,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                10,
+                                0,
+                                10,
+                                0,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      _decrement();
+                                    },
+                                    icon: Icon(
+                                      Icons.remove,
+                                      color: colorScheme.grayIcon,
+                                    ),
+                                  ),
+                                  Text(
+                                    '$_guestCount',
+                                    style: GoogleFonts.urbanist(
+                                      textStyle: textScheme.headlineMedium,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      _increment();
+                                    },
+                                    icon: Icon(
+                                      Icons.add,
+                                      color: colorScheme.primary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                            24,
+                            16,
+                            24,
+                            0,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Choose an Option',
+                                style: GoogleFonts.urbanist(
+                                  textStyle: textScheme.bodyMedium,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      24,
+                      12,
+                      24,
+                      12,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                              0,
+                              8,
+                              0,
+                              8,
+                            ),
+                            child: BreakFastSelectionGrid(
+                              options: [
+                                'Breakfast',
+                                'No Breakfast',
+                                'Hot Tub Access',
+                                'No Access',
+                              ],
+                              maxItemsPerRow: 2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsGeometry.fromSTEB(24, 12, 24, 4),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Payment Infomation',
+                          style: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                    child: CreditCardForm(
+                      obscureNumber: true,
+                      obscureCvv: false,
+                      spacing: 10,
+                    ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          24,
+                          24,
+                          24,
+                          0,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Base Price',
+                              style: GoogleFonts.lexendDeca(
+                                textStyle: textScheme.bodySmall?.copyWith(
+                                  fontWeight: CustomFontWeight.normal,
+                                  color: const Color(0xFF8B97A2),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '\$156.00',
+                              style: GoogleFonts.urbanist(
+                                textStyle: textScheme.titleSmall,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          24,
+                          12,
+                          24,
+                          0,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Taxes',
+                              style: GoogleFonts.lexendDeca(
+                                textStyle: textScheme.bodySmall?.copyWith(
+                                  fontWeight: CustomFontWeight.normal,
+                                  color: const Color(0xFF8B97A2),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '\$24.20',
+                              style: GoogleFonts.urbanist(
+                                textStyle: textScheme.titleSmall,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          24,
+                          12,
+                          24,
+                          0,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Cleaning Fee',
+                              style: GoogleFonts.lexendDeca(
+                                textStyle: textScheme.bodySmall?.copyWith(
+                                  fontWeight: CustomFontWeight.normal,
+                                  color: const Color(0xFF8B97A2),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '\$40.00',
+                              style: GoogleFonts.urbanist(
+                                textStyle: textScheme.titleSmall,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          24,
+                          12,
+                          24,
+                          24,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  'Total',
+                                  style: GoogleFonts.lexendDeca(
+                                    textStyle: textScheme.headlineSmall
+                                        ?.copyWith(
+                                          fontWeight: CustomFontWeight.normal,
+                                          color: const Color(0xFF8B97A2),
+                                        ),
+                                  ),
+                                ),
+                                Container(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.transparent,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      await showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.transparent,
+                                        barrierColor: const Color(0xB3000000),
+                                        context: context,
+                                        builder: (context) {
+                                          return Padding(
+                                            padding: MediaQuery.viewInsetsOf(
+                                              context,
+                                            ),
+                                            child: const SizedBox(
+                                              height: 280,
+                                              child: TotalWidget(),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      size: 18,
+                                      color: colorScheme.grayIcon,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              '\$230.20',
+                              style: GoogleFonts.urbanist(
+                                textStyle: textScheme.displaySmall,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.sizeOf(context).width,
+            height: 100, // 임시
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              boxShadow: [
+                const BoxShadow(
+                  color: Color(0x55000000),
+                  blurRadius: 7,
+                  offset: Offset(0.0, -1),
+                ),
+              ],
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(0),
+                bottomRight: Radius.circular(0),
+                topRight: Radius.circular(16),
+                topLeft: Radius.circular(16),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 34),
+              child: ElevatedButton(
+                onPressed: () {
+                  context.go('/trip_details');
+                },
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(130, 60),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  backgroundColor: colorScheme.primary,
+                  elevation: 0,
+                  side: const BorderSide(color: Colors.transparent, width: 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: Text(
+                  'Book Now',
+                  style: GoogleFonts.lexendDeca(
+                    textStyle: textScheme.displaySmall?.copyWith(
+                      fontSize: 20,
+                      fontWeight: CustomFontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
