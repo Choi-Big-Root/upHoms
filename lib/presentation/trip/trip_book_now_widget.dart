@@ -10,14 +10,14 @@ import '../common_widgets/breakfast_selection_grid.dart';
 import '../common_widgets/credit_card_form.dart';
 import '../common_widgets/total_widget.dart';
 
-class PropertyBookNowWidget extends StatefulWidget {
-  const PropertyBookNowWidget({super.key});
+class TripBookNowWidget extends StatefulWidget {
+  const TripBookNowWidget({super.key});
 
   @override
-  State<PropertyBookNowWidget> createState() => _PropertyBookNowWidgetState();
+  State<TripBookNowWidget> createState() => _TripBookNowWidgetState();
 }
 
-class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
+class _TripBookNowWidgetState extends State<TripBookNowWidget> {
   DateTime? _selectedDate0;
   DateTime? _selectedDate1;
   final DateFormat _dateFormatter = DateFormat('yyyy-MM-dd');
@@ -154,7 +154,7 @@ class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
                       children: [
                         Expanded(
                           child: Text(
-                            '[propertyName]',
+                            '[tripName]',
                             style: GoogleFonts.urbanist(
                               textStyle: textScheme.displaySmall,
                             ),
@@ -175,7 +175,7 @@ class _PropertyBookNowWidgetState extends State<PropertyBookNowWidget> {
                       children: [
                         Expanded(
                           child: Text(
-                            '[propertyNeighborhood]',
+                            '[tripNeighborhood]',
                             style: GoogleFonts.lexendDeca(
                               fontWeight: CustomFontWeight.normal,
                               fontSize: 12,

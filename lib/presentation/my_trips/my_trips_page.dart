@@ -133,7 +133,7 @@ class _MyTripsPageState extends State<MyTripsPage>
                                       highlightColor: Colors.transparent,
                                       onTap: () {
                                         // mytrips detail 이동.
-                                        context.push('/trip_details');
+                                        context.push('/my_trip_details');
                                       },
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,

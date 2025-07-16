@@ -6,14 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
 
-class PropertySearchWidget extends StatefulWidget {
-  const PropertySearchWidget({super.key});
+class TripSearchWidget extends StatefulWidget {
+  const TripSearchWidget({super.key});
 
   @override
-  State<PropertySearchWidget> createState() => _PropertySearchWidgetState();
+  State<TripSearchWidget> createState() => _TripSearchWidgetState();
 }
 
-class _PropertySearchWidgetState extends State<PropertySearchWidget> {
+class _TripSearchWidgetState extends State<TripSearchWidget> {
   final testList = [
     ['test_title0', 'test_descript0', 4.8],
     ['test_title1', 'test_descript1', 4.2],
@@ -230,7 +230,7 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () {
-                            context.push('/property_details');
+                            context.push('/trip_details');
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -265,7 +265,7 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                                   0,
                                 ),
                                 child: Text(
-                                  '[propertyName]',
+                                  '[tripName]',
                                   style: GoogleFonts.urbanist(
                                     textStyle: textScheme.headlineSmall
                                         ?.copyWith(
@@ -282,7 +282,7 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                                   0,
                                 ),
                                 child: Text(
-                                  '[propertyNeighborhood]',
+                                  '[tripNeighborhood]',
                                   style: GoogleFonts.lexendDeca(
                                     textStyle: textScheme.bodySmall?.copyWith(
                                       color: colorScheme.grayIcon,

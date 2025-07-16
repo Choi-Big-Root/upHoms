@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../home/home_page.dart';
 import '../my_trips/my_trips_page.dart';
-import '../my_trips/widgets/trip_details_widget.dart';
+import '../my_trips/widgets/my_trip_details_widget.dart';
 import '../profile/profile_page.dart';
 import 'main_shell.dart';
 
 import '../create_account/create_account_page.dart';
 import '../login/login_page.dart';
-import '../property/property_book_now_widget.dart';
-import '../property/property_details_widget.dart';
-import '../property/property_review_widget.dart';
-import '../property/property_search_widget.dart';
+import '../trip/trip_book_now_widget.dart';
+import '../trip/trip_details_widget.dart';
+import '../trip/trip_review_widget.dart';
+import '../trip/trip_search_widget.dart';
 import 'route_path.dart';
 
 //  루트 네비게이터 키 생성
@@ -60,24 +60,24 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const CreateAccountPage(),
     ),
     GoRoute(
-      path: RoutePath.propertyDetails,
-      name: 'property_details',
-      builder: (context, state) => const PropertyDetailsWidget(),
+      path: RoutePath.myTripDetails,
+      name: 'my_trip_details',
+      builder: (context, state) => const MyTripDetailsWidget(),
     ),
     GoRoute(
-      path: RoutePath.propertySearch,
-      name: 'property_search',
-      builder: (context, state) => const PropertySearchWidget(),
+      path: RoutePath.tripSearch,
+      name: 'trip_search',
+      builder: (context, state) => const TripSearchWidget(),
     ),
     GoRoute(
-      path: RoutePath.propertyReview,
-      name: 'property_review',
-      builder: (context, state) => const PropertyReviewWidget(),
+      path: RoutePath.tripReview,
+      name: 'trip_review',
+      builder: (context, state) => const TripReviewWidget(),
     ),
     GoRoute(
-      path: RoutePath.propertyBookNow,
-      name: 'property_book_now',
-      builder: (context, state) => const PropertyBookNowWidget(),
+      path: RoutePath.tripBookNow,
+      name: 'trip_book_now',
+      builder: (context, state) => const TripBookNowWidget(),
     ),
     GoRoute(
       path: RoutePath.tripDetails,

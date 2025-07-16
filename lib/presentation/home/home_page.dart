@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                               height: 40,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  context.push('/property_search');
+                                  context.push('/trip_search');
                                 },
                                 style: ButtonStyle(
                                   padding: WidgetStateProperty.all(
@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                         hoverColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: () {
-                          context.push('/property_details');
+                          context.push('/trip_details');
                         },
                         child: Column(
                           children: [

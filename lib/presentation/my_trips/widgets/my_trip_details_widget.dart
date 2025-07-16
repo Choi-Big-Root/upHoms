@@ -10,14 +10,14 @@ import '../../common_widgets/review_trip_widget.dart';
 import '../../common_widgets/total_widget.dart';
 import 'cancel_trip_widget.dart';
 
-class TripDetailsWidget extends StatefulWidget {
-  const TripDetailsWidget({super.key});
+class MyTripDetailsWidget extends StatefulWidget {
+  const MyTripDetailsWidget({super.key});
 
   @override
-  State<TripDetailsWidget> createState() => _TripDetailsWidgetState();
+  State<MyTripDetailsWidget> createState() => _MyTripDetailsWidgetState();
 }
 
-class _TripDetailsWidgetState extends State<TripDetailsWidget> {
+class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colors;
@@ -167,7 +167,7 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          '[propertyNeighborhood]',
+                          '[tripNeighborhood]',
                           style: GoogleFonts.urbanist(
                             textStyle: textScheme.headlineMedium,
                           ),
@@ -217,7 +217,7 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          '[propertyName]',
+                          '[tripName]',
                           style: GoogleFonts.urbanist(
                             textStyle: textScheme.headlineSmall,
                           ),
@@ -233,14 +233,14 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () {
-                        context.push('/property_details');
+                        context.push('/trip_details');
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '[propertyAddress]',
+                            '[tripAddress]',
                             style: GoogleFonts.lexendDeca(
                               textStyle: textScheme.bodySmall?.copyWith(
                                 fontWeight: CustomFontWeight.normal,

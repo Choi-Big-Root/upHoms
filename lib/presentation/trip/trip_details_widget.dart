@@ -6,14 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
 
-class PropertyDetailsWidget extends StatefulWidget {
-  const PropertyDetailsWidget({super.key});
+class TripDetailsWidget extends StatefulWidget {
+  const TripDetailsWidget({super.key});
 
   @override
-  State<PropertyDetailsWidget> createState() => _PropertyDetailsWidgetState();
+  State<TripDetailsWidget> createState() => _TripDetailsWidgetState();
 }
 
-class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget>
+class _TripDetailsWidgetState extends State<TripDetailsWidget>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
@@ -165,7 +165,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget>
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () {
-                        context.push('/property_review');
+                        context.push('/trip_review');
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -687,7 +687,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget>
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      context.push('/property_book_now');
+                      context.push('/trip_book_now');
                     },
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(130, 50),

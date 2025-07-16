@@ -6,14 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
 
-class PropertyReviewWidget extends StatefulWidget {
-  const PropertyReviewWidget({super.key});
+class TripReviewWidget extends StatefulWidget {
+  const TripReviewWidget({super.key});
 
   @override
-  State<PropertyReviewWidget> createState() => _PropertyReviewWidgetState();
+  State<TripReviewWidget> createState() => _TripReviewWidgetState();
 }
 
-class _PropertyReviewWidgetState extends State<PropertyReviewWidget> {
+class _TripReviewWidgetState extends State<TripReviewWidget> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colors;

@@ -319,22 +319,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: SizedBox(
-                                      width: 170,
-                                      child: Text(
-                                        'Forgot Password?',
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.urbanist(
-                                          textStyle: textScheme.titleSmall,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                   Padding(
                                     padding:
                                         const EdgeInsetsDirectional.fromSTEB(
@@ -344,7 +330,7 @@ class _LoginPageState extends State<LoginPage> {
                                           0,
                                         ),
                                     child: SizedBox(
-                                      width: 130,
+                                      width: 230,
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: state.maybeWhen(
