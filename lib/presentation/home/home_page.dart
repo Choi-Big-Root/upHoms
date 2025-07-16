@@ -75,7 +75,6 @@ class _HomePageState extends State<HomePage> {
                             textStyle: textScheme.displaySmall?.copyWith(
                               color: colorScheme.tertiary,
                             ),
-                            letterSpacing: 0.0,
                           ),
                         ),
                       ],
@@ -93,7 +92,6 @@ class _HomePageState extends State<HomePage> {
                             textStyle: textScheme.titleSmall?.copyWith(
                               color: colorScheme.grayIcon,
                               fontWeight: CustomFontWeight.light,
-                              letterSpacing: 0.0,
                             ),
                           ),
                         ),
@@ -134,7 +132,6 @@ class _HomePageState extends State<HomePage> {
                                     textStyle: textScheme.bodyMedium?.copyWith(
                                       color: colorScheme.grayIcon,
                                     ),
-                                    letterSpacing: 0.0,
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
@@ -172,7 +169,6 @@ class _HomePageState extends State<HomePage> {
                                 style: GoogleFonts.urbanist(
                                   textStyle: textScheme.bodyMedium?.copyWith(
                                     color: colorScheme.tertiary,
-                                    letterSpacing: 0.0,
                                   ),
                                 ),
                               ),
@@ -223,7 +219,6 @@ class _HomePageState extends State<HomePage> {
                                     textStyle: textScheme.titleSmall?.copyWith(
                                       color: Colors.white,
                                     ),
-                                    letterSpacing: 0.0,
                                   ),
                                 ),
                               ),
@@ -312,7 +307,6 @@ class _HomePageState extends State<HomePage> {
                                       testData[0].toString(),
                                       style: GoogleFonts.urbanist(
                                         textStyle: textScheme.headlineSmall,
-                                        letterSpacing: 0.0,
                                       ),
                                     ),
                                   ),
@@ -334,7 +328,6 @@ class _HomePageState extends State<HomePage> {
                                       testData[1].toString(),
                                       style: GoogleFonts.urbanist(
                                         textStyle: textScheme.bodyMedium,
-                                        letterSpacing: 0.0,
                                       ),
                                     ),
                                   ),
@@ -371,7 +364,6 @@ class _HomePageState extends State<HomePage> {
                                         testData[2].toString(),
                                         style: GoogleFonts.urbanist(
                                           textStyle: textScheme.bodyMedium,
-                                          letterSpacing: 0.0,
                                         ),
                                       ),
                                     ),
@@ -387,7 +379,6 @@ class _HomePageState extends State<HomePage> {
                                         'Rating',
                                         style: GoogleFonts.urbanist(
                                           textStyle: textScheme.bodyMedium,
-                                          letterSpacing: 0.0,
                                         ),
                                       ),
                                     ),

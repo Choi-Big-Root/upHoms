@@ -144,7 +144,6 @@ class _LoginPageState extends State<LoginPage> {
                                   'Welcome Back,',
                                   style: GoogleFonts.urbanist(
                                     textStyle: textScheme.displaySmall,
-                                    letterSpacing: 0.0,
                                   ),
                                 ),
                               ),
@@ -163,12 +162,10 @@ class _LoginPageState extends State<LoginPage> {
                                         labelText: 'Email Address',
                                         labelStyle: GoogleFonts.urbanist(
                                           textStyle: textScheme.bodyMedium,
-                                          letterSpacing: 0.0,
                                         ),
                                         hintText: 'Enter your email here...',
                                         hintStyle: GoogleFonts.urbanist(
                                           textStyle: textScheme.bodyMedium,
-                                          letterSpacing: 0.0,
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -219,7 +216,6 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       style: GoogleFonts.urbanist(
                                         textStyle: textScheme.titleSmall,
-                                        letterSpacing: 0.0,
                                       ),
                                     ),
                                   ),
@@ -240,12 +236,10 @@ class _LoginPageState extends State<LoginPage> {
                                         labelText: 'Password',
                                         labelStyle: GoogleFonts.urbanist(
                                           textStyle: textScheme.bodyMedium,
-                                          letterSpacing: 0.0,
                                         ),
                                         hintText: 'Enter your password here...',
                                         hintStyle: GoogleFonts.urbanist(
                                           textStyle: textScheme.bodyMedium,
-                                          letterSpacing: 0.0,
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -310,7 +304,6 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       style: GoogleFonts.urbanist(
                                         textStyle: textScheme.titleSmall,
-                                        letterSpacing: 0.0,
                                       ),
                                     ),
                                   ),
@@ -338,7 +331,6 @@ class _LoginPageState extends State<LoginPage> {
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.urbanist(
                                           textStyle: textScheme.titleSmall,
-                                          letterSpacing: 0.0,
                                         ),
                                       ),
                                     ),
@@ -430,7 +422,6 @@ class _LoginPageState extends State<LoginPage> {
                                         fontWeight: CustomFontWeight.normal,
                                         color: colorScheme.grayIcon,
                                         fontSize: 14,
-                                        letterSpacing: 0.0,
                                       ),
                                     ),
                                   ),
@@ -446,7 +437,6 @@ class _LoginPageState extends State<LoginPage> {
                                           textStyle: textScheme.titleSmall,
                                           fontWeight: CustomFontWeight.bold,
                                           fontSize: 14,
-                                          letterSpacing: 0.0,
                                           color: colorScheme.turquoise,
                                         ),
                                       ),

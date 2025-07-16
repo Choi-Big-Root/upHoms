@@ -57,7 +57,6 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
           style: GoogleFonts.lexendDeca(
             textStyle: textScheme.titleMedium?.copyWith(
               color: colorScheme.tertiary,
-              letterSpacing: 0.0,
             ),
           ),
         ),
@@ -111,7 +110,6 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                                   textStyle: textScheme.bodyMedium?.copyWith(
                                     color: colorScheme.grayIcon,
                                   ),
-                                  letterSpacing: 0.0,
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
@@ -149,7 +147,6 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                               style: GoogleFonts.urbanist(
                                 textStyle: textScheme.bodyMedium?.copyWith(
                                   color: colorScheme.tertiary,
-                                  letterSpacing: 0.0,
                                 ),
                               ),
                             ),
@@ -187,7 +184,6 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                               style: GoogleFonts.urbanist(
                                 textStyle: textScheme.titleSmall?.copyWith(
                                   color: Colors.white,
-                                  letterSpacing: 0.0,
                                 ),
                               ),
                             ),
@@ -274,7 +270,6 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                                     textStyle: textScheme.headlineSmall
                                         ?.copyWith(
                                           color: colorScheme.darkText,
-                                          letterSpacing: 0.0,
                                         ),
                                   ),
                                 ),
@@ -291,7 +286,6 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                                   style: GoogleFonts.lexendDeca(
                                     textStyle: textScheme.bodySmall?.copyWith(
                                       color: colorScheme.grayIcon,
-                                      letterSpacing: 0.0,
                                     ),
                                   ),
                                 ),
@@ -333,7 +327,6 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                                                   color: const Color(
                                                     0xFF8B97A2,
                                                   ),
-                                                  letterSpacing: 0.0,
                                                 ),
                                           ),
                                         ),
@@ -354,7 +347,6 @@ class _PropertySearchWidgetState extends State<PropertySearchWidget> {
                                                   fontWeight:
                                                       CustomFontWeight.normal,
                                                   fontSize: 12,
-                                                  letterSpacing: 0.0,
                                                   color: const Color(0xFF8B97A2),
                                                 ),
                                           ),

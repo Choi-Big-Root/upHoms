@@ -103,7 +103,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             'Welcome Back,',
                             style: GoogleFonts.urbanist(
                               textStyle: textScheme.displaySmall,
-                              letterSpacing: 0.0,
                             ),
                           ),
                         ),
@@ -122,12 +121,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   labelText: 'Email Address',
                                   labelStyle: GoogleFonts.urbanist(
                                     textStyle: textScheme.bodyMedium,
-                                    letterSpacing: 0.0,
                                   ),
                                   hintText: 'Enter your email here...',
                                   hintStyle: GoogleFonts.urbanist(
                                     textStyle: textScheme.bodyMedium,
-                                    letterSpacing: 0.0,
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -169,7 +166,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 ),
                                 style: GoogleFonts.urbanist(
                                   textStyle: textScheme.titleSmall,
-                                  letterSpacing: 0.0,
                                 ),
                                 //validator: ,
                               ),
@@ -190,12 +186,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   labelText: 'Password',
                                   labelStyle: GoogleFonts.urbanist(
                                     textStyle: textScheme.bodyMedium,
-                                    letterSpacing: 0.0,
                                   ),
                                   hintText: 'Enter your password here...',
                                   hintStyle: GoogleFonts.urbanist(
                                     textStyle: textScheme.bodyMedium,
-                                    letterSpacing: 0.0,
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -251,7 +245,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 ),
                                 style: GoogleFonts.urbanist(
                                   textStyle: textScheme.titleSmall,
-                                  letterSpacing: 0.0,
                                 ),
                               ),
                             ),
@@ -335,7 +328,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   textStyle: textScheme.bodyMedium,
                                   color: colorScheme.secondaryText,
                                   fontSize: 14,
-                                  letterSpacing: 0.0,
                                 ),
                               ),
                             ),
@@ -350,7 +342,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     textStyle: textScheme.titleSmall,
                                     fontWeight: CustomFontWeight.bold,
                                     fontSize: 14,
-                                    letterSpacing: 0.0,
                                     color: colorScheme.turquoise,
                                   ),
                                 ),

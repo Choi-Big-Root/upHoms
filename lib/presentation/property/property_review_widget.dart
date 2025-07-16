@@ -46,7 +46,6 @@ class _PropertyReviewWidgetState extends State<PropertyReviewWidget> {
           'Reviews',
           style: GoogleFonts.urbanist(
             textStyle: textScheme.headlineSmall,
-            letterSpacing: 0.0,
           ),
         ),
         actions: [],
@@ -95,7 +94,6 @@ class _PropertyReviewWidgetState extends State<PropertyReviewWidget> {
                                 textStyle: textScheme.displaySmall?.copyWith(
                                   fontWeight: CustomFontWeight.bold,
                                   fontSize: 28,
-                                  letterSpacing: 0.0,
                                 ),
                               ),
                             ),
@@ -107,7 +105,6 @@ class _PropertyReviewWidgetState extends State<PropertyReviewWidget> {
                                 fontWeight: CustomFontWeight.normal,
                                 fontSize: 12,
                                 color: const Color(0xFF95A1AC),
-                                letterSpacing: 0.0,
                               ),
                             ),
                           ),
@@ -134,7 +131,6 @@ class _PropertyReviewWidgetState extends State<PropertyReviewWidget> {
                                         ?.copyWith(
                                           fontWeight: CustomFontWeight.bold,
                                           fontSize: 28,
-                                          letterSpacing: 0.0,
                                         ),
                                   ),
                                 ),
@@ -161,7 +157,6 @@ class _PropertyReviewWidgetState extends State<PropertyReviewWidget> {
                                 fontWeight: CustomFontWeight.normal,
                                 fontSize: 12,
                                 color: const Color(0xFF8B97A2),
-                                letterSpacing: 0.0,
                               ),
                             ),
                           ),
@@ -222,7 +217,6 @@ class _PropertyReviewWidgetState extends State<PropertyReviewWidget> {
                                             style: GoogleFonts.urbanist(
                                               textStyle:
                                                   textScheme.headlineSmall,
-                                              letterSpacing: 0.0,
                                             ),
                                           ),
                                           const Padding(
@@ -317,7 +311,6 @@ class _PropertyReviewWidgetState extends State<PropertyReviewWidget> {
                                               ?.copyWith(
                                                 color:
                                                     colorScheme.secondaryText,
-                                                letterSpacing: 0.0,
                                               ),
                                         ),
                                       ),
