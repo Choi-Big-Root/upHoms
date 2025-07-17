@@ -5,9 +5,11 @@ import '../my_trips/my_trips_page.dart';
 import '../my_trips/widgets/my_trip_details_widget.dart';
 import '../profile/profile_change_password.dart';
 import '../profile/profile_edit.dart';
+import '../profile/profile_my_bookings.dart';
+import '../profile/profile_my_property.dart';
 import '../profile/profile_page.dart';
 import '../profile/profile_payment_edit.dart';
-import '../profile/property/property_editor_wrapper.dart';
+import '../profile/property/widgets/property_editor_wrapper.dart';
 import '../profile/property/widgets/property_step1_widget.dart';
 import '../profile/property/widgets/property_step2_widget.dart';
 import '../profile/property/widgets/property_step3_widget.dart';
@@ -109,6 +111,16 @@ final GoRouter router = GoRouter(
       path: RoutePath.profileChangePassword,
       name: 'profile_change_password',
       builder: (context, state) => const ProfileChangePassword(),
+    ),
+    GoRoute(
+      path: RoutePath.profileMyProperty,
+      name: 'profile_my_property',
+      builder: (context, state) => const ProfileMyProperty(),
+    ),
+    GoRoute(
+      path: RoutePath.profileMyBookings,
+      name: 'profile_my_bookings',
+      builder: (context, state) => const ProfileMyBookings(),
     ),
 
     GoRoute(

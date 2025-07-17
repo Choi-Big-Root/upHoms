@@ -355,13 +355,17 @@ class _ProfilePageState extends State<ProfilePage> {
               ProfileRoutesInkwellWidget(
                 title: 'My Properties',
                 isFirstRow: false,
-                onTapAction: () {},
+                onTapAction: () {
+                  context.push('/profile_my_property');
+                },
                 tripCount: 4,
               ),
               ProfileRoutesInkwellWidget(
                 title: 'My Bookings',
                 isFirstRow: false,
-                onTapAction: () {},
+                onTapAction: () {
+                  context.push('/profile_my_bookings');
+                },
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 20),

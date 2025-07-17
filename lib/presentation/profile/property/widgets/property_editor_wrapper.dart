@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/property_step1_widget.dart';
+import 'property_step1_widget.dart';
 
 class PropertyEditorWrapper extends StatelessWidget {
   const PropertyEditorWrapper({super.key});
