@@ -5,8 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
-import 'widgets/profile_routes_inkwell_widget.dart';
-
+import 'common/profile_routes_inkwell_widget.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -398,7 +397,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // 사용가능 이메일인지 확인 이후 다음단계로 이동.
+                  context.push('/property_editor_wrapper');
                 },
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(colorScheme.primary),
