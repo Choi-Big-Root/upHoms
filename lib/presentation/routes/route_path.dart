@@ -15,4 +15,9 @@ class RoutePath {
   static const String profileEdit = '/profile_edit';
   static const String profilePaymentEdit = '/profile_payment_edit';
   static const String profileChangePassword = '/profile_change_password';
+
+  static const String propertyEditorWrapper = '/property_editor_wrapper';
+  static const String propertyStep1Widget = '/property_step1_widget';
+  static const String propertyStep2Widget = '/property_step2_widget';
+  static const String propertyStep3Widget = '/property_step3_widget';
 }

@@ -7,6 +7,10 @@ import '../profile/profile_change_password.dart';
 import '../profile/profile_edit.dart';
 import '../profile/profile_page.dart';
 import '../profile/profile_payment_edit.dart';
+import '../profile/property/property_editor_wrapper.dart';
+import '../profile/property/widgets/property_step1_widget.dart';
+import '../profile/property/widgets/property_step2_widget.dart';
+import '../profile/property/widgets/property_step3_widget.dart';
 import 'main_shell.dart';
 
 import '../create_account/create_account_page.dart';
@@ -57,16 +61,19 @@ final GoRouter router = GoRouter(
       name: 'login',
       builder: (context, state) => const LoginPage(),
     ),
+
     GoRoute(
       path: RoutePath.createAccount,
       name: 'create_account',
       builder: (context, state) => const CreateAccountPage(),
     ),
+
     GoRoute(
       path: RoutePath.myTripDetails,
       name: 'my_trip_details',
       builder: (context, state) => const MyTripDetailsWidget(),
     ),
+
     GoRoute(
       path: RoutePath.tripSearch,
       name: 'trip_search',
@@ -87,6 +94,7 @@ final GoRouter router = GoRouter(
       name: 'trip_details',
       builder: (context, state) => const TripDetailsWidget(),
     ),
+
     GoRoute(
       path: RoutePath.profileEdit,
       name: 'profile_edit',
@@ -101,6 +109,27 @@ final GoRouter router = GoRouter(
       path: RoutePath.profileChangePassword,
       name: 'profile_change_password',
       builder: (context, state) => const ProfileChangePassword(),
+    ),
+
+    GoRoute(
+      path: RoutePath.propertyEditorWrapper,
+      name: 'property_editor_wrapper',
+      builder: (context, state) => const PropertyEditorWrapper(),
+    ),
+    GoRoute(
+      path: RoutePath.propertyStep1Widget,
+      name: 'property_step1_widget',
+      builder: (context, state) => const PropertyStep1Widget(),
+    ),
+    GoRoute(
+      path: RoutePath.propertyStep2Widget,
+      name: 'property_step2_widget',
+      builder: (context, state) => const PropertyStep2Widget(),
+    ),
+    GoRoute(
+      path: RoutePath.propertyStep3Widget,
+      name: 'property_step3_widget',
+      builder: (context, state) => const PropertyStep3Widget(),
     ),
   ],
 );
