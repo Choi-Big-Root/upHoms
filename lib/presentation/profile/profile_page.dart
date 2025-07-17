@@ -349,7 +349,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ProfileRoutesInkwellWidget(
                 title: 'Change Password',
                 isFirstRow: false,
-                onTapAction: () {},
+                onTapAction: () {
+                  context.push('/profile_change_password');
+                },
               ),
               ProfileRoutesInkwellWidget(
                 title: 'My Properties',

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../home/home_page.dart';
 import '../my_trips/my_trips_page.dart';
 import '../my_trips/widgets/my_trip_details_widget.dart';
+import '../profile/profile_change_password.dart';
 import '../profile/profile_edit.dart';
 import '../profile/profile_page.dart';
 import '../profile/profile_payment_edit.dart';
@@ -95,6 +96,11 @@ final GoRouter router = GoRouter(
       path: RoutePath.profilePaymentEdit,
       name: 'profile_payment_edit',
       builder: (context, state) => const ProfilePaymentEdit(),
+    ),
+    GoRoute(
+      path: RoutePath.profileChangePassword,
+      name: 'profile_change_password',
+      builder: (context, state) => const ProfileChangePassword(),
     ),
   ],
 );

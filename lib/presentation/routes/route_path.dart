@@ -14,4 +14,5 @@ class RoutePath {
   static const String profile = '/profile';
   static const String profileEdit = '/profile_edit';
   static const String profilePaymentEdit = '/profile_payment_edit';
+  static const String profileChangePassword = '/profile_change_password';
 }
