@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../core/constants.dart';
 import '../dto/user_dto.dart';
 import '../../domain/entities/user.dart'; // User 엔티티 import
 import '../mapper/user_mapper.dart'; // UserMapper import
@@ -10,8 +11,7 @@ abstract class UserRemoteDataSource {
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final http.Client client;
-  // TODO: iOS 시뮬레이터의 경우 localhost, Android 에뮬레이터의 경우 10.0.2.2
-  final String _baseUrl = 'http://10.0.2.2:3000';
+  final String _baseUrl = AppConstants.localServerUrl;
 
   UserRemoteDataSourceImpl({required this.client});
 

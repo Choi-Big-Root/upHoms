@@ -7,7 +7,7 @@ void showFullScreenImage(BuildContext context, String imageUrl){
         child: Container(
           color: Colors.black,
           child: Center(
-            child: Image.network(imageUrl,fit: BoxFit.contain,),
+            child: Image.network(imageUrl,fit: BoxFit.fitWidth,),
           ),
         ));
   });

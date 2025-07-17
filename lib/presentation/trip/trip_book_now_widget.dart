@@ -682,7 +682,7 @@ class _TripBookNowWidgetState extends State<TripBookNowWidget> {
               padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 34),
               child: ElevatedButton(
                 onPressed: () {
-                  context.go('/trip_details');
+                  context.go('/my_trip_details');
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(130, 60),
