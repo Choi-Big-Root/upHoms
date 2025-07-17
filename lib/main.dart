@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'core/constants.dart';
 import 'core/custom/custom_theme.dart';
 
 import 'core/theme/theme_data.dart';
@@ -16,27 +17,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      builder: (context,child) => MaterialApp.router(
-        routerConfig: router,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.light().copyWith(
-          textTheme: customTextTheme(ThemeColors.light),
-          extensions: <ThemeExtension<dynamic>>[
-            ThemeColors.light
-          ],
-        ),
-        darkTheme: ThemeData.dark().copyWith(
-          textTheme: customTextTheme(ThemeColors.dark),
-          extensions: <ThemeExtension<dynamic>>[
-            ThemeColors.dark,
-          ],
-        ),
-        themeMode: ThemeMode.light,
-      ),
-      designSize: const Size(393, 852),
+    return ValueListenableBuilder(
+      valueListenable: AppConstants.themeNotifier,
+      builder: (_, ThemeMode mode, _) {
+        return ScreenUtilInit(
+          builder: (context, child) => MaterialApp.router(
+            routerConfig: router,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData.light().copyWith(
+              textTheme: customTextTheme(ThemeColors.light),
+              extensions: <ThemeExtension<dynamic>>[ThemeColors.light],
+            ),
+            darkTheme: ThemeData.dark().copyWith(
+              textTheme: customTextTheme(ThemeColors.dark),
+              extensions: <ThemeExtension<dynamic>>[ThemeColors.dark],
+            ),
+            themeMode: mode,
+          ),
+          designSize: const Size(393, 852),
+        );
+      },
     );
-
-
   }
 }
