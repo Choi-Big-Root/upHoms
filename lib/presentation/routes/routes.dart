@@ -5,6 +5,7 @@ import '../my_trips/my_trips_page.dart';
 import '../my_trips/widgets/my_trip_details_widget.dart';
 import '../profile/profile_edit.dart';
 import '../profile/profile_page.dart';
+import '../profile/profile_payment_edit.dart';
 import 'main_shell.dart';
 
 import '../create_account/create_account_page.dart';
@@ -89,6 +90,11 @@ final GoRouter router = GoRouter(
       path: RoutePath.profileEdit,
       name: 'profile_edit',
       builder: (context, state) => const ProfileEdit(),
+    ),
+    GoRoute(
+      path: RoutePath.profilePaymentEdit,
+      name: 'profile_payment_edit',
+      builder: (context, state) => const ProfilePaymentEdit(),
     ),
   ],
 );
