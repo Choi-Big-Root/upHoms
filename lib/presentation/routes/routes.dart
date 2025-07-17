@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../home/home_page.dart';
 import '../my_trips/my_trips_page.dart';
 import '../my_trips/widgets/my_trip_details_widget.dart';
+import '../profile/profile_edit.dart';
 import '../profile/profile_page.dart';
 import 'main_shell.dart';
 
@@ -83,6 +84,11 @@ final GoRouter router = GoRouter(
       path: RoutePath.tripDetails,
       name: 'trip_details',
       builder: (context, state) => const TripDetailsWidget(),
+    ),
+    GoRoute(
+      path: RoutePath.profileEdit,
+      name: 'profile_edit',
+      builder: (context, state) => const ProfileEdit(),
     ),
   ],
 );

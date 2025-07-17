@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/constants.dart';
@@ -334,7 +335,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ProfileRoutesInkwellWidget(
                 title: 'Edit Profile',
                 isFirstRow: true,
-                onTapAction: () {},
+                onTapAction: () {
+                  context.push('/profile_edit');
+                },
               ),
               ProfileRoutesInkwellWidget(
                 title: 'Payment Information',

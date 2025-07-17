@@ -12,4 +12,5 @@ class RoutePath {
   static const String myTripDetails = '/my_trip_details';
 
   static const String profile = '/profile';
+  static const String profileEdit = '/profile_edit';
 }
