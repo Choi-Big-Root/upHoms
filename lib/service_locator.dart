@@ -6,6 +6,7 @@ import 'data/remote/user/user_remote_data_source_impl.dart';
 import 'data/repositories/user/user_repository_impl.dart';
 import 'domain/repositories/user/user_repository.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
+import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/user/user_bloc.bloc.dart';
 
 final locator = GetIt.instance;
@@ -33,6 +34,9 @@ void _domain() {
   locator.registerSingleton<CreateAccountUsecase>(
     CreateAccountUsecase(locator<UserRepository>()),
   );
+  locator.registerSingleton<GetUserUsecase>(
+    GetUserUsecase(locator<UserRepository>()),
+  );
 }
 
 void _presentation() {
@@ -41,6 +45,9 @@ void _presentation() {
   // UserBloc를 만드려면 CreateUserUsecase 가 있어야하고
   // CreateUserUsecase 냉장고[locator]에 이미 넣어둔 상태.
   locator.registerFactory(
-    () => UserBloc(createUserUsecase: locator<CreateAccountUsecase>()),
+    () => UserBloc(
+      createUserUsecase: locator<CreateAccountUsecase>(),
+      getUserUsecase: locator<GetUserUsecase>(),
+    ),
   );
 }

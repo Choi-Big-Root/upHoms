@@ -8,3 +8,7 @@ class CreateUser extends UserEvent {
   CreateUser(this.user);
   final UserModel user;
 }
+class GetUser extends UserEvent {
+  GetUser(this.user);
+  final UserModel user;
+}

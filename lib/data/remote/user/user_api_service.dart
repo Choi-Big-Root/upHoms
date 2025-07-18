@@ -13,4 +13,7 @@ abstract class UserApiService {
 
   @POST("/user_create")
   Future<void> createUser(@Body() UserDto user);
+
+  @POST("/login")
+  Future<void> getUser(@Body() UserDto user);
 }

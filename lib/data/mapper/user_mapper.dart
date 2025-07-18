@@ -6,14 +6,14 @@ class UserMapper {
   // UserModel -> UserDto 변환 (네트워크 요청 시)
   static UserDto toDto(UserModel model) {
     return UserDto(
-      userCity: model.userCity,
-      email: model.email,
-      password: model.password,
-      displayName: model.displayName,
+      userCity: model.userCity?? '',
+      email: model.email ?? '',
+      password: model.password ?? '',
+      displayName: model.displayName ?? '',
       photoUrl: model.photoUrl ?? '',
       uid: model.uid ?? -1,
       createdTime: model.createdTime ?? '',
-      phoneNumber: model.phoneNumber,
+      phoneNumber: model.phoneNumber ?? '',
       bio: model.bio ?? '',
       isHost: model.isHost ?? false,
       numberPropertyList: model.numberPropertyList ?? [],

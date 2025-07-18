@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserModel {
 
- String get userCity; String get email; String get password; String get displayName; String? get photoUrl; int? get uid; String? get createdTime; String get phoneNumber; String? get bio; bool? get isHost; List<int>? get numberPropertyList; List<int>? get numberActiveBookingsList;
+ String? get userCity; String? get email; String? get password; String? get displayName; String? get photoUrl; int? get uid; String? get createdTime; String? get phoneNumber; String? get bio; bool? get isHost; List<int>? get numberPropertyList; List<int>? get numberActiveBookingsList;
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $UserModelCopyWith<$Res>  {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
 @useResult
 $Res call({
- String userCity, String email, String password, String displayName, String? photoUrl, int? uid, String? createdTime, String phoneNumber, String? bio, bool? isHost, List<int>? numberPropertyList, List<int>? numberActiveBookingsList
+ String? userCity, String? email, String? password, String? displayName, String? photoUrl, int? uid, String? createdTime, String? phoneNumber, String? bio, bool? isHost, List<int>? numberPropertyList, List<int>? numberActiveBookingsList
 });
 
 
@@ -65,17 +65,17 @@ class _$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userCity = null,Object? email = null,Object? password = null,Object? displayName = null,Object? photoUrl = freezed,Object? uid = freezed,Object? createdTime = freezed,Object? phoneNumber = null,Object? bio = freezed,Object? isHost = freezed,Object? numberPropertyList = freezed,Object? numberActiveBookingsList = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userCity = freezed,Object? email = freezed,Object? password = freezed,Object? displayName = freezed,Object? photoUrl = freezed,Object? uid = freezed,Object? createdTime = freezed,Object? phoneNumber = freezed,Object? bio = freezed,Object? isHost = freezed,Object? numberPropertyList = freezed,Object? numberActiveBookingsList = freezed,}) {
   return _then(_self.copyWith(
-userCity: null == userCity ? _self.userCity : userCity // ignore: cast_nullable_to_non_nullable
-as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
-as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
-as String,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
+userCity: freezed == userCity ? _self.userCity : userCity // ignore: cast_nullable_to_non_nullable
+as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,password: freezed == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
+as String?,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
+as String?,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
 as String?,uid: freezed == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as int?,createdTime: freezed == createdTime ? _self.createdTime : createdTime // ignore: cast_nullable_to_non_nullable
-as String?,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
 as String?,isHost: freezed == isHost ? _self.isHost : isHost // ignore: cast_nullable_to_non_nullable
 as bool?,numberPropertyList: freezed == numberPropertyList ? _self.numberPropertyList : numberPropertyList // ignore: cast_nullable_to_non_nullable
 as List<int>?,numberActiveBookingsList: freezed == numberActiveBookingsList ? _self.numberActiveBookingsList : numberActiveBookingsList // ignore: cast_nullable_to_non_nullable
@@ -164,7 +164,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userCity,  String email,  String password,  String displayName,  String? photoUrl,  int? uid,  String? createdTime,  String phoneNumber,  String? bio,  bool? isHost,  List<int>? numberPropertyList,  List<int>? numberActiveBookingsList)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? userCity,  String? email,  String? password,  String? displayName,  String? photoUrl,  int? uid,  String? createdTime,  String? phoneNumber,  String? bio,  bool? isHost,  List<int>? numberPropertyList,  List<int>? numberActiveBookingsList)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
 return $default(_that.userCity,_that.email,_that.password,_that.displayName,_that.photoUrl,_that.uid,_that.createdTime,_that.phoneNumber,_that.bio,_that.isHost,_that.numberPropertyList,_that.numberActiveBookingsList);case _:
@@ -185,7 +185,7 @@ return $default(_that.userCity,_that.email,_that.password,_that.displayName,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userCity,  String email,  String password,  String displayName,  String? photoUrl,  int? uid,  String? createdTime,  String phoneNumber,  String? bio,  bool? isHost,  List<int>? numberPropertyList,  List<int>? numberActiveBookingsList)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? userCity,  String? email,  String? password,  String? displayName,  String? photoUrl,  int? uid,  String? createdTime,  String? phoneNumber,  String? bio,  bool? isHost,  List<int>? numberPropertyList,  List<int>? numberActiveBookingsList)  $default,) {final _that = this;
 switch (_that) {
 case _UserModel():
 return $default(_that.userCity,_that.email,_that.password,_that.displayName,_that.photoUrl,_that.uid,_that.createdTime,_that.phoneNumber,_that.bio,_that.isHost,_that.numberPropertyList,_that.numberActiveBookingsList);case _:
@@ -205,7 +205,7 @@ return $default(_that.userCity,_that.email,_that.password,_that.displayName,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userCity,  String email,  String password,  String displayName,  String? photoUrl,  int? uid,  String? createdTime,  String phoneNumber,  String? bio,  bool? isHost,  List<int>? numberPropertyList,  List<int>? numberActiveBookingsList)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? userCity,  String? email,  String? password,  String? displayName,  String? photoUrl,  int? uid,  String? createdTime,  String? phoneNumber,  String? bio,  bool? isHost,  List<int>? numberPropertyList,  List<int>? numberActiveBookingsList)?  $default,) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
 return $default(_that.userCity,_that.email,_that.password,_that.displayName,_that.photoUrl,_that.uid,_that.createdTime,_that.phoneNumber,_that.bio,_that.isHost,_that.numberPropertyList,_that.numberActiveBookingsList);case _:
@@ -220,17 +220,17 @@ return $default(_that.userCity,_that.email,_that.password,_that.displayName,_tha
 @JsonSerializable()
 
 class _UserModel implements UserModel {
-  const _UserModel({required this.userCity, required this.email, required this.password, required this.displayName, this.photoUrl, this.uid, this.createdTime, required this.phoneNumber, this.bio, this.isHost, final  List<int>? numberPropertyList, final  List<int>? numberActiveBookingsList}): _numberPropertyList = numberPropertyList,_numberActiveBookingsList = numberActiveBookingsList;
+  const _UserModel({this.userCity, this.email, this.password, this.displayName, this.photoUrl, this.uid, this.createdTime, this.phoneNumber, this.bio, this.isHost, final  List<int>? numberPropertyList, final  List<int>? numberActiveBookingsList}): _numberPropertyList = numberPropertyList,_numberActiveBookingsList = numberActiveBookingsList;
   factory _UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
-@override final  String userCity;
-@override final  String email;
-@override final  String password;
-@override final  String displayName;
+@override final  String? userCity;
+@override final  String? email;
+@override final  String? password;
+@override final  String? displayName;
 @override final  String? photoUrl;
 @override final  int? uid;
 @override final  String? createdTime;
-@override final  String phoneNumber;
+@override final  String? phoneNumber;
 @override final  String? bio;
 @override final  bool? isHost;
  final  List<int>? _numberPropertyList;
@@ -285,7 +285,7 @@ abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Re
   factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
 @override @useResult
 $Res call({
- String userCity, String email, String password, String displayName, String? photoUrl, int? uid, String? createdTime, String phoneNumber, String? bio, bool? isHost, List<int>? numberPropertyList, List<int>? numberActiveBookingsList
+ String? userCity, String? email, String? password, String? displayName, String? photoUrl, int? uid, String? createdTime, String? phoneNumber, String? bio, bool? isHost, List<int>? numberPropertyList, List<int>? numberActiveBookingsList
 });
 
 
@@ -302,17 +302,17 @@ class __$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userCity = null,Object? email = null,Object? password = null,Object? displayName = null,Object? photoUrl = freezed,Object? uid = freezed,Object? createdTime = freezed,Object? phoneNumber = null,Object? bio = freezed,Object? isHost = freezed,Object? numberPropertyList = freezed,Object? numberActiveBookingsList = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userCity = freezed,Object? email = freezed,Object? password = freezed,Object? displayName = freezed,Object? photoUrl = freezed,Object? uid = freezed,Object? createdTime = freezed,Object? phoneNumber = freezed,Object? bio = freezed,Object? isHost = freezed,Object? numberPropertyList = freezed,Object? numberActiveBookingsList = freezed,}) {
   return _then(_UserModel(
-userCity: null == userCity ? _self.userCity : userCity // ignore: cast_nullable_to_non_nullable
-as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
-as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
-as String,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
+userCity: freezed == userCity ? _self.userCity : userCity // ignore: cast_nullable_to_non_nullable
+as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,password: freezed == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
+as String?,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
+as String?,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
 as String?,uid: freezed == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as int?,createdTime: freezed == createdTime ? _self.createdTime : createdTime // ignore: cast_nullable_to_non_nullable
-as String?,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
 as String?,isHost: freezed == isHost ? _self.isHost : isHost // ignore: cast_nullable_to_non_nullable
 as bool?,numberPropertyList: freezed == numberPropertyList ? _self._numberPropertyList : numberPropertyList // ignore: cast_nullable_to_non_nullable
 as List<int>?,numberActiveBookingsList: freezed == numberActiveBookingsList ? _self._numberActiveBookingsList : numberActiveBookingsList // ignore: cast_nullable_to_non_nullable

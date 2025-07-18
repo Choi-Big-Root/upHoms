@@ -32,4 +32,26 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       throw Exception('An unexpected error occurred while creating user');
     }
   }
+
+  @override
+  Future<void> getUser(UserModel user) async {
+    try{
+      final userDto = UserMapper.toDto(user);
+      await userApiService.getUser(userDto);
+    } on DioException catch (e) {
+      // DioException을 사용하여 더 상세한 에러 처리
+      if (e.response != null) {
+        logger.e('Error creating user: ${e.response?.statusCode} - ${e.response?.data}');
+        throw Exception('${e.response?.data}');
+      } else {
+        logger.e('Error creating user: ${e.message}');
+        throw Exception('Failed to create user: Network error or timeout');
+      }
+    } catch (e) {
+      logger.e('Unexpected error creating user: $e');
+      throw Exception('An unexpected error occurred while creating user');
+    }
+  }
+
+
 }

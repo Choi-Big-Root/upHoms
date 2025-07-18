@@ -7,14 +7,14 @@ part 'user_model.g.dart';
 @freezed
 abstract class UserModel with _$UserModel {
   const factory UserModel({
-    required String userCity,
-    required String email,
-    required String password,
-    required String displayName,
+    String? userCity,
+    String? email,
+    String? password,
+    String? displayName,
     String? photoUrl,
     int? uid,
     String? createdTime,
-    required String phoneNumber,
+    String? phoneNumber,
     String? bio,
     bool? isHost,
     List<int>? numberPropertyList,

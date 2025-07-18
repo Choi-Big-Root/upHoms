@@ -47,6 +47,47 @@ app.get('/', (req, res) => {
     res.send('Node.js server is running!');
 });
 
+// User Login : 로그인
+app.post('/login', (req, res) => {
+    const userRequest = req.body; // 클라이언트로부터 받은 이메일과 비밀번호
+
+    // 이메일과 비밀번호가 요청 본문에 있는지 확인
+    if (!userRequest.email || !userRequest.password) {
+        return res.status(400).send('Email and password are required.');
+    }
+
+    fs.readFile(path.join(__dirname, 'users.json'), 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading users.json:', err);
+            return res.status(500).send('SERVER ERROR');
+        }
+
+        let users = [];
+        try {
+            users = JSON.parse(data);
+        } catch (parseErr) {
+            console.error('Error parsing users.json:', parseErr);
+            return res.status(500).send('User data is corrupted.');
+        }
+
+        //이메일과 비밀번호가 일치하는 사용자 찾기
+        const foundUser = users.find(user =>
+            user.email === userRequest.email && user.password === userRequest.password
+        );
+
+        if (foundUser) {
+            const userResponse = { ...foundUser }; // 불변성을 위해 복사
+            delete userResponse.password; // 비밀번호 필드 제거
+
+            console.log(`Login successful for user: ${foundUser.email}`);
+            return res.status(200).json(userResponse); // 200 OK와 함께 사용자 정보 JSON 반환
+        } else {
+            // 사용자를 찾지 못했거나 비밀번호가 일치하지 않을 경우
+            console.log(`Login failed for email: ${userRequest.email}`);
+            return res.status(401).send('Invalid credentials.'); // 401 Unauthorized 반환
+        }
+    });
+});
 
 // User Create: 유저 생성
 app.post('/user_create', (req, res) => {

@@ -68,7 +68,10 @@ final GoRouter router = GoRouter(
       path: RoutePath.login,
       name: 'login',
       builder: (context, state) {
-        return const LoginPage();
+        return BlocProvider<UserBloc>(
+          create: (context) => locator<UserBloc>(),
+          child: const LoginPage(),
+        );
       },
     ),
 

@@ -7,14 +7,14 @@ part of 'user_model.dart';
 // **************************************************************************
 
 _UserModel _$UserModelFromJson(Map<String, dynamic> json) => _UserModel(
-  userCity: json['userCity'] as String,
-  email: json['email'] as String,
-  password: json['password'] as String,
-  displayName: json['displayName'] as String,
+  userCity: json['userCity'] as String?,
+  email: json['email'] as String?,
+  password: json['password'] as String?,
+  displayName: json['displayName'] as String?,
   photoUrl: json['photoUrl'] as String?,
   uid: (json['uid'] as num?)?.toInt(),
   createdTime: json['createdTime'] as String?,
-  phoneNumber: json['phoneNumber'] as String,
+  phoneNumber: json['phoneNumber'] as String?,
   bio: json['bio'] as String?,
   isHost: json['isHost'] as bool?,
   numberPropertyList: (json['numberPropertyList'] as List<dynamic>?)
