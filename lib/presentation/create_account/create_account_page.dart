@@ -10,6 +10,7 @@ import '../../core/custom/custom_font_weight.dart';
 import '../../core/custom/custom_snack_bar.dart';
 import '../../core/custom/custom_text_form_field_widget.dart';
 import '../../core/theme/theme_data.dart';
+import '../../core/utils/validators.dart';
 import '../../domain/model/user/user_model.dart';
 import '../bloc/user/user_bloc.bloc.dart';
 
@@ -170,10 +171,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     24,
                                   ),
                               validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '필수 입력사항 입니다.';
-                                }
-                                return null;
+                                return AppValidators.validateEmail(value);
                               },
                             ),
                           ),
@@ -224,6 +222,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   size: 22,
                                 ),
                               ),
+                              validator: (value){
+                                return AppValidators.validateRequired(value, '비밀번호');
+                              },
                             ),
                           ),
                         ],
@@ -259,6 +260,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     0,
                                     24,
                                   ),
+                              validator: (value){
+                                return AppValidators.validateRequired(value, '닉네임');
+                              },
                             ),
                           ),
                         ],
@@ -294,6 +298,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     0,
                                     24,
                                   ),
+                              validator: (value){
+                                return AppValidators.validateRequired(value, '지역');
+                              },
                             ),
                           ),
                         ],
@@ -329,6 +336,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     0,
                                     24,
                                   ),
+                              validator: (value){
+                                return AppValidators.validatePhoneNumber(value);
+                              },
                             ),
                           ),
                         ],
