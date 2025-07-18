@@ -22,7 +22,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       // DioException을 사용하여 더 상세한 에러 처리
       if (e.response != null) {
         logger.e('Error creating user: ${e.response?.statusCode} - ${e.response?.data}');
-        throw Exception('Failed to create user: Server error (${e.response?.statusCode})');
+        throw Exception('${e.response?.data}');
       } else {
         logger.e('Error creating user: ${e.message}');
         throw Exception('Failed to create user: Network error or timeout');

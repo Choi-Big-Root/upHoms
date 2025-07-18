@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/custom/custom_snack_bar.dart';
 import '../../service_locator.dart';
 import '../bloc/user/user_bloc.bloc.dart';
 import '../home/home_page.dart';
@@ -66,7 +67,9 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.login,
       name: 'login',
-      builder: (context, state) => const LoginPage(),
+      builder: (context, state) {
+        return const LoginPage();
+      },
     ),
 
     GoRoute(

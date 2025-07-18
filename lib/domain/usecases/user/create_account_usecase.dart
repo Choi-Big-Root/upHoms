@@ -1,8 +1,8 @@
 import '../../model/user/user_model.dart';
 import '../../repositories/user/user_repository.dart';
 
-class CreateUserUsecase{
-  CreateUserUsecase(this.userRepository);
+class CreateAccountUsecase{
+  CreateAccountUsecase(this.userRepository);
 
   final UserRepository userRepository;
 

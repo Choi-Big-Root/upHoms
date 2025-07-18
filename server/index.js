@@ -55,7 +55,7 @@ app.post('/user_create', (req, res) => {
     fs.readFile(path.join(__dirname, 'users.json'), 'utf8', (err, data) => {
         if (err) {
             console.error('Error reading users.json:', err);
-            return res.status(500).send('Error reading user data.');
+            return res.status(500).send('SERVER ERROR');
         }
 
         let users = [];
@@ -65,9 +65,17 @@ app.post('/user_create', (req, res) => {
             console.error('Error parsing users.json:', parseErr);
             return res.status(500).send('User data is corrupted.');
         }
+        
         //자동 증가 uid 생성 (마지막 uid + 1)
         const lastUid = users.length > 0 ? users[users.length - 1].uid || 0 : 0;
         const newUid = parseInt(lastUid) + 1;
+
+        const existingUser = users.find(user => user.email === newUserRequest.email);
+
+        if (existingUser) {
+            // 이미 동일한 이메일이 존재하는 경우
+            return res.status(409).send('이미 가입된 이메일이 존재 합니다.');
+        }
 
         const newUser = {
             ...newUserRequest,           // 나머지 요청 필드 포함
@@ -80,7 +88,7 @@ app.post('/user_create', (req, res) => {
         fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(users, null, 2), (err) => {
             if (err) {
                 console.error('Error writing users.json:', err);
-                return res.status(500).send('Error saving user data.');
+                return res.status(500).send('SERVER ERROR');
             }    
             res.status(201).json(newUser); // uid 포함된 유저 정보 반환
         });
