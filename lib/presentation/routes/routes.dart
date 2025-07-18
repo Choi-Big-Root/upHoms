@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../service_locator.dart';
+import '../bloc/user/user_bloc.bloc.dart';
 import '../home/home_page.dart';
 import '../my_trips/my_trips_page.dart';
 import '../my_trips/widgets/my_trip_details_widget.dart';
@@ -26,7 +29,9 @@ import 'route_path.dart';
 //  루트 네비게이터 키 생성
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 // 셸 라우트용 네비게이터 키 생성
-final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
+final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'shell',
+);
 
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
@@ -67,7 +72,12 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.createAccount,
       name: 'create_account',
-      builder: (context, state) => const CreateAccountPage(),
+      builder: (context, state) {
+        return BlocProvider<UserBloc>(
+          create: (context) => locator<UserBloc>(),
+          child: const CreateAccountPage(),
+        );
+      },
     ),
 
     GoRoute(

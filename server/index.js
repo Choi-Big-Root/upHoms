@@ -1,53 +1,93 @@
-
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
 const app = express();
 const port = 3000;
 
-const fs = require('fs');
-const DB_FILE = './users.json';
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+}
 
-// Helper function to read the database
-const readDB = () => {
-  if (!fs.existsSync(DB_FILE)) {
-    return [];
-  }
-  const data = fs.readFileSync(DB_FILE);
-  return JSON.parse(data);
-};
+// Set up storage for uploaded files
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadsDir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to original file name
+    }
+});
 
-// Helper function to write to the database
-const writeDB = (data) => {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
-};
+const upload = multer({ storage: storage });
 
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(uploadsDir));
+
+// Middleware to parse JSON bodies
+app.use(express.json()); // Add this line
+
+// Image upload endpoint
+app.post('/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    res.send({
+        message: 'File uploaded successfully!',
+        filename: req.file.filename,
+        filepath: `/uploads/${req.file.filename}`
+    });
+});
+
+// Basic route for testing server
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+    res.send('Node.js server is running!');
 });
 
-app.get('/create_account', (req, res) => {
-  const { id, pwd, name, profile_pic } = req.query;
-  if (!id || !pwd || !name) {
-    return res.status(400).send('id, pwd, name are required');
-  }
 
-  const users = readDB();
-  const existingUser = users.find(user => user.id === id);
-  if (existingUser) {
-    return res.status(409).send('User ID already exists');
-  }
+// User Create: 유저 생성
+app.post('/user_create', (req, res) => {
+    const newUserRequest = req.body;
 
-  const newUser = { id, pwd, name, profile_pic };
-  users.push(newUser);
-  writeDB(users);
+    fs.readFile(path.join(__dirname, 'users.json'), 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading users.json:', err);
+            return res.status(500).send('Error reading user data.');
+        }
 
-  res.status(201).send(newUser);
+        let users = [];
+        try {
+            users = JSON.parse(data);
+        } catch (parseErr) {
+            console.error('Error parsing users.json:', parseErr);
+            return res.status(500).send('User data is corrupted.');
+        }
+        //자동 증가 uid 생성 (마지막 uid + 1)
+        const lastUid = users.length > 0 ? users[users.length - 1].uid || 0 : 0;
+        const newUid = parseInt(lastUid) + 1;
+
+        const newUser = {
+            ...newUserRequest,           // 나머지 요청 필드 포함
+            uid: newUid,                  // 자동 생성된 uid
+            createdTime: new Date().toISOString(), // 타임스탬프도 같이
+        };
+
+        users.push(newUser);
+
+        fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(users, null, 2), (err) => {
+            if (err) {
+                console.error('Error writing users.json:', err);
+                return res.status(500).send('Error saving user data.');
+            }    
+            res.status(201).json(newUser); // uid 포함된 유저 정보 반환
+        });
+    });
 });
 
-app.get('/users', (req, res) => {
-  const users = readDB();
-  res.json(users);
-});
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Server listening at http://localhost:${port}`);
 });

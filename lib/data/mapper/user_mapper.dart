@@ -10,14 +10,14 @@ class UserMapper {
       email: model.email,
       password: model.password,
       displayName: model.displayName,
-      photoUrl: model.photoUrl,
-      uid: model.uid,
-      createdTime: model.createdTime,
+      photoUrl: model.photoUrl ?? '',
+      uid: model.uid ?? -1,
+      createdTime: model.createdTime ?? '',
       phoneNumber: model.phoneNumber,
-      bio: model.bio,
-      isHost: model.isHost,
-      numberPropertyList: model.numberPropertyList,
-      numberActiveBookingsList: model.numberActiveBookingsList,
+      bio: model.bio ?? '',
+      isHost: model.isHost ?? false,
+      numberPropertyList: model.numberPropertyList ?? [],
+      numberActiveBookingsList: model.numberActiveBookingsList ?? [],
     );
   }
 

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 
 import '../../core/constants.dart';
+import '../../core/custom/custom_button_widget.dart';
 import '../../core/custom/custom_font_weight.dart';
-import '../../core/custom/custom_theme.dart';
+import '../../core/custom/custom_text_form_field_widget.dart';
 import '../../core/theme/theme_data.dart';
+import '../../domain/model/user/user_model.dart';
+import '../bloc/user/user_bloc.bloc.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -15,7 +20,43 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
-  var showPassword = false; // 추후에 상태관리 데이터로 변경.
+  final logger = Logger();
+
+  var _showPassword = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailAddressController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _displayNameController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailAddressController.dispose();
+    _passwordController.dispose();
+    _displayNameController.dispose();
+    _cityController.dispose();
+    _phoneNumberController.dispose();
+  }
+
+  UserModel _saveForm() {
+    final userModel =  UserModel(
+      userCity: _cityController.text,
+      email: _emailAddressController.text,
+      password: _passwordController.text,
+      displayName: _displayNameController.text,
+      phoneNumber: _phoneNumberController.text,
+    );
+    return userModel;
+  }
+
+  void _onPressedCreateAccount()  {
+    if (_formKey.currentState!.validate()) {
+      logger.d(_saveForm().toString());
+      context.read<UserBloc>().add(CreateUser(_saveForm()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,340 +64,297 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     final textScheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.primary,
-      body: Container(
-        width: MediaQuery.sizeOf(context).width,
-        height: MediaQuery.sizeOf(context).height,
-        decoration: BoxDecoration(
-          color: colorScheme.tertiary,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: Image.network(
-              '${AppConstants.imageFolderPath}/main_bg.png',
-            ).image,
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 500,
-              decoration: BoxDecoration(
-                color: colorScheme.secondaryBackground,
-                boxShadow: [
-                  const BoxShadow(
-                    blurRadius: 7,
-                    color: Color(0x4D090F13),
-                    offset: Offset(0.0, 3),
+      backgroundColor: colorScheme.secondaryBackground,
+      body: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 56),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      //화이트 일때 로고 이미지.
+                      if (!(Theme.of(context).brightness == Brightness.dark))
+                        Image.network(
+                          '${AppConstants.imageFolderPath}/logo.png',
+                          width: 200,
+                          height: 60,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      //다크 일때 로고 이미지
+                      if (Theme.of(context).brightness == Brightness.dark)
+                        Image.network(
+                          '${AppConstants.imageFolderPath}/logo.png',
+                          width: 200,
+                          height: 60,
+                          fit: BoxFit.fitWidth,
+                        ),
+                    ],
                   ),
-                ],
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
-                  topLeft: Radius.circular(0),
-                  topRight: Radius.circular(0),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                child: SingleChildScrollView(
-                  child: Column(
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 4),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Get Started Below,',
+                      style: GoogleFonts.urbanist(
+                        textStyle: textScheme.displaySmall,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                  child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 56),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            //화이트 일때 로고 이미지.
-                            if (!(Theme.of(context).brightness ==
-                                Brightness.dark))
-                              Image.network(
-                                '${AppConstants.imageFolderPath}/logo.png',
-                                width: 200,
-                                height: 60,
-                                fit: BoxFit.fitWidth,
-                              ),
-                            //다크 일때 로고 이미지
-                            if(Theme.of(context).brightness == Brightness.dark)
-                              Image.network(
-                                '${AppConstants.imageFolderPath}/logo.png',
-                                width: 200,
-                                height: 60,
-                                fit: BoxFit.fitWidth,
-                              ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                          0,
-                          16,
-                          0,
-                          4,
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Welcome Back,',
-                            style: GoogleFonts.urbanist(
-                              textStyle: textScheme.displaySmall,
-                            ),
+                      Expanded(
+                        child: CustomTextFormFieldWidget(
+                          controller: _emailAddressController,
+                          obscureText: false,
+                          labelText: 'Email Address',
+                          labelStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                //controller: ,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Email Address',
-                                  labelStyle: GoogleFonts.urbanist(
-                                    textStyle: textScheme.bodyMedium,
-                                  ),
-                                  hintText: 'Enter your email here...',
-                                  hintStyle: GoogleFonts.urbanist(
-                                    textStyle: textScheme.bodyMedium,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: colorScheme.lineGray,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: colorScheme.lineGray,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0X00000000),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0X00000000),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  filled: true,
-                                  fillColor: colorScheme.secondaryBackground,
-                                  contentPadding:
-                                  const EdgeInsetsDirectional.fromSTEB(
-                                    16,
-                                    24,
-                                    0,
-                                    24,
-                                  ),
-                                ),
-                                style: GoogleFonts.urbanist(
-                                  textStyle: textScheme.titleSmall,
-                                ),
-                                //validator: ,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                obscureText: !showPassword,
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  labelStyle: GoogleFonts.urbanist(
-                                    textStyle: textScheme.bodyMedium,
-                                  ),
-                                  hintText: 'Enter your password here...',
-                                  hintStyle: GoogleFonts.urbanist(
-                                    textStyle: textScheme.bodyMedium,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: colorScheme.lineGray,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: colorScheme.lineGray,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0x00000000),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0x00000000),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  filled: true,
-                                  fillColor: colorScheme.secondaryBackground,
-                                  contentPadding:
-                                  const EdgeInsetsDirectional.fromSTEB(
-                                    16,
-                                    24,
-                                    24,
-                                    24,
-                                  ),
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        showPassword = !showPassword;
-                                      });
-                                    },
-                                    child: Icon(
-                                      showPassword
-                                          ? Icons.visibility_outlined
-                                          : Icons.visibility_off_outlined,
-                                      color: const Color(0xFF95A1AC),
-                                      size: 22,
-                                    ),
-                                  ),
-                                ),
-                                style: GoogleFonts.urbanist(
-                                  textStyle: textScheme.titleSmall,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                          0,
-                          24,
-                          0,
-                          0,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                0,
-                                0,
-                                4,
-                                0,
-                              ),
-                              child: SizedBox(
-                                width: 230,
-                                height: 50,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    // 사용가능 이메일인지 확인 이후 다음단계로 이동.
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: WidgetStateProperty.all(
-                                      colorScheme.primary,
-                                    ),
-                                    elevation: WidgetStateProperty.all(3.0),
-                                    side: WidgetStateProperty.all(
-                                      const BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Create Account',
-                                    style: GoogleFonts.lexendDeca(
-                                      textStyle: textScheme.titleMedium
-                                          ?.copyWith(
-                                        fontWeight: CustomFontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                          0,
-                          16,
-                          0,
-                          24,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                20,
-                                0,
-                                0,
-                                0,
-                              ),
-                              child: Text(
-                                'Already have an account?',
-                                style: GoogleFonts.lexendDeca(
-                                  textStyle: textScheme.bodyMedium,
-                                  color: colorScheme.secondaryText,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () => context.push('/login'),
-                              child: SizedBox(
-                                width: 90,
-                                child: Text(
-                                  'Login',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.lexendDeca(
-                                    textStyle: textScheme.titleSmall,
-                                    fontWeight: CustomFontWeight.bold,
-                                    fontSize: 14,
-                                    color: colorScheme.turquoise,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          hintText: 'Enter your email here...',
+                          hintStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            24,
+                            0,
+                            24,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return '필수 입력사항 입니다.';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomTextFormFieldWidget(
+                          controller: _passwordController,
+                          obscureText: !_showPassword,
+                          labelText: 'Password',
+                          labelStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          hintText: 'Enter your password here...',
+                          hintStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            24,
+                            0,
+                            24,
+                          ),
+                          suffixIcon: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _showPassword = !_showPassword;
+                              });
+                            },
+                            child: Icon(
+                              _showPassword
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: const Color(0xFF95A1AC),
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomTextFormFieldWidget(
+                          controller: _displayNameController,
+                          obscureText: false,
+                          labelText: 'Display Name',
+                          labelStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          hintText: 'Enter your d.n here...',
+                          hintStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            24,
+                            0,
+                            24,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomTextFormFieldWidget(
+                          controller: _cityController,
+                          obscureText: false,
+                          labelText: 'City',
+                          labelStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          hintText: 'Enter your city here...',
+                          hintStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            24,
+                            0,
+                            24,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomTextFormFieldWidget(
+                          controller: _phoneNumberController,
+                          obscureText: false,
+                          labelText: 'Phone Number',
+                          labelStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          hintText: 'Enter your p.n here...',
+                          hintStyle: GoogleFonts.urbanist(
+                            textStyle: textScheme.bodyMedium,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            24,
+                            0,
+                            24,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                //submit Button
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          0,
+                          0,
+                          4,
+                          0,
+                        ),
+                        child: CustomButtonWidget(
+                          color: colorScheme.primary,
+                          onPressed: () {
+                            _onPressedCreateAccount();
+                          },
+                          elevation: 3.0,
+                          circular: 25,
+                          size: const Size(230, 50),
+                          text: 'Create Account',
+                          style: GoogleFonts.lexendDeca(
+                            textStyle: textScheme.titleMedium?.copyWith(
+                              fontWeight: CustomFontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 24),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          20,
+                          0,
+                          0,
+                          0,
+                        ),
+                        child: Text(
+                          'Already have an account?',
+                          style: GoogleFonts.lexendDeca(
+                            textStyle: textScheme.bodyMedium,
+                            color: colorScheme.secondaryText,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => context.push('/login'),
+                        child: SizedBox(
+                          width: 90,
+                          child: Text(
+                            'Login',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.lexendDeca(
+                              textStyle: textScheme.titleSmall,
+                              fontWeight: CustomFontWeight.bold,
+                              fontSize: 14,
+                              color: colorScheme.turquoise,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

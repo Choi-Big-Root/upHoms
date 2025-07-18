@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'service_locator.dart';
 import 'core/constants.dart';
 import 'core/custom/custom_theme.dart';
 
@@ -9,6 +10,7 @@ import 'presentation/routes/routes.dart';
 
 Future<void> main() async {
   await dotenv.load();
+  setLocator();
   runApp(const MyApp());
 }
 
