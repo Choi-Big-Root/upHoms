@@ -75,7 +75,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               const CircularProgressIndicator();
             },
             success: () async {
-              CustomSnackBar.showTopSnackBar(context, '계정이 성공적으로 생성되었습니다!',isError: false);
+              CustomSnackBar.showTopSnackBar(context, '계정이 성공적으로 생성되었습니다!',isError: false,isDismissPop: true);
             },
             error: (message) {
               CustomSnackBar.showTopSnackBar(
