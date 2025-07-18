@@ -48,3 +48,6 @@ app.*.map.json
 .env
 #server
 /server
+#Test
+/test
+/test/*

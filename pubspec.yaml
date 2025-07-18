@@ -38,17 +38,23 @@ dependencies:
   go_router: ^16.0.0
   google_fonts: ^6.2.1
   flutter_bloc: ^9.1.1
-  http: ^1.4.0
   freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
   cached_network_image: ^3.4.1
   intl: ^0.20.2
   image_picker: ^1.1.2
   flutter_dotenv: ^5.2.1
+  dio: ^5.8.0+1
+  retrofit: ^4.6.0
+  logger: ^2.6.0
+  retrofit_generator: ^9.7.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
+  mockito: ^5.4.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
