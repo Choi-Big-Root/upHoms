@@ -13,6 +13,7 @@ import '../../core/theme/theme_data.dart';
 import '../../core/utils/validators.dart';
 import '../../domain/model/user/user_model.dart';
 import '../bloc/user/user_bloc.bloc.dart';
+import '../cubit/message_cubit.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -67,26 +68,53 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
     return Scaffold(
       backgroundColor: colorScheme.secondaryBackground,
-      body: BlocConsumer<UserBloc, UserState>(
-        listener: (context, state) {
-          // 상태 변화에 따른 UI 액션
-          state.when(
-            initial: () {},
-            loading: () {
-              const CircularProgressIndicator();
-            },
-            success: () async {
-              CustomSnackBar.showTopSnackBar(context, '계정이 성공적으로 생성되었습니다!',isError: false,isDismissPop: true);
-            },
-            error: (message) {
-              CustomSnackBar.showTopSnackBar(
-                context,
-                message,
-                isError: true, // 에러 스타일 적용
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<UserBloc, UserState>(
+            listener: (BuildContext context, UserState state) {
+              state.when(
+                initial: () {},
+                loading: () {
+                  const CircularProgressIndicator();
+                },
+                success: () async {
+                  context.read<MessageCubit>().showSuccessMessage(
+                    '계정이 성공적으로 생성되었습니다!',
+                  );
+                  context.go('/login');
+                },
+                error: (message) {
+                  CustomSnackBar.showTopSnackBar(
+                    context,
+                    message,
+                    isError: true, // 에러 스타일 적용
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+          BlocListener<MessageCubit, MessageState>(
+            listener: (context, state) {
+              state.when(
+                initial: () {},
+                success: (message, onDismissed) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    CustomSnackBar.showTopSnackBar(
+                      context,
+                      message,
+                      isError: false,
+                      onDismissed: onDismissed,
+                    );
+                    context.read<MessageCubit>().clearMessage();
+                  });
+                },
+                error: (message) {},
+                none: () {},
+              );
+            },
+          ),
+        ],
+    child: BlocBuilder<UserBloc, UserState>(
         builder: (BuildContext context, UserState state) {
           return Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -222,8 +250,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   size: 22,
                                 ),
                               ),
-                              validator: (value){
-                                return AppValidators.validateRequired(value, '비밀번호');
+                              validator: (value) {
+                                return AppValidators.validateRequired(
+                                  value,
+                                  '비밀번호',
+                                );
                               },
                             ),
                           ),
@@ -260,8 +291,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     0,
                                     24,
                                   ),
-                              validator: (value){
-                                return AppValidators.validateRequired(value, '닉네임');
+                              validator: (value) {
+                                return AppValidators.validateRequired(
+                                  value,
+                                  '닉네임',
+                                );
                               },
                             ),
                           ),
@@ -298,8 +332,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     0,
                                     24,
                                   ),
-                              validator: (value){
-                                return AppValidators.validateRequired(value, '지역');
+                              validator: (value) {
+                                return AppValidators.validateRequired(
+                                  value,
+                                  '지역',
+                                );
                               },
                             ),
                           ),
@@ -336,7 +373,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     0,
                                     24,
                                   ),
-                              validator: (value){
+                              validator: (value) {
                                 return AppValidators.validatePhoneNumber(value);
                               },
                             ),
@@ -436,6 +473,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
           );
         },
+      ),
       ),
     );
   }

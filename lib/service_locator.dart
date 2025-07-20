@@ -8,6 +8,7 @@ import 'domain/repositories/user/user_repository.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/user/user_bloc.bloc.dart';
+import 'presentation/cubit/message_cubit.dart';
 
 final locator = GetIt.instance;
 
@@ -50,4 +51,5 @@ void _presentation() {
       getUserUsecase: locator<GetUserUsecase>(),
     ),
   );
+  locator.registerSingleton<MessageCubit>(MessageCubit());
 }

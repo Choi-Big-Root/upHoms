@@ -8,6 +8,9 @@ import 'core/custom/custom_theme.dart';
 import 'core/theme/theme_data.dart';
 import 'presentation/routes/routes.dart';
 
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
+
 Future<void> main() async {
   await dotenv.load();
   setLocator();
@@ -25,6 +28,7 @@ class MyApp extends StatelessWidget {
         return ScreenUtilInit(
           builder: (context, child) => MaterialApp.router(
             routerConfig: router,
+            scaffoldMessengerKey: scaffoldMessengerKey,
             debugShowCheckedModeBanner: false,
             theme: ThemeData.light().copyWith(
               textTheme: customTextTheme(ThemeColors.light),

@@ -4,6 +4,8 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../main.dart';
+
 class CustomSnackBar {
   CustomSnackBar._();
 
@@ -19,8 +21,20 @@ class CustomSnackBar {
     String message, {
     bool isError = false,
     Duration duration = const Duration(seconds: 3),
-        bool isDismissPop = false,
+    VoidCallback? onDismissed,
   }) {
+    final ScaffoldMessengerState? messengerState =
+        scaffoldMessengerKey.currentState;
+
+    if (messengerState == null) {
+      debugPrint(
+        'ScaffoldMessengerState is not available. Cannot show snackbar.',
+      );
+      return;
+    }
+
+    messengerState.hideCurrentSnackBar();
+
     Flushbar(
       message: message,
       icon: Icon(
@@ -42,9 +56,9 @@ class CustomSnackBar {
       // 둥근 모서리
       backgroundColor: isError ? Colors.red.shade500 : Colors.blue.shade500,
       // 배경색
-      onStatusChanged:(status) {
-        if (status == FlushbarStatus.DISMISSED && isDismissPop) {
-          context.pop();
+      onStatusChanged: (status) {
+        if (status == FlushbarStatus.DISMISSED && onDismissed != null) {
+          onDismissed();
         }
       },
     ).show(context);

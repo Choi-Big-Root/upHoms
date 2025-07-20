@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/custom/custom_snack_bar.dart';
 import '../../service_locator.dart';
 import '../bloc/user/user_bloc.bloc.dart';
+import '../cubit/message_cubit.dart';
 import '../home/home_page.dart';
 import '../my_trips/my_trips_page.dart';
 import '../my_trips/widgets/my_trip_details_widget.dart';
@@ -68,9 +69,12 @@ final GoRouter router = GoRouter(
       path: RoutePath.login,
       name: 'login',
       builder: (context, state) {
-        return BlocProvider<UserBloc>(
-          create: (context) => locator<UserBloc>(),
-          child: const LoginPage(),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => locator<UserBloc>()),
+            BlocProvider(create: (context) => locator<MessageCubit>()),
+          ],
+          child:const LoginPage(),
         );
       },
     ),
@@ -79,9 +83,12 @@ final GoRouter router = GoRouter(
       path: RoutePath.createAccount,
       name: 'create_account',
       builder: (context, state) {
-        return BlocProvider<UserBloc>(
-          create: (context) => locator<UserBloc>(),
-          child: const CreateAccountPage(),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => locator<UserBloc>()),
+            BlocProvider(create: (context) => locator<MessageCubit>()),
+          ],
+          child:const CreateAccountPage(),
         );
       },
     ),
