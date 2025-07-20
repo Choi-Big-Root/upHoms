@@ -1,0 +1,13 @@
+import '../../../domain/model/property/property_model.dart';
+import '../../../domain/repositories/property/property_repository.dart';
+import '../../remote/property/property_remote_data_source.dart';
+
+class PropertyRepositoryImpl implements PropertyRepository {
+  PropertyRepositoryImpl(this.propertyRemoteDataSource);
+  final PropertyRemoteDataSource propertyRemoteDataSource;
+
+  @override
+  Future<void> addProperty(PropertyModel property) async {
+    await propertyRemoteDataSource.addProperty(property);
+  }
+}

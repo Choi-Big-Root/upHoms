@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_api_service.dart';
+part of 'property_api_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'user_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
-class _UserApiService implements UserApiService {
-  _UserApiService(this._dio, {this.baseUrl, this.errorLogger});
+class _PropertyApiService implements PropertyApiService {
+  _PropertyApiService(this._dio, {this.baseUrl, this.errorLogger});
 
   final Dio _dio;
 
@@ -18,35 +18,16 @@ class _UserApiService implements UserApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<void> createUser(UserDto user) async {
+  Future<void> addProperty(PropertyDto property) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = user;
+    final _data = property;
     final _options = _setStreamType<void>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/user_create',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    await _dio.fetch<void>(_options);
-  }
-
-  @override
-  Future<void> getUser(UserDto user) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = user;
-    final _options = _setStreamType<void>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/login',
+            '/add_property',
             queryParameters: queryParameters,
             data: _data,
           )

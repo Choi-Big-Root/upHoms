@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'core/constants.dart';
 import 'data/remote/user/user_api_service.dart';
 import 'data/remote/user/user_remote_data_source.dart';
 import 'data/remote/user/user_remote_data_source_impl.dart';
@@ -20,6 +21,7 @@ void setLocator() {
 
 void _data() {
   final dio = Dio();
+  dio.options.baseUrl = AppConstants.localServerUrl;
   dio.options.headers['Content-Type'] = 'application/json';
   locator.registerSingleton<Dio>(dio);
   locator.registerSingleton<UserApiService>(UserApiService(locator<Dio>()));
