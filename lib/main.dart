@@ -25,8 +25,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MessageCubit>(
-      create: (context) => locator<MessageCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => locator<UserBloc>()),
+        BlocProvider(create: (context) => locator<MessageCubit>()),
+      ],
       child: ValueListenableBuilder(
         valueListenable: AppConstants.themeNotifier,
         builder: (_, ThemeMode mode, _) {

@@ -1,11 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'core/constants.dart';
+import 'data/remote/property/property_api_service.dart';
+import 'data/remote/property/property_remote_data_source.dart';
+import 'data/remote/property/property_remote_data_source_impl.dart';
 import 'data/remote/user/user_api_service.dart';
 import 'data/remote/user/user_remote_data_source.dart';
 import 'data/remote/user/user_remote_data_source_impl.dart';
+import 'data/repositories/property/property_repository_impl.dart';
 import 'data/repositories/user/user_repository_impl.dart';
+import 'domain/repositories/property/property_repository.dart';
 import 'domain/repositories/user/user_repository.dart';
+import 'domain/usecases/property/add_property_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/user/user_bloc.bloc.dart';
@@ -31,6 +37,15 @@ void _data() {
   locator.registerSingleton<UserRepository>(
     UserRepositoryImpl(locator<UserRemoteDataSource>()),
   );
+
+  locator.registerSingleton<PropertyApiService>(PropertyApiService(locator<Dio>()));
+  locator.registerSingleton<PropertyRemoteDataSource>(
+    PropertyRemoteDataSourceImpl(locator<PropertyApiService>()),
+  );
+  locator.registerSingleton<PropertyRepository>(
+    PropertyRepositoryImpl(locator<PropertyRemoteDataSource>()),
+  );
+
 }
 
 void _domain() {
@@ -39,6 +54,9 @@ void _domain() {
   );
   locator.registerSingleton<GetUserUsecase>(
     GetUserUsecase(locator<UserRepository>()),
+  );
+  locator.registerSingleton<AddPropertyUsecase>(
+    AddPropertyUsecase(locator<PropertyRepository>()),
   );
 }
 
@@ -53,5 +71,8 @@ void _presentation() {
       getUserUsecase: locator<GetUserUsecase>(),
     ),
   );
+
+
+
   locator.registerSingleton<MessageCubit>(MessageCubit());
 }

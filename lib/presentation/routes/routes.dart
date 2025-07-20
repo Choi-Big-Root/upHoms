@@ -68,10 +68,7 @@ final GoRouter router = GoRouter(
       path: RoutePath.login,
       name: 'login',
       builder: (context, state) {
-        return BlocProvider<UserBloc>(
-          create: (context) => locator<UserBloc>(),
-          child: const LoginPage(),
-        );
+        return const LoginPage();
       },
     ),
 
@@ -79,10 +76,7 @@ final GoRouter router = GoRouter(
       path: RoutePath.createAccount,
       name: 'create_account',
       builder: (context, state) {
-        return BlocProvider<UserBloc>(
-          create: (context) => locator<UserBloc>(),
-          child: const CreateAccountPage(),
-        );
+        return const CreateAccountPage();
       },
     ),
 
