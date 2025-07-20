@@ -53,7 +53,7 @@ app.post('/login', (req, res) => {
 
     // 이메일과 비밀번호가 요청 본문에 있는지 확인
     if (!userRequest.email || !userRequest.password) {
-        return res.status(400).send('Email and password are required.');
+        return res.status(400).send('이메일 또는 패스워드를 입력 해 주세요.');
     }
 
     fs.readFile(path.join(__dirname, 'users.json'), 'utf8', (err, data) => {
@@ -84,7 +84,7 @@ app.post('/login', (req, res) => {
         } else {
             // 사용자를 찾지 못했거나 비밀번호가 일치하지 않을 경우
             console.log(`Login failed for email: ${userRequest.email}`);
-            return res.status(401).send('Invalid credentials.'); // 401 Unauthorized 반환
+            return res.status(401).send('이메일 또는 비밀번호가 일치하지 않습니다.'); // 401 Unauthorized 반환
         }
     });
 });

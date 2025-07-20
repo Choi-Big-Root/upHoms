@@ -8,6 +8,7 @@ import '../../core/custom/custom_font_weight.dart';
 import '../../core/custom/custom_snack_bar.dart';
 import '../../core/custom/custom_text_form_field_widget.dart';
 import '../../core/theme/theme_extension.dart';
+import '../../core/utils/validators.dart';
 import '../../domain/model/user/user_model.dart';
 import '../bloc/user/user_bloc.bloc.dart';
 import '../cubit/message_cubit.dart';
@@ -23,14 +24,30 @@ class _LoginPageState extends State<LoginPage> {
   final logger = Logger();
 
   var showPassword = false;
-  final TextEditingController _idController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailAddressController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _idController.dispose();
+    _emailAddressController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  UserModel _saveForm() {
+    final userModel = UserModel(
+      email: _emailAddressController.text,
+      password: _passwordController.text,
+    );
+    return userModel;
+  }
+
+  void _onPressedLogin() {
+    if (_formKey.currentState!.validate()) {
+      logger.d(_saveForm().toString());
+      context.read<UserBloc>().add(GetUser(_saveForm()));
+    }
   }
 
   @override
@@ -50,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 success: () async {
                   context.read<MessageCubit>().showSuccessMessage(
-                    '로그인 성공 : ${_idController.text}',
+                    '로그인 성공 : ${_emailAddressController.text}',
                   );
                   context.go('/home');
                 },
@@ -104,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Container(
                     width: double.infinity,
-                    height: 500,
+                    height: 550,
                     decoration: BoxDecoration(
                       color: colorScheme.secondaryBackground,
                       boxShadow: [
@@ -122,239 +139,257 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 56),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  //화이트 일때 로고 이미지.
-                                  if (!(Theme.of(context).brightness ==
-                                      Brightness.dark))
-                                    Image.network(
-                                      '${AppConstants.imageFolderPath}/logo.png',
-                                      width: 200,
-                                      height: 60,
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                  //다크 일때 로고 이미지
-                                  if (Theme.of(context).brightness ==
-                                      Brightness.dark)
-                                    Image.network(
-                                      '${AppConstants.imageFolderPath}/logo.png',
-                                      width: 200,
-                                      height: 60,
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                ],
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                        20,
+                        0,
+                        20,
+                        0,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 56),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    //화이트 일때 로고 이미지.
+                                    if (!(Theme.of(context).brightness ==
+                                        Brightness.dark))
+                                      Image.network(
+                                        '${AppConstants.imageFolderPath}/logo.png',
+                                        width: 200,
+                                        height: 60,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    //다크 일때 로고 이미지
+                                    if (Theme.of(context).brightness ==
+                                        Brightness.dark)
+                                      Image.network(
+                                        '${AppConstants.imageFolderPath}/logo.png',
+                                        width: 200,
+                                        height: 60,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                0,
-                                16,
-                                0,
-                                4,
-                              ),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Get Started Below,',
-                                  style: GoogleFonts.urbanist(
-                                    textStyle: textScheme.displaySmall,
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0,
+                                  16,
+                                  0,
+                                  4,
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Get Started Below,',
+                                    style: GoogleFonts.urbanist(
+                                      textStyle: textScheme.displaySmall,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: CustomTextFormFieldWidget(
-                                      controller: TextEditingController(),
-                                      obscureText: false,
-                                      labelText: 'Email Address',
-                                      labelStyle: GoogleFonts.urbanist(
-                                        textStyle: textScheme.bodyMedium,
-                                      ),
-                                      hintText: 'Enter your email here...',
-                                      hintStyle: GoogleFonts.urbanist(
-                                        textStyle: textScheme.bodyMedium,
-                                      ),
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                            16,
-                                            24,
-                                            0,
-                                            24,
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: CustomTextFormFieldWidget(
-                                      controller: TextEditingController(),
-                                      obscureText: !showPassword,
-                                      labelText: 'Password',
-                                      labelStyle: GoogleFonts.urbanist(
-                                        textStyle: textScheme.bodyMedium,
-                                      ),
-                                      hintText: 'Enter your password here...',
-                                      hintStyle: GoogleFonts.urbanist(
-                                        textStyle: textScheme.bodyMedium,
-                                      ),
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                            16,
-                                            24,
-                                            0,
-                                            24,
-                                          ),
-                                      suffixIcon: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            showPassword = !showPassword;
-                                          });
-                                        },
-                                        child: Icon(
-                                          showPassword
-                                              ? Icons.visibility_outlined
-                                              : Icons.visibility_off_outlined,
-                                          color: const Color(0xFF95A1AC),
-                                          size: 22,
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: CustomTextFormFieldWidget(
+                                        controller: _emailAddressController,
+                                        obscureText: false,
+                                        labelText: 'Email Address',
+                                        labelStyle: GoogleFonts.urbanist(
+                                          textStyle: textScheme.bodyMedium,
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                0,
-                                24,
-                                0,
-                                0,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0,
-                                      0,
-                                      4,
-                                      0,
-                                    ),
-                                    child: SizedBox(
-                                      width: 230,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          final userModel = UserModel(
-                                            email: 'test@email.com',
-                                            password: '123',
-                                          );
-                                          context.read<UserBloc>().add(
-                                            GetUser(userModel),
+                                        hintText: 'Enter your email here...',
+                                        hintStyle: GoogleFonts.urbanist(
+                                          textStyle: textScheme.bodyMedium,
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                              16,
+                                              24,
+                                              0,
+                                              24,
+                                            ),
+                                        validator: (value) {
+                                          return AppValidators.validateRequired(
+                                            value,
+                                            '이메일',
                                           );
                                         },
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              WidgetStateProperty.all(
-                                                colorScheme.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: CustomTextFormFieldWidget(
+                                        controller: _passwordController,
+                                        obscureText: !showPassword,
+                                        labelText: 'Password',
+                                        labelStyle: GoogleFonts.urbanist(
+                                          textStyle: textScheme.bodyMedium,
+                                        ),
+                                        hintText: 'Enter your password here...',
+                                        hintStyle: GoogleFonts.urbanist(
+                                          textStyle: textScheme.bodyMedium,
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                              16,
+                                              24,
+                                              0,
+                                              24,
+                                            ),
+                                        suffixIcon: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              showPassword = !showPassword;
+                                            });
+                                          },
+                                          child: Icon(
+                                            showPassword
+                                                ? Icons.visibility_outlined
+                                                : Icons.visibility_off_outlined,
+                                            color: const Color(0xFF95A1AC),
+                                            size: 22,
+                                          ),
+                                        ),
+                                        validator: (value) {
+                                          return AppValidators.validateRequired(
+                                            value,
+                                            '비밀번호',
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0,
+                                  24,
+                                  0,
+                                  0,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                            0,
+                                            0,
+                                            4,
+                                            0,
+                                          ),
+                                      child: SizedBox(
+                                        width: 230,
+                                        height: 50,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            _onPressedLogin();
+                                          },
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                WidgetStateProperty.all(
+                                                  colorScheme.primary,
+                                                ),
+                                            elevation: WidgetStateProperty.all(
+                                              3.0,
+                                            ),
+                                            side: WidgetStateProperty.all(
+                                              const BorderSide(
+                                                color: Colors.transparent,
+                                                width: 1.0,
                                               ),
-                                          elevation: WidgetStateProperty.all(3.0),
-                                          side: WidgetStateProperty.all(
-                                            const BorderSide(
-                                              color: Colors.transparent,
-                                              width: 1.0,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Login',
+                                            style: GoogleFonts.lexendDeca(
+                                              textStyle: textScheme.titleMedium
+                                                  ?.copyWith(
+                                                    fontWeight:
+                                                        CustomFontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
                                             ),
                                           ),
                                         ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0,
+                                  16,
+                                  0,
+                                  24,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                            20,
+                                            0,
+                                            0,
+                                            0,
+                                          ),
+                                      child: Text(
+                                        'Don\'t have an account?',
+                                        style: GoogleFonts.lexendDeca(
+                                          textStyle: textScheme.bodyMedium,
+                                          color: colorScheme.secondaryText,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          context.push('/create_account'),
+                                      child: SizedBox(
+                                        width: 150,
                                         child: Text(
-                                          'Login',
+                                          'Create Account',
+                                          textAlign: TextAlign.center,
                                           style: GoogleFonts.lexendDeca(
-                                            textStyle: textScheme.titleMedium
-                                                ?.copyWith(
-                                                  fontWeight:
-                                                      CustomFontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
+                                            textStyle: textScheme.titleSmall,
+                                            fontWeight: CustomFontWeight.bold,
+                                            fontSize: 14,
+                                            color: colorScheme.turquoise,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                0,
-                                16,
-                                0,
-                                24,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                      20,
-                                      0,
-                                      0,
-                                      0,
-                                    ),
-                                    child: Text(
-                                      'Don\'t have an account?',
-                                      style: GoogleFonts.lexendDeca(
-                                        textStyle: textScheme.bodyMedium,
-                                        color: colorScheme.secondaryText,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () =>
-                                        context.push('/create_account'),
-                                    child: SizedBox(
-                                      width: 150,
-                                      child: Text(
-                                        'Create Account',
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.lexendDeca(
-                                          textStyle: textScheme.titleSmall,
-                                          fontWeight: CustomFontWeight.bold,
-                                          fontSize: 14,
-                                          color: colorScheme.turquoise,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
