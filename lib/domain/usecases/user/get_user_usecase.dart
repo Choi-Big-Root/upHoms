@@ -7,7 +7,7 @@ class GetUserUsecase{
   final UserRepository userRepository;
 
 
-  Future<void> call (UserModel user) async {
-    await userRepository.getUser(user);
+  Future<UserModel> call (UserModel user) async {
+    return await userRepository.getUser(user);
   }
 }

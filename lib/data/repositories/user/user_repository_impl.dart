@@ -12,7 +12,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> getUser(UserModel user) async {
-    await remoteDataSource.getUser(user);
+  Future<UserModel> getUser(UserModel user) async {
+    return await remoteDataSource.getUser(user);
   }
 }

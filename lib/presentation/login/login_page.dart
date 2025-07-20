@@ -65,7 +65,8 @@ class _LoginPageState extends State<LoginPage> {
                 loading: () {
                   const CircularProgressIndicator();
                 },
-                success: () async {
+                success: (data) async {
+                  logger.d(data.toString());
                   context.read<MessageCubit>().showSuccessMessage(
                     '로그인 성공 : ${_emailAddressController.text}',
                   );

@@ -29,7 +29,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     emit(const UserState.loading());
     try {
       await _createUserUsecase(event.user);
-      emit(const UserState.success());
+      emit(const UserState.success(UserModel()));
     } catch (e) {
       emit(UserState.error(e.toString()));
     }
@@ -37,8 +37,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Future<void> _onGetUser(GetUser event, Emitter<UserState> emit) async {
     emit(const UserState.loading());
     try {
-      await _getUserUsecase(event.user);
-      emit(const UserState.success());
+      final user = await _getUserUsecase(event.user);
+      emit(UserState.success(user));
     } catch (e) {
       emit(UserState.error(e.toString()));
     }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/constants.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
+import '../bloc/user/user_bloc.bloc.dart';
 import 'common/profile_routes_inkwell_widget.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,6 +16,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colors;
@@ -55,32 +59,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Mr.Rogers',
-                          style: GoogleFonts.lexendDeca(
-                            textStyle: textScheme.headlineSmall?.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '[email]',
-                          style: GoogleFonts.lexendDeca(
-                            textStyle: textScheme.bodyMedium?.copyWith(
-                              fontWeight: CustomFontWeight.normal,
-                              color: colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  BlocBuilder<UserBloc, UserState>(
+                    builder: (context, state) {
+                      return state.maybeWhen(
+                        success: (user) => _buildUserInfo(context, user.displayName ?? 'Mr.Rogers', user.email ?? '[email]'), // 성공 상태
+                        orElse: () => const SizedBox.shrink()
+                      );
+                    },
                   ),
                 ],
               ),
@@ -426,6 +411,38 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUserInfo(BuildContext context, String displayName, String email) {
+    final colorScheme = context.colors;
+    final textScheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            displayName,
+            style: GoogleFonts.lexendDeca(
+              textStyle: textScheme.headlineSmall?.copyWith(
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Text(
+            email,
+            style: GoogleFonts.lexendDeca(
+              textStyle: textScheme.bodyMedium?.copyWith(
+                fontWeight: CustomFontWeight.normal,
+                color: colorScheme.primary,
+              ),
+            ),
           ),
         ],
       ),
