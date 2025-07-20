@@ -6,6 +6,7 @@ import '../dto/user/user_dto.dart';
 class PropertyMapper {
   static PropertyDto toDto(PropertyModel model) {
     return PropertyDto(
+      propertyId : model.propertyId ?? '',
       propertyName: model.propertyName ?? '',
       propertyDescription: model.propertyDescription ?? '',
       mainImage: model.mainImage ?? '',
@@ -27,6 +28,7 @@ class PropertyMapper {
   }
   static PropertyModel toModel(PropertyDto dto) {
     return PropertyModel(
+      propertyId: dto.propertyId,
       propertyName: dto.propertyName,
       propertyDescription: dto.propertyDescription,
       mainImage: dto.mainImage,

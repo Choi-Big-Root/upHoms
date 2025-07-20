@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PropertyModel {
 
- String? get propertyName; String? get propertyDescription; String? get mainImage; String? get propertyLocation; String? get propertyAddress; bool? get isDraft; UserDto? get user; String? get propertyNeighborhood; double? get ratingSummary; int? get price; double? get taxRate; int? get cleaningFee; String? get notes; double? get minNightStay; String? get lastUpdated; int? get minNights; bool? get isLive;
+ String? get propertyId; String? get propertyName; String? get propertyDescription; String? get mainImage; String? get propertyLocation; String? get propertyAddress; bool? get isDraft; UserDto? get user; String? get propertyNeighborhood; double? get ratingSummary; int? get price; double? get taxRate; int? get cleaningFee; String? get notes; double? get minNightStay; String? get lastUpdated; int? get minNights; bool? get isLive;
 /// Create a copy of PropertyModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $PropertyModelCopyWith<PropertyModel> get copyWith => _$PropertyModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PropertyModel&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.propertyDescription, propertyDescription) || other.propertyDescription == propertyDescription)&&(identical(other.mainImage, mainImage) || other.mainImage == mainImage)&&(identical(other.propertyLocation, propertyLocation) || other.propertyLocation == propertyLocation)&&(identical(other.propertyAddress, propertyAddress) || other.propertyAddress == propertyAddress)&&(identical(other.isDraft, isDraft) || other.isDraft == isDraft)&&(identical(other.user, user) || other.user == user)&&(identical(other.propertyNeighborhood, propertyNeighborhood) || other.propertyNeighborhood == propertyNeighborhood)&&(identical(other.ratingSummary, ratingSummary) || other.ratingSummary == ratingSummary)&&(identical(other.price, price) || other.price == price)&&(identical(other.taxRate, taxRate) || other.taxRate == taxRate)&&(identical(other.cleaningFee, cleaningFee) || other.cleaningFee == cleaningFee)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.minNightStay, minNightStay) || other.minNightStay == minNightStay)&&(identical(other.lastUpdated, lastUpdated) || other.lastUpdated == lastUpdated)&&(identical(other.minNights, minNights) || other.minNights == minNights)&&(identical(other.isLive, isLive) || other.isLive == isLive));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PropertyModel&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.propertyDescription, propertyDescription) || other.propertyDescription == propertyDescription)&&(identical(other.mainImage, mainImage) || other.mainImage == mainImage)&&(identical(other.propertyLocation, propertyLocation) || other.propertyLocation == propertyLocation)&&(identical(other.propertyAddress, propertyAddress) || other.propertyAddress == propertyAddress)&&(identical(other.isDraft, isDraft) || other.isDraft == isDraft)&&(identical(other.user, user) || other.user == user)&&(identical(other.propertyNeighborhood, propertyNeighborhood) || other.propertyNeighborhood == propertyNeighborhood)&&(identical(other.ratingSummary, ratingSummary) || other.ratingSummary == ratingSummary)&&(identical(other.price, price) || other.price == price)&&(identical(other.taxRate, taxRate) || other.taxRate == taxRate)&&(identical(other.cleaningFee, cleaningFee) || other.cleaningFee == cleaningFee)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.minNightStay, minNightStay) || other.minNightStay == minNightStay)&&(identical(other.lastUpdated, lastUpdated) || other.lastUpdated == lastUpdated)&&(identical(other.minNights, minNights) || other.minNights == minNights)&&(identical(other.isLive, isLive) || other.isLive == isLive));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,propertyName,propertyDescription,mainImage,propertyLocation,propertyAddress,isDraft,user,propertyNeighborhood,ratingSummary,price,taxRate,cleaningFee,notes,minNightStay,lastUpdated,minNights,isLive);
+int get hashCode => Object.hash(runtimeType,propertyId,propertyName,propertyDescription,mainImage,propertyLocation,propertyAddress,isDraft,user,propertyNeighborhood,ratingSummary,price,taxRate,cleaningFee,notes,minNightStay,lastUpdated,minNights,isLive);
 
 @override
 String toString() {
-  return 'PropertyModel(propertyName: $propertyName, propertyDescription: $propertyDescription, mainImage: $mainImage, propertyLocation: $propertyLocation, propertyAddress: $propertyAddress, isDraft: $isDraft, user: $user, propertyNeighborhood: $propertyNeighborhood, ratingSummary: $ratingSummary, price: $price, taxRate: $taxRate, cleaningFee: $cleaningFee, notes: $notes, minNightStay: $minNightStay, lastUpdated: $lastUpdated, minNights: $minNights, isLive: $isLive)';
+  return 'PropertyModel(propertyId: $propertyId, propertyName: $propertyName, propertyDescription: $propertyDescription, mainImage: $mainImage, propertyLocation: $propertyLocation, propertyAddress: $propertyAddress, isDraft: $isDraft, user: $user, propertyNeighborhood: $propertyNeighborhood, ratingSummary: $ratingSummary, price: $price, taxRate: $taxRate, cleaningFee: $cleaningFee, notes: $notes, minNightStay: $minNightStay, lastUpdated: $lastUpdated, minNights: $minNights, isLive: $isLive)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $PropertyModelCopyWith<$Res>  {
   factory $PropertyModelCopyWith(PropertyModel value, $Res Function(PropertyModel) _then) = _$PropertyModelCopyWithImpl;
 @useResult
 $Res call({
- String? propertyName, String? propertyDescription, String? mainImage, String? propertyLocation, String? propertyAddress, bool? isDraft, UserDto? user, String? propertyNeighborhood, double? ratingSummary, int? price, double? taxRate, int? cleaningFee, String? notes, double? minNightStay, String? lastUpdated, int? minNights, bool? isLive
+ String? propertyId, String? propertyName, String? propertyDescription, String? mainImage, String? propertyLocation, String? propertyAddress, bool? isDraft, UserDto? user, String? propertyNeighborhood, double? ratingSummary, int? price, double? taxRate, int? cleaningFee, String? notes, double? minNightStay, String? lastUpdated, int? minNights, bool? isLive
 });
 
 
@@ -65,9 +65,10 @@ class _$PropertyModelCopyWithImpl<$Res>
 
 /// Create a copy of PropertyModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? propertyName = freezed,Object? propertyDescription = freezed,Object? mainImage = freezed,Object? propertyLocation = freezed,Object? propertyAddress = freezed,Object? isDraft = freezed,Object? user = freezed,Object? propertyNeighborhood = freezed,Object? ratingSummary = freezed,Object? price = freezed,Object? taxRate = freezed,Object? cleaningFee = freezed,Object? notes = freezed,Object? minNightStay = freezed,Object? lastUpdated = freezed,Object? minNights = freezed,Object? isLive = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? propertyId = freezed,Object? propertyName = freezed,Object? propertyDescription = freezed,Object? mainImage = freezed,Object? propertyLocation = freezed,Object? propertyAddress = freezed,Object? isDraft = freezed,Object? user = freezed,Object? propertyNeighborhood = freezed,Object? ratingSummary = freezed,Object? price = freezed,Object? taxRate = freezed,Object? cleaningFee = freezed,Object? notes = freezed,Object? minNightStay = freezed,Object? lastUpdated = freezed,Object? minNights = freezed,Object? isLive = freezed,}) {
   return _then(_self.copyWith(
-propertyName: freezed == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
+propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
+as String?,propertyName: freezed == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
 as String?,propertyDescription: freezed == propertyDescription ? _self.propertyDescription : propertyDescription // ignore: cast_nullable_to_non_nullable
 as String?,mainImage: freezed == mainImage ? _self.mainImage : mainImage // ignore: cast_nullable_to_non_nullable
 as String?,propertyLocation: freezed == propertyLocation ? _self.propertyLocation : propertyLocation // ignore: cast_nullable_to_non_nullable
@@ -181,10 +182,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserDto? user,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  double? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserDto? user,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  double? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PropertyModel() when $default != null:
-return $default(_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
+return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
   return orElse();
 
 }
@@ -202,10 +203,10 @@ return $default(_that.propertyName,_that.propertyDescription,_that.mainImage,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserDto? user,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  double? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserDto? user,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  double? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)  $default,) {final _that = this;
 switch (_that) {
 case _PropertyModel():
-return $default(_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
+return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -222,10 +223,10 @@ return $default(_that.propertyName,_that.propertyDescription,_that.mainImage,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserDto? user,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  double? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserDto? user,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  double? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)?  $default,) {final _that = this;
 switch (_that) {
 case _PropertyModel() when $default != null:
-return $default(_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
+return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
   return null;
 
 }
@@ -237,9 +238,10 @@ return $default(_that.propertyName,_that.propertyDescription,_that.mainImage,_th
 @JsonSerializable()
 
 class _PropertyModel implements PropertyModel {
-  const _PropertyModel({this.propertyName, this.propertyDescription, this.mainImage, this.propertyLocation, this.propertyAddress, this.isDraft, this.user, this.propertyNeighborhood, this.ratingSummary, this.price, this.taxRate, this.cleaningFee, this.notes, this.minNightStay, this.lastUpdated, this.minNights, this.isLive});
+  const _PropertyModel({this.propertyId, this.propertyName, this.propertyDescription, this.mainImage, this.propertyLocation, this.propertyAddress, this.isDraft, this.user, this.propertyNeighborhood, this.ratingSummary, this.price, this.taxRate, this.cleaningFee, this.notes, this.minNightStay, this.lastUpdated, this.minNights, this.isLive});
   factory _PropertyModel.fromJson(Map<String, dynamic> json) => _$PropertyModelFromJson(json);
 
+@override final  String? propertyId;
 @override final  String? propertyName;
 @override final  String? propertyDescription;
 @override final  String? mainImage;
@@ -271,16 +273,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PropertyModel&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.propertyDescription, propertyDescription) || other.propertyDescription == propertyDescription)&&(identical(other.mainImage, mainImage) || other.mainImage == mainImage)&&(identical(other.propertyLocation, propertyLocation) || other.propertyLocation == propertyLocation)&&(identical(other.propertyAddress, propertyAddress) || other.propertyAddress == propertyAddress)&&(identical(other.isDraft, isDraft) || other.isDraft == isDraft)&&(identical(other.user, user) || other.user == user)&&(identical(other.propertyNeighborhood, propertyNeighborhood) || other.propertyNeighborhood == propertyNeighborhood)&&(identical(other.ratingSummary, ratingSummary) || other.ratingSummary == ratingSummary)&&(identical(other.price, price) || other.price == price)&&(identical(other.taxRate, taxRate) || other.taxRate == taxRate)&&(identical(other.cleaningFee, cleaningFee) || other.cleaningFee == cleaningFee)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.minNightStay, minNightStay) || other.minNightStay == minNightStay)&&(identical(other.lastUpdated, lastUpdated) || other.lastUpdated == lastUpdated)&&(identical(other.minNights, minNights) || other.minNights == minNights)&&(identical(other.isLive, isLive) || other.isLive == isLive));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PropertyModel&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.propertyDescription, propertyDescription) || other.propertyDescription == propertyDescription)&&(identical(other.mainImage, mainImage) || other.mainImage == mainImage)&&(identical(other.propertyLocation, propertyLocation) || other.propertyLocation == propertyLocation)&&(identical(other.propertyAddress, propertyAddress) || other.propertyAddress == propertyAddress)&&(identical(other.isDraft, isDraft) || other.isDraft == isDraft)&&(identical(other.user, user) || other.user == user)&&(identical(other.propertyNeighborhood, propertyNeighborhood) || other.propertyNeighborhood == propertyNeighborhood)&&(identical(other.ratingSummary, ratingSummary) || other.ratingSummary == ratingSummary)&&(identical(other.price, price) || other.price == price)&&(identical(other.taxRate, taxRate) || other.taxRate == taxRate)&&(identical(other.cleaningFee, cleaningFee) || other.cleaningFee == cleaningFee)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.minNightStay, minNightStay) || other.minNightStay == minNightStay)&&(identical(other.lastUpdated, lastUpdated) || other.lastUpdated == lastUpdated)&&(identical(other.minNights, minNights) || other.minNights == minNights)&&(identical(other.isLive, isLive) || other.isLive == isLive));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,propertyName,propertyDescription,mainImage,propertyLocation,propertyAddress,isDraft,user,propertyNeighborhood,ratingSummary,price,taxRate,cleaningFee,notes,minNightStay,lastUpdated,minNights,isLive);
+int get hashCode => Object.hash(runtimeType,propertyId,propertyName,propertyDescription,mainImage,propertyLocation,propertyAddress,isDraft,user,propertyNeighborhood,ratingSummary,price,taxRate,cleaningFee,notes,minNightStay,lastUpdated,minNights,isLive);
 
 @override
 String toString() {
-  return 'PropertyModel(propertyName: $propertyName, propertyDescription: $propertyDescription, mainImage: $mainImage, propertyLocation: $propertyLocation, propertyAddress: $propertyAddress, isDraft: $isDraft, user: $user, propertyNeighborhood: $propertyNeighborhood, ratingSummary: $ratingSummary, price: $price, taxRate: $taxRate, cleaningFee: $cleaningFee, notes: $notes, minNightStay: $minNightStay, lastUpdated: $lastUpdated, minNights: $minNights, isLive: $isLive)';
+  return 'PropertyModel(propertyId: $propertyId, propertyName: $propertyName, propertyDescription: $propertyDescription, mainImage: $mainImage, propertyLocation: $propertyLocation, propertyAddress: $propertyAddress, isDraft: $isDraft, user: $user, propertyNeighborhood: $propertyNeighborhood, ratingSummary: $ratingSummary, price: $price, taxRate: $taxRate, cleaningFee: $cleaningFee, notes: $notes, minNightStay: $minNightStay, lastUpdated: $lastUpdated, minNights: $minNights, isLive: $isLive)';
 }
 
 
@@ -291,7 +293,7 @@ abstract mixin class _$PropertyModelCopyWith<$Res> implements $PropertyModelCopy
   factory _$PropertyModelCopyWith(_PropertyModel value, $Res Function(_PropertyModel) _then) = __$PropertyModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? propertyName, String? propertyDescription, String? mainImage, String? propertyLocation, String? propertyAddress, bool? isDraft, UserDto? user, String? propertyNeighborhood, double? ratingSummary, int? price, double? taxRate, int? cleaningFee, String? notes, double? minNightStay, String? lastUpdated, int? minNights, bool? isLive
+ String? propertyId, String? propertyName, String? propertyDescription, String? mainImage, String? propertyLocation, String? propertyAddress, bool? isDraft, UserDto? user, String? propertyNeighborhood, double? ratingSummary, int? price, double? taxRate, int? cleaningFee, String? notes, double? minNightStay, String? lastUpdated, int? minNights, bool? isLive
 });
 
 
@@ -308,9 +310,10 @@ class __$PropertyModelCopyWithImpl<$Res>
 
 /// Create a copy of PropertyModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? propertyName = freezed,Object? propertyDescription = freezed,Object? mainImage = freezed,Object? propertyLocation = freezed,Object? propertyAddress = freezed,Object? isDraft = freezed,Object? user = freezed,Object? propertyNeighborhood = freezed,Object? ratingSummary = freezed,Object? price = freezed,Object? taxRate = freezed,Object? cleaningFee = freezed,Object? notes = freezed,Object? minNightStay = freezed,Object? lastUpdated = freezed,Object? minNights = freezed,Object? isLive = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? propertyId = freezed,Object? propertyName = freezed,Object? propertyDescription = freezed,Object? mainImage = freezed,Object? propertyLocation = freezed,Object? propertyAddress = freezed,Object? isDraft = freezed,Object? user = freezed,Object? propertyNeighborhood = freezed,Object? ratingSummary = freezed,Object? price = freezed,Object? taxRate = freezed,Object? cleaningFee = freezed,Object? notes = freezed,Object? minNightStay = freezed,Object? lastUpdated = freezed,Object? minNights = freezed,Object? isLive = freezed,}) {
   return _then(_PropertyModel(
-propertyName: freezed == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
+propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
+as String?,propertyName: freezed == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
 as String?,propertyDescription: freezed == propertyDescription ? _self.propertyDescription : propertyDescription // ignore: cast_nullable_to_non_nullable
 as String?,mainImage: freezed == mainImage ? _self.mainImage : mainImage // ignore: cast_nullable_to_non_nullable
 as String?,propertyLocation: freezed == propertyLocation ? _self.propertyLocation : propertyLocation // ignore: cast_nullable_to_non_nullable
