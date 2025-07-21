@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert'; // 추가
 
+import '../../core/constants.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
 import '../bloc/property/property_bloc.bloc.dart'; // 추가
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                               0,
                             ),
                             child: Image.network(
-                              'https://picsum.photos/id/338/160/50.jpg',
+                              '${AppConstants.imageFolderPath}/logo.png',
                               width: 160,
                               height: 50,
                               fit: BoxFit.fitWidth,
