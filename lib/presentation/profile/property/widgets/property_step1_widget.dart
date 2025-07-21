@@ -14,6 +14,7 @@ import '../../../../core/theme/theme_extension.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../domain/model/property/property_model.dart';
 import '../../../bloc/property/property_bloc.bloc.dart';
+import '../../../routes/route_path.dart';
 import 'common/custom_property_app_bar.dart';
 import 'common/custom_property_textfield.dart';
 import 'common/custom_property_textfield_dec.dart';
@@ -110,7 +111,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
     if (_formKey.currentState!.validate()) {
       logger.d(_saveForm().toString());
       context.read<PropertyBloc>().add(EditingProperty(_saveForm()));
-      context.push('/property_step2_widget');
+      context.pushNamed(RoutePath.propertyStep2Widget);
     }
   }
 

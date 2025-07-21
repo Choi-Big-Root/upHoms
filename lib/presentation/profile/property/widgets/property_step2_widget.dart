@@ -10,6 +10,7 @@ import '../../../../core/theme/theme_extension.dart';
 import '../../../../domain/model/amenity/amenity_model.dart';
 import '../../../../domain/model/property/property_model.dart';
 import '../../../bloc/property/property_bloc.bloc.dart';
+import '../../../routes/route_path.dart';
 import 'common/custom_property_amenlty.dart';
 import 'common/custom_property_app_bar.dart';
 
@@ -67,7 +68,7 @@ class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
       listener: (context, state) {
         state.maybeWhen(
           editing: (data) {
-            context.push('/property_step3_widget');
+            context.pushNamed(RoutePath.propertyStep3Widget);
           },
           orElse: () => const SizedBox.shrink(),
         );

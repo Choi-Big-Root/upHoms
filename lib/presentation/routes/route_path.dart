@@ -19,7 +19,7 @@ class RoutePath {
   static const String profileMyBookings = '/profile_my_bookings';
   
   static const String propertyEditorWrapper = '/property_editor_wrapper';
-  static const String propertyStep1Widget = '/property_step1_widget';
-  static const String propertyStep2Widget = '/property_step2_widget';
-  static const String propertyStep3Widget = '/property_step3_widget';
+  static const String propertyStep1Widget = 'property_step1_widget';
+  static const String propertyStep2Widget = 'property_step2_widget';
+  static const String propertyStep3Widget = 'property_step3_widget';
 }
