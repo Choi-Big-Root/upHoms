@@ -403,7 +403,7 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
                                   elevation: 2.0,
                                   circular: 60,
                                   size: const Size(200, 50),
-                                  text: 'Save Changes',
+                                  text: 'PUBLISH',
                                   style: GoogleFonts.urbanist(
                                     textStyle: textScheme.headlineSmall
                                         ?.copyWith(color: colorScheme.tertiary),

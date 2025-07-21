@@ -8,7 +8,7 @@ class CustomPropertyAmenlty extends StatefulWidget {
     super.key,
     required this.text,
     required this.switchVal,
-    required this.onChanged, 
+    required this.onChanged,
   });
 
   final String text;

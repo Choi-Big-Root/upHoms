@@ -4,10 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/theme/theme_extension.dart';
 
-class CustomPropertyAppBar extends StatelessWidget implements PreferredSizeWidget{
-  const CustomPropertyAppBar({super.key});
-
-
+class CustomPropertyAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
+  const CustomPropertyAppBar({super.key, this.isEditMode = false});
+  final bool isEditMode;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class CustomPropertyAppBar extends StatelessWidget implements PreferredSizeWidge
         ),
       ),
       title: Text(
-        'Edit Property',
+        isEditMode ? 'Edit Property': 'Create Property',
         style: GoogleFonts.urbanist(textStyle: textScheme.headlineSmall),
       ),
       actions: [],
