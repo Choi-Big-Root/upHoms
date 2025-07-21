@@ -10,7 +10,9 @@
     "phoneNumber": "01099999999",
     "bio": "",
     "isHost": false,
-    "numberPropertyList": [],
+    "numberPropertyList": [
+      1
+    ],
     "numberActiveBookingsList": []
   },
   {

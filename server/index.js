@@ -138,14 +138,22 @@ app.post('/user_create', (req, res) => {
 
 // /add_property: 부동산 정보 생성 및 저장
 const PROPERTIES_FILE = path.join(__dirname, 'properties.json');
+const USERS_FILE = path.join(__dirname, 'users.json');
+
 app.post('/add_property', (req, res) => {
     const newPropertyRequest = req.body;
 
-    // 필수 필드 검증 (예시: propertyName, propertyAddress, price)
+    // 필수 필드 검증 (propertyName, propertyAddress, price)
     if (!newPropertyRequest.propertyName || !newPropertyRequest.propertyAddress || !newPropertyRequest.price) {
         return res.status(400).send('Missing required property fields: propertyName, propertyAddress, price.');
     }
 
+    // 유저 정보 검증 (user.uid 또는 user.email이 존재해야 함)
+    if (!newPropertyRequest.user || (!newPropertyRequest.user.uid && !newPropertyRequest.user.email)) {
+        return res.status(400).send('User information (uid or email) is required in the request body.');
+    }
+
+    // --- 프로퍼티 저장 로직 시작 ---
     fs.readFile(PROPERTIES_FILE, 'utf8', (err, data) => {
         let properties = [];
         if (err) {
@@ -171,12 +179,22 @@ app.post('/add_property', (req, res) => {
             : 0;
         const newPropertyId = lastPropertyId + 1;
 
+        // 새로운 Property 객체 생성
         const newProperty = {
-            ...newPropertyRequest,           // 클라이언트에서 넘어온 모든 필드를 먼저 스프레드
-            propertyId: newPropertyId,       // ✨ propertyId를 마지막에 할당하여 항상 이 값이 적용되도록 함
+            ...newPropertyRequest,
+            propertyId: newPropertyId,
             createdTime: new Date().toISOString(),
             lastUpdated: new Date().toISOString()
         };
+
+        // --- PropertyModel 내부 user 객체 업데이트 시작 ---
+        // 클라이언트에서 보낸 user 객체에 numberPropertyList가 없을 경우 초기화
+        if (!newProperty.user.numberPropertyList) {
+            newProperty.user.numberPropertyList = [];
+        }
+        // propertyId를 PropertyModel 내 user의 numberPropertyList에 추가
+        newProperty.user.numberPropertyList.push(newPropertyId);
+        // --- PropertyModel 내부 user 객체 업데이트 끝 ---
 
         properties.push(newProperty);
 
@@ -185,8 +203,52 @@ app.post('/add_property', (req, res) => {
                 console.error('Error writing properties.json:', err);
                 return res.status(500).send('SERVER ERROR while writing property data.');
             }
-            console.log(`Property with ID ${newProperty.propertyId} added successfully.`);
-            res.status(201).json(newProperty);
+
+            // --- users.json 업데이트 로직 시작 ---
+            fs.readFile(USERS_FILE, 'utf8', (userErr, userData) => {
+                if (userErr) {
+                    console.error('Error reading users.json:', userErr);
+                    console.warn('Property saved, but failed to update user list.');
+                    return res.status(201).json(newProperty);
+                }
+
+                let users = [];
+                try {
+                    users = JSON.parse(userData);
+                } catch (parseUserErr) {
+                    console.error('Error parsing users.json:', parseUserErr);
+                    console.warn('Property saved, but user data is corrupted.');
+                    return res.status(201).json(newProperty);
+                }
+
+                const targetUserIdentifier = newPropertyRequest.user.uid || newPropertyRequest.user.email;
+                const userKey = newPropertyRequest.user.uid ? 'uid' : 'email';
+
+                const userIndex = users.findIndex(u => {
+                    return u[userKey] == (userKey === 'uid' ? parseInt(targetUserIdentifier) : targetUserIdentifier);
+                });
+
+                if (userIndex !== -1) {
+                    if (!users[userIndex].numberPropertyList) {
+                        users[userIndex].numberPropertyList = [];
+                    }
+                    users[userIndex].numberPropertyList.push(newPropertyId);
+
+                    fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), (writeUserErr) => {
+                        if (writeUserErr) {
+                            console.error('Error writing users.json:', writeUserErr);
+                            console.warn('Property saved, but failed to update user list.');
+                            return res.status(201).json(newProperty);
+                        }
+                        console.log(`Property ID ${newProperty.propertyId} added to user ${users[userIndex][userKey]}'s numberPropertyList in users.json.`);
+                        res.status(201).json(newProperty);
+                    });
+                } else {
+                    console.warn(`Could not find user with ${userKey}: ${targetUserIdentifier} to update numberPropertyList in users.json.`);
+                    res.status(201).json(newProperty);
+                }
+            });
+            // --- users.json 업데이트 로직 끝 ---
         });
     });
 });
