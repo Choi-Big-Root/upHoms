@@ -251,6 +251,32 @@ app.post('/add_property', (req, res) => {
     });
 });
 
+// /properties: 모든 부동산 정보 가져오기
+app.get('/properties', (req, res) => {
+    fs.readFile(PROPERTIES_FILE, 'utf8', (err, data) => {
+        if (err) {
+            // 파일이 없으면 빈 배열 반환 (오류가 아님)
+            if (err.code === 'ENOENT') {
+                console.log('properties.json not found, returning empty array.');
+                return res.status(200).json([]); // 빈 배열 반환
+            } else {
+                console.error('Error reading properties.json:', err);
+                return res.status(500).send('SERVER ERROR while reading property data.');
+            }
+        }
+
+        let properties = [];
+        try {
+            properties = JSON.parse(data);
+        } catch (parseErr) {
+            console.error('Error parsing properties.json:', parseErr);
+            return res.status(500).send('Property data is corrupted.');
+        }
+
+        console.log(`Successfully retrieved ${properties.length} properties.`);
+        res.status(200).json(properties); // 모든 프로퍼티 데이터 반환
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);

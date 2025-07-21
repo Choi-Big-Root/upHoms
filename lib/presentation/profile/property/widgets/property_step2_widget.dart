@@ -68,7 +68,7 @@ class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
       listener: (context, state) {
         state.maybeWhen(
           editing: (data) {
-            context.pushNamed(RoutePath.propertyStep3Widget);
+            context.push('/property_step3_widget');
           },
           orElse: () => const SizedBox.shrink(),
         );
