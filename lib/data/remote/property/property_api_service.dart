@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/error_logger.dart';
 import '../../dto/property/property_dto.dart';
@@ -14,4 +15,7 @@ abstract class PropertyApiService {
 
   @GET('/properties') // 모든 속성을 가져오는 GET 요청 추가
   Future<List<PropertyDto>> getAllProperties();
+
+  @POST('/property_search')
+  Future<List<PropertyDto>> getSearchProperties(@Body() Map<String, dynamic> searchText);
 }

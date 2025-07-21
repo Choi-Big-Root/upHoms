@@ -15,7 +15,11 @@ class EditingProperty extends PropertyEvent {
   final PropertyModel propertyModel;
 }
 
-// 새로운 이벤트 추가
 class LoadProperties extends PropertyEvent {
   const LoadProperties();
+}
+
+class LoadSearchProperties extends PropertyEvent {
+  const LoadSearchProperties(this.searchText);
+  final Map<String, dynamic> searchText;
 }

@@ -7,6 +7,7 @@ class PropertyState with _$PropertyState {
   const factory PropertyState.success() = Created;
   const factory PropertyState.error(String message) = Error;
   const factory PropertyState.editing(PropertyModel property) = Editing;
-  // 새로운 상태 추가
   const factory PropertyState.propertiesLoaded(List<PropertyModel> properties) = PropertiesLoaded;
+  const factory PropertyState.searchPropertiesLoaded(List<PropertyModel> properties) = SearchPropertiesLoaded;
+
 }

@@ -15,4 +15,9 @@ class PropertyRepositoryImpl implements PropertyRepository {
   Future<List<PropertyModel>> getAllProperties() async {
     return await propertyRemoteDataSource.getAllProperties();
   }
+
+  @override
+  Future<List<PropertyModel>> getSearchProperties(Map<String, dynamic> searchText) async {
+    return await propertyRemoteDataSource.getSearchProperties(searchText);
+  }
 }

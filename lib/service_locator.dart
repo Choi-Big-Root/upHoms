@@ -13,6 +13,7 @@ import 'domain/repositories/property/property_repository.dart';
 import 'domain/repositories/user/user_repository.dart';
 import 'domain/usecases/property/add_property_usecase.dart';
 import 'domain/usecases/property/get_all_properties_usecase.dart';
+import 'domain/usecases/property/get_search_propertiesa_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/property/property_bloc.bloc.dart';
@@ -62,8 +63,10 @@ void _domain() {
     AddPropertyUsecase(locator<PropertyRepository>()),
   );
   locator.registerSingleton<GetAllPropertiesUsecase>(
-    // 추가
     GetAllPropertiesUsecase(locator<PropertyRepository>()),
+  );
+  locator.registerSingleton<GetSearchPropertiesUsecase>(
+    GetSearchPropertiesUsecase(locator<PropertyRepository>()),
   );
 }
 
@@ -83,6 +86,7 @@ void _presentation() {
     () => PropertyBloc(
       addPropertyUsecase: locator<AddPropertyUsecase>(),
       getAllPropertiesUsecase: locator<GetAllPropertiesUsecase>(),
+      getSearchPropertiesUsecase: locator<GetSearchPropertiesUsecase>(),
     ),
   );
 

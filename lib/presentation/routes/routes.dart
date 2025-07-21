@@ -85,7 +85,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.tripSearch,
       name: 'trip_search',
-      builder: (context, state) => const TripSearchWidget(),
+      builder: (context, state) {
+        final searchText = {'searchText' : state.uri.queryParameters['searchText']};
+        return TripSearchWidget(searchText: searchText);
+      },
     ),
     GoRoute(
       path: RoutePath.tripReview,

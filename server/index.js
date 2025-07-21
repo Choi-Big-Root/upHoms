@@ -27,8 +27,15 @@ const upload = multer({ storage: storage });
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(uploadsDir));
 
-// Middleware to parse JSON bodies
-app.use(express.json()); // Add this line
+// --- ✨ 중요: body-parser 미들웨어 순서 변경 및 추가 ---
+// 1. JSON 요청 본문을 파싱하기 위한 미들웨어 (가장 먼저 위치하여 일반적인 JSON 요청을 처리)
+app.use(express.json());
+// 2. 평범한 텍스트 요청 본문을 파싱하기 위한 미들웨어 추가
+//    이 미들웨어는 Content-Type이 'text/plain'일 때 req.body를 문자열로 파싱합니다.
+//    (body-parser의존성을 명시적으로 설치하지 않았다면, 'express' 내부에 포함되어 있습니다.)
+app.use(express.text());
+// --- ✨ 여기까지가 body-parser 미들웨어 설정입니다. ---
+
 
 // Image upload endpoint
 app.post('/upload', upload.single('image'), (req, res) => {
@@ -106,7 +113,7 @@ app.post('/user_create', (req, res) => {
             console.error('Error parsing users.json:', parseErr);
             return res.status(500).send('User data is corrupted.');
         }
-        
+
         //자동 증가 uid 생성 (마지막 uid + 1)
         const lastUid = users.length > 0 ? users[users.length - 1].uid || 0 : 0;
         const newUid = parseInt(lastUid) + 1;
@@ -130,7 +137,7 @@ app.post('/user_create', (req, res) => {
             if (err) {
                 console.error('Error writing users.json:', err);
                 return res.status(500).send('SERVER ERROR');
-            }    
+            }
             res.status(201).json(newUser); // uid 포함된 유저 정보 반환
         });
     });
@@ -251,7 +258,6 @@ app.post('/add_property', (req, res) => {
     });
 });
 
-// /properties: 모든 부동산 정보 가져오기
 app.get('/properties', (req, res) => {
     fs.readFile(PROPERTIES_FILE, 'utf8', (err, data) => {
         if (err) {
@@ -273,8 +279,80 @@ app.get('/properties', (req, res) => {
             return res.status(500).send('Property data is corrupted.');
         }
 
-        console.log(`Successfully retrieved ${properties.length} properties.`);
-        res.status(200).json(properties); // 모든 프로퍼티 데이터 반환
+        properties.sort((a, b) => {
+            // lastUpdated 필드가 없는 경우를 대비하여 기본값 설정 (예: 과거 날짜)
+            const dateA = a.lastUpdated ? new Date(a.lastUpdated) : new Date(0); // Epoch 시작
+            const dateB = b.lastUpdated ? new Date(b.lastUpdated) : new Date(0); // Epoch 시작
+
+            // 내림차순 정렬 (최신 날짜가 먼저 오도록)
+            return dateB.getTime() - dateA.getTime();
+        });
+
+        console.log(`Successfully retrieved ${properties.length} properties, sorted by lastUpdated.`);
+        res.status(200).json(properties); // 정렬된 프로퍼티 데이터 반환
+    });
+});
+
+// /property_search: 검색어로 부동산 정보 가져오기
+app.post('/property_search', (req, res) => {
+    let searchText;
+
+    // ✨ req.body의 타입에 따라 searchText 추출 방식 결정
+    // 클라이언트가 @Body() String searchText로 보내면 Content-Type이 'text/plain'일 수 있으며,
+    // 이 경우 bodyParser.text()가 req.body를 직접 문자열로 파싱합니다.
+    if (typeof req.body === 'string') {
+        searchText = req.body.toLowerCase().trim();
+    }
+    // 만약 클라이언트가 실수로 Content-Type을 'application/json'으로 보내면서
+    // 유효하지 않은 JSON 문자열(예: 'test')을 보낸다면, bodyParser.json()에서 에러가 날 수 있습니다.
+    // 하지만 유효한 JSON 객체로 보냈다면 (예: {"searchText": "test"}), 이 분기로 올 수 있습니다.
+    else if (typeof req.body === 'object' && req.body !== null && req.body.searchText) {
+        searchText = req.body.searchText.toLowerCase().trim();
+    } else {
+        // 예상치 못한 req.body 형식
+        console.error('Unexpected req.body type for /property_search:', req.body);
+        return res.status(400).send('Invalid search text format. Please send a plain string or a JSON object with a "searchText" key.');
+    }
+
+    if (!searchText) {
+        return res.status(400).send('Search text is required in the request body.');
+    }
+
+    fs.readFile(PROPERTIES_FILE, 'utf8', (err, data) => {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                console.log('properties.json not found, returning empty array for search.');
+                return res.status(200).json([]);
+            } else {
+                console.error('Error reading properties.json for search:', err);
+                return res.status(500).send('SERVER ERROR while reading property data for search.');
+            }
+        }
+
+        let properties = [];
+        try {
+            properties = JSON.parse(data);
+        } catch (parseErr) {
+            console.error('Error parsing properties.json for search:', parseErr);
+            return res.status(500).send('Property data is corrupted.');
+        }
+
+        const searchResults = properties.filter(property => {
+            // 필드가 없을 경우를 대비하여 안전하게 접근하고 소문자로 변환
+            const propertyAddress = property.propertyAddress?.toString().toLowerCase() || '';
+            const propertyCity = property.propertyCity?.toString().toLowerCase() || '';
+            const propertyState = property.propertyState?.toString().toLowerCase() || '';
+            const propertyNeighborhood = property.propertyNeighborhood?.toString().toLowerCase() || '';
+
+            // 하나라도 검색어를 포함하면 true 반환
+            return propertyAddress.includes(searchText) ||
+                   propertyCity.includes(searchText) ||
+                   propertyState.includes(searchText) ||
+                   propertyNeighborhood.includes(searchText);
+        });
+
+        console.log(`Found ${searchResults.length} properties matching "${searchText}".`);
+        res.status(200).json(searchResults); // 검색 결과 반환
     });
 });
 

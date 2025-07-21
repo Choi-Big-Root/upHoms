@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,12 +8,10 @@ import 'dart:io';
 import 'dart:convert';
 
 import '../../../../core/custom/custom_button_widget.dart';
-import '../../../../core/custom/custom_font_weight.dart';
 import '../../../../core/theme/theme_extension.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../domain/model/property/property_model.dart';
 import '../../../bloc/property/property_bloc.bloc.dart';
-import '../../../routes/route_path.dart';
 import 'common/custom_property_app_bar.dart';
 import 'common/custom_property_textfield.dart';
 import 'common/custom_property_textfield_dec.dart';
@@ -48,7 +45,9 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
       final bytes = await image.readAsBytes();
       setState(() {
         _selectedImageFile = image;
-        _selectedImageBase64 = base64Encode(bytes);
+        final String fileExtension = image.path.split('.').last.toLowerCase();
+        final String mimeType = 'image/${fileExtension == 'jpg' ? 'jpeg' : fileExtension}';
+        _selectedImageBase64 = 'data:$mimeType;base64,${base64Encode(bytes)}';
       });
     }
   }
