@@ -8,6 +8,7 @@ part of 'property_model.dart';
 
 _PropertyModel _$PropertyModelFromJson(Map<String, dynamic> json) =>
     _PropertyModel(
+      propertyId: json['propertyId'] as String?,
       propertyName: json['propertyName'] as String?,
       propertyDescription: json['propertyDescription'] as String?,
       mainImage: json['mainImage'] as String?,
@@ -16,14 +17,17 @@ _PropertyModel _$PropertyModelFromJson(Map<String, dynamic> json) =>
       isDraft: json['isDraft'] as bool?,
       user: json['user'] == null
           ? null
-          : UserDto.fromJson(json['user'] as Map<String, dynamic>),
+          : UserModel.fromJson(json['user'] as Map<String, dynamic>),
+      amenity: json['amenity'] == null
+          ? null
+          : AmenityModel.fromJson(json['amenity'] as Map<String, dynamic>),
       propertyNeighborhood: json['propertyNeighborhood'] as String?,
       ratingSummary: (json['ratingSummary'] as num?)?.toDouble(),
       price: (json['price'] as num?)?.toInt(),
       taxRate: (json['taxRate'] as num?)?.toDouble(),
       cleaningFee: (json['cleaningFee'] as num?)?.toInt(),
       notes: json['notes'] as String?,
-      minNightStay: (json['minNightStay'] as num?)?.toDouble(),
+      minNightStay: (json['minNightStay'] as num?)?.toInt(),
       lastUpdated: json['lastUpdated'] as String?,
       minNights: (json['minNights'] as num?)?.toInt(),
       isLive: json['isLive'] as bool?,
@@ -31,6 +35,7 @@ _PropertyModel _$PropertyModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$PropertyModelToJson(_PropertyModel instance) =>
     <String, dynamic>{
+      'propertyId': instance.propertyId,
       'propertyName': instance.propertyName,
       'propertyDescription': instance.propertyDescription,
       'mainImage': instance.mainImage,
@@ -38,6 +43,7 @@ Map<String, dynamic> _$PropertyModelToJson(_PropertyModel instance) =>
       'propertyAddress': instance.propertyAddress,
       'isDraft': instance.isDraft,
       'user': instance.user,
+      'amenity': instance.amenity,
       'propertyNeighborhood': instance.propertyNeighborhood,
       'ratingSummary': instance.ratingSummary,
       'price': instance.price,
