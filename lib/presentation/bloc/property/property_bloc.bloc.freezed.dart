@@ -55,14 +55,15 @@ extension PropertyStatePatterns on PropertyState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Created value)?  success,TResult Function( Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Created value)?  success,TResult Function( Error value)?  error,TResult Function( Editing value)?  editing,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial(_that);case Loading() when loading != null:
 return loading(_that);case Created() when success != null:
 return success(_that);case Error() when error != null:
-return error(_that);case _:
+return error(_that);case Editing() when editing != null:
+return editing(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Created value)  success,required TResult Function( Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Created value)  success,required TResult Function( Error value)  error,required TResult Function( Editing value)  editing,}){
 final _that = this;
 switch (_that) {
 case Initial():
 return initial(_that);case Loading():
 return loading(_that);case Created():
 return success(_that);case Error():
-return error(_that);case _:
+return error(_that);case Editing():
+return editing(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +106,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Created value)?  success,TResult? Function( Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Created value)?  success,TResult? Function( Error value)?  error,TResult? Function( Editing value)?  editing,}){
 final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial(_that);case Loading() when loading != null:
 return loading(_that);case Created() when success != null:
 return success(_that);case Error() when error != null:
-return error(_that);case _:
+return error(_that);case Editing() when editing != null:
+return editing(_that);case _:
   return null;
 
 }
@@ -128,13 +131,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  error,TResult Function( PropertyModel property)?  editing,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Loading() when loading != null:
 return loading();case Created() when success != null:
 return success();case Error() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case Editing() when editing != null:
+return editing(_that.property);case _:
   return orElse();
 
 }
@@ -152,13 +156,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  error,required TResult Function( PropertyModel property)  editing,}) {final _that = this;
 switch (_that) {
 case Initial():
 return initial();case Loading():
 return loading();case Created():
 return success();case Error():
-return error(_that.message);case _:
+return error(_that.message);case Editing():
+return editing(_that.property);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +180,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  error,TResult? Function( PropertyModel property)?  editing,}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Loading() when loading != null:
 return loading();case Created() when success != null:
 return success();case Error() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case Editing() when editing != null:
+return editing(_that.property);case _:
   return null;
 
 }
@@ -349,6 +355,81 @@ as String,
 }
 
 
+}
+
+/// @nodoc
+
+
+class Editing implements PropertyState {
+  const Editing(this.property);
+  
+
+ final  PropertyModel property;
+
+/// Create a copy of PropertyState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EditingCopyWith<Editing> get copyWith => _$EditingCopyWithImpl<Editing>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Editing&&(identical(other.property, property) || other.property == property));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,property);
+
+@override
+String toString() {
+  return 'PropertyState.editing(property: $property)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $EditingCopyWith<$Res> implements $PropertyStateCopyWith<$Res> {
+  factory $EditingCopyWith(Editing value, $Res Function(Editing) _then) = _$EditingCopyWithImpl;
+@useResult
+$Res call({
+ PropertyModel property
+});
+
+
+$PropertyModelCopyWith<$Res> get property;
+
+}
+/// @nodoc
+class _$EditingCopyWithImpl<$Res>
+    implements $EditingCopyWith<$Res> {
+  _$EditingCopyWithImpl(this._self, this._then);
+
+  final Editing _self;
+  final $Res Function(Editing) _then;
+
+/// Create a copy of PropertyState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? property = null,}) {
+  return _then(Editing(
+null == property ? _self.property : property // ignore: cast_nullable_to_non_nullable
+as PropertyModel,
+  ));
+}
+
+/// Create a copy of PropertyState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PropertyModelCopyWith<$Res> get property {
+  
+  return $PropertyModelCopyWith<$Res>(_self.property, (value) {
+    return _then(_self.copyWith(property: value));
+  });
+}
 }
 
 // dart format on

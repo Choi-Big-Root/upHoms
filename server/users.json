@@ -180,5 +180,19 @@
     "isHost": false,
     "numberPropertyList": [],
     "numberActiveBookingsList": []
+  },
+  {
+    "userCity": "131231",
+    "email": "zxczxc11@email.com",
+    "password": "1231",
+    "displayName": "23123",
+    "photoUrl": "",
+    "uid": 14,
+    "createdTime": "2025-07-20T15:36:37.503Z",
+    "phoneNumber": "11111111111",
+    "bio": "",
+    "isHost": false,
+    "numberPropertyList": [],
+    "numberActiveBookingsList": []
   }
 ]

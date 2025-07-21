@@ -6,4 +6,5 @@ class PropertyState with _$PropertyState {
   const factory PropertyState.loading() = Loading;
   const factory PropertyState.success() = Created;
   const factory PropertyState.error(String message) = Error;
+  const factory PropertyState.editing(PropertyModel property) = Editing;
 }

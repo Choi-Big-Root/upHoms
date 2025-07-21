@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uphoms/presentation/bloc/user/user_bloc.bloc.dart';
 import 'package:uphoms/presentation/cubit/message_cubit.dart';
+import 'presentation/bloc/property/property_bloc.bloc.dart';
 import 'service_locator.dart';
 import 'core/constants.dart';
 import 'core/custom/custom_theme.dart';
@@ -27,8 +28,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => locator<UserBloc>()),
-        BlocProvider(create: (context) => locator<MessageCubit>()),
+        BlocProvider(create: (context) => locator<UserBloc>()), //User 관련
+        BlocProvider(create: (context) => locator<PropertyBloc>()), // property 관련
+        BlocProvider(create: (context) => locator<MessageCubit>()), // snackbar message 관련
       ],
       child: ValueListenableBuilder(
         valueListenable: AppConstants.themeNotifier,

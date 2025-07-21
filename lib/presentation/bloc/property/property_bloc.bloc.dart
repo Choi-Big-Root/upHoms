@@ -13,9 +13,10 @@ part 'property_bloc.bloc.freezed.dart';
 class PropertyBloc extends Bloc<PropertyEvent,PropertyState> {
   final AddPropertyUsecase _addPropertyUsecase;
 
-  PropertyBloc({required AddPropertyUsecase addPropertyUsecasem }) : _addPropertyUsecase = addPropertyUsecasem,
+  PropertyBloc({required AddPropertyUsecase addPropertyUsecase }) : _addPropertyUsecase = addPropertyUsecase,
   super(const PropertyState.initial()){
     on<AddProperty>(_onAddProperty);
+    on<EditingProperty>(_onEditingProperty);
   }
 
   Future<void> _onAddProperty(AddProperty event, Emitter<PropertyState> emit) async {
@@ -23,6 +24,15 @@ class PropertyBloc extends Bloc<PropertyEvent,PropertyState> {
     try {
       await _addPropertyUsecase(event.propertyModel);
       emit(const PropertyState.success());
+    } catch (e) {
+      emit(PropertyState.error(e.toString()));
+    }
+  }
+
+  Future<void> _onEditingProperty(EditingProperty event, Emitter<PropertyState> emit) async {
+    emit(const PropertyState.loading());
+    try {
+      emit(PropertyState.editing(event.propertyModel));
     } catch (e) {
       emit(PropertyState.error(e.toString()));
     }

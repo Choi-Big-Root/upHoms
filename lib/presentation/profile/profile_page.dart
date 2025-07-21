@@ -62,7 +62,35 @@ class _ProfilePageState extends State<ProfilePage> {
                   BlocBuilder<UserBloc, UserState>(
                     builder: (context, state) {
                       return state.maybeWhen(
-                        success: (user) => _buildUserInfo(context, user.displayName ?? 'Mr.Rogers', user.email ?? '[email]'), // 성공 상태
+                        success: (user) {
+                          return Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  user.displayName!,
+                                  style: GoogleFonts.lexendDeca(
+                                    textStyle: textScheme.headlineSmall?.copyWith(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  user.email!,
+                                  style: GoogleFonts.lexendDeca(
+                                    textStyle: textScheme.bodyMedium?.copyWith(
+                                      fontWeight: CustomFontWeight.normal,
+                                      color: colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                         orElse: () => const SizedBox.shrink()
                       );
                     },
@@ -411,38 +439,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUserInfo(BuildContext context, String displayName, String email) {
-    final colorScheme = context.colors;
-    final textScheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            displayName,
-            style: GoogleFonts.lexendDeca(
-              textStyle: textScheme.headlineSmall?.copyWith(
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Text(
-            email,
-            style: GoogleFonts.lexendDeca(
-              textStyle: textScheme.bodyMedium?.copyWith(
-                fontWeight: CustomFontWeight.normal,
-                color: colorScheme.primary,
-              ),
-            ),
           ),
         ],
       ),

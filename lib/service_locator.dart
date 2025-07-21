@@ -14,6 +14,7 @@ import 'domain/repositories/user/user_repository.dart';
 import 'domain/usecases/property/add_property_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
+import 'presentation/bloc/property/property_bloc.bloc.dart';
 import 'presentation/bloc/user/user_bloc.bloc.dart';
 import 'presentation/cubit/message_cubit.dart';
 
@@ -38,14 +39,15 @@ void _data() {
     UserRepositoryImpl(locator<UserRemoteDataSource>()),
   );
 
-  locator.registerSingleton<PropertyApiService>(PropertyApiService(locator<Dio>()));
+  locator.registerSingleton<PropertyApiService>(
+    PropertyApiService(locator<Dio>()),
+  );
   locator.registerSingleton<PropertyRemoteDataSource>(
     PropertyRemoteDataSourceImpl(locator<PropertyApiService>()),
   );
   locator.registerSingleton<PropertyRepository>(
     PropertyRepositoryImpl(locator<PropertyRemoteDataSource>()),
   );
-
 }
 
 void _domain() {
@@ -72,7 +74,9 @@ void _presentation() {
     ),
   );
 
-
+  locator.registerFactory(
+    () => PropertyBloc(addPropertyUsecase: locator<AddPropertyUsecase>(),),
+  );
 
   locator.registerSingleton<MessageCubit>(MessageCubit());
 }

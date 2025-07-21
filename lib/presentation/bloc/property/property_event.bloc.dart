@@ -9,3 +9,8 @@ class AddProperty extends PropertyEvent {
 
   final PropertyModel propertyModel;
 }
+
+class EditingProperty extends PropertyEvent {
+  EditingProperty(this.propertyModel);
+  final PropertyModel propertyModel;
+}
