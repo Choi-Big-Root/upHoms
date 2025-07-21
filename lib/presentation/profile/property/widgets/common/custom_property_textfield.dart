@@ -7,13 +7,17 @@ class CustomPropertyTextField extends StatefulWidget {
   const CustomPropertyTextField({
     super.key,
     required this.hintText,
+    this.controller,
     this.padding = const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
     this.maxLine = 1,
+    this.validator,
   });
 
+  final TextEditingController? controller;
   final String hintText;
   final EdgeInsetsDirectional padding;
   final int maxLine;
+  final String? Function(String?)? validator;
 
   @override
   State<CustomPropertyTextField> createState() =>
@@ -26,7 +30,7 @@ class _CustomPropertyTextFieldState extends State<CustomPropertyTextField> {
     return Padding(
       padding: widget.padding,
       child: TextFormField(
-        controller: TextEditingController(),
+        controller: widget.controller,
         focusNode: FocusNode(),
         maxLines: widget.maxLine,
         obscureText: false,
@@ -58,6 +62,7 @@ class _CustomPropertyTextFieldState extends State<CustomPropertyTextField> {
             context,
           ).textTheme.headlineMedium?.copyWith(color: context.colors.grayIcon),
         ),
+        validator:widget.validator,
       ),
     );
   }

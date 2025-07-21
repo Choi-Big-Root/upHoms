@@ -1,11 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 
 import '../../../../core/custom/custom_button_widget.dart';
 import '../../../../core/custom/custom_font_weight.dart';
 import '../../../../core/theme/theme_extension.dart';
+import '../../../../core/utils/validators.dart';
+import '../../../../domain/model/property/property_model.dart';
+import '../../../bloc/property/property_bloc.bloc.dart';
 import 'common/custom_property_app_bar.dart';
 import 'common/custom_property_textfield.dart';
 import 'common/custom_property_textfield_dec.dart';
@@ -18,6 +23,43 @@ class PropertyStep1Widget extends StatefulWidget {
 }
 
 class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
+  final logger = Logger();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _propertyNameController = TextEditingController();
+  final TextEditingController _propertyAddressController =
+      TextEditingController();
+  final TextEditingController _propertyNeighborhoodController =
+      TextEditingController();
+  final TextEditingController _propertyDescriptionController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _propertyNameController.dispose();
+    _propertyAddressController.dispose();
+    _propertyNeighborhoodController.dispose();
+    _propertyDescriptionController.dispose();
+  }
+
+  PropertyModel _saveForm() {
+    final propertyModel = PropertyModel(
+      propertyName: _propertyNameController.text,
+      propertyAddress: _propertyAddressController.text,
+      propertyNeighborhood: _propertyNeighborhoodController.text,
+      propertyDescription: _propertyDescriptionController.text,
+    );
+    return propertyModel;
+  }
+
+  void _onPressedNextStep() {
+    if (_formKey.currentState!.validate()) {
+      logger.d(_saveForm().toString());
+      context.read<PropertyBloc>().add(EditingProperty(_saveForm()));
+      context.push('/property_step2_widget');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colors;
@@ -28,6 +70,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
       body: SafeArea(
         top: true,
         child: Form(
+          key: _formKey,
           child: Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
             child: Column(
@@ -76,40 +119,68 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
                             title: 'PROPERTY NAME',
                             topPadding: 12,
                           ),
-                          const CustomPropertyTextField(
+                          CustomPropertyTextField(
+                            controller: _propertyNameController,
                             hintText: 'Something Catchy...',
+                            validator: (value) {
+                              return AppValidators.validateRequired(
+                                value,
+                                '상품 이름',
+                              );
+                            },
                           ),
 
                           const CustomPropertyTextFieldDec(
                             title: 'PROPERTY ADDRESS',
                             topPadding: 8,
                           ),
-                          const CustomPropertyTextField(
+                          CustomPropertyTextField(
+                            controller: _propertyAddressController,
                             hintText: '123 Disney way here...',
                             maxLine: 2,
+                            validator: (value) {
+                              return AppValidators.validateRequired(
+                                value,
+                                '상품 주소',
+                              );
+                            },
                           ),
 
                           const CustomPropertyTextFieldDec(
                             title: 'NEIGHBORHOOD',
                             topPadding: 8,
                           ),
-                          const CustomPropertyTextField(
-                            hintText: 'Something Catchy...',
+                          CustomPropertyTextField(
+                            controller: _propertyNeighborhoodController,
+                            hintText: 'Neighborhood or city...',
+                            validator: (value) {
+                              return AppValidators.validateRequired(
+                                value,
+                                '상품 지역',
+                              );
+                            },
                           ),
 
                           const CustomPropertyTextFieldDec(
                             title: 'DESCRIPTION',
                             topPadding: 8,
                           ),
-                          const CustomPropertyTextField(
-                            hintText: 'Neighborhood or city...',
+                          CustomPropertyTextField(
+                            controller: _propertyDescriptionController,
+                            hintText: 'Description...',
                             maxLine: 4,
-                            padding: EdgeInsetsDirectional.fromSTEB(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
                               0,
                               4,
                               0,
                               12,
                             ),
+                            validator: (value) {
+                              return AppValidators.validateRequired(
+                                value,
+                                '상품 설명',
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -143,7 +214,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
                       CustomButtonWidget(
                         color: colorScheme.primary,
                         onPressed: () {
-                          context.push('/property_step2_widget');
+                          _onPressedNextStep();
                         },
                         elevation: 2.0,
                         circular: 60,
