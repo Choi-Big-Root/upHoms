@@ -10,4 +10,9 @@ class PropertyRepositoryImpl implements PropertyRepository {
   Future<void> addProperty(PropertyModel property) async {
     await propertyRemoteDataSource.addProperty(property);
   }
+
+  @override
+  Future<List<PropertyModel>> getAllProperties() async {
+    return await propertyRemoteDataSource.getAllProperties();
+  }
 }

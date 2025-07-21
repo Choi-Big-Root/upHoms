@@ -12,6 +12,7 @@ import 'data/repositories/user/user_repository_impl.dart';
 import 'domain/repositories/property/property_repository.dart';
 import 'domain/repositories/user/user_repository.dart';
 import 'domain/usecases/property/add_property_usecase.dart';
+import 'domain/usecases/property/get_all_properties_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/property/property_bloc.bloc.dart';
@@ -60,6 +61,10 @@ void _domain() {
   locator.registerSingleton<AddPropertyUsecase>(
     AddPropertyUsecase(locator<PropertyRepository>()),
   );
+  locator.registerSingleton<GetAllPropertiesUsecase>(
+    // 추가
+    GetAllPropertiesUsecase(locator<PropertyRepository>()),
+  );
 }
 
 void _presentation() {
@@ -75,7 +80,10 @@ void _presentation() {
   );
 
   locator.registerFactory(
-    () => PropertyBloc(addPropertyUsecase: locator<AddPropertyUsecase>(),),
+    () => PropertyBloc(
+      addPropertyUsecase: locator<AddPropertyUsecase>(),
+      getAllPropertiesUsecase: locator<GetAllPropertiesUsecase>(),
+    ),
   );
 
   locator.registerSingleton<MessageCubit>(MessageCubit());

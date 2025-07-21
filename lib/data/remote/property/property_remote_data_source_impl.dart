@@ -32,4 +32,23 @@ class PropertyRemoteDataSourceImpl implements PropertyRemoteDataSource {
       throw Exception('An unexpected error occurred while Add Property');
     }
   }
+
+  @override
+  Future<List<PropertyModel>> getAllProperties() async {
+    try {
+      final propertyDtos = await propertyApiService.getAllProperties();
+      return propertyDtos.map((dto) => PropertyMapper.toModel(dto)).toList();
+    } on DioException catch (e) {
+      if (e.response != null) {
+        logger.e('Error Get All Properties: ${e.response?.statusCode} - ${e.response?.data}');
+        throw Exception('${e.response?.data}');
+      } else {
+        logger.e('Error Get All Properties: ${e.message}');
+        throw Exception('Failed to get all properties: Network error or timeout');
+      }
+    } catch (e) {
+      logger.e('Unexpected error Get All Properties: $e');
+      throw Exception('An unexpected error occurred while getting all properties');
+    }
+  }
 }

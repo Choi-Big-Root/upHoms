@@ -11,4 +11,7 @@ abstract class PropertyApiService {
 
   @POST('/add_property')
   Future<void> addProperty(@Body() PropertyDto property);
+
+  @GET('/properties') // 모든 속성을 가져오는 GET 요청 추가
+  Future<List<PropertyDto>> getAllProperties();
 }
