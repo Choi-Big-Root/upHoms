@@ -122,6 +122,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
                           CustomPropertyTextField(
                             controller: _propertyNameController,
                             hintText: 'Something Catchy...',
+                            textInputType: TextInputType.text,
                             validator: (value) {
                               return AppValidators.validateRequired(
                                 value,
@@ -137,6 +138,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
                           CustomPropertyTextField(
                             controller: _propertyAddressController,
                             hintText: '123 Disney way here...',
+                            textInputType: TextInputType.text,
                             maxLine: 2,
                             validator: (value) {
                               return AppValidators.validateRequired(
@@ -153,6 +155,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
                           CustomPropertyTextField(
                             controller: _propertyNeighborhoodController,
                             hintText: 'Neighborhood or city...',
+                            textInputType: TextInputType.text,
                             validator: (value) {
                               return AppValidators.validateRequired(
                                 value,
@@ -168,6 +171,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
                           CustomPropertyTextField(
                             controller: _propertyDescriptionController,
                             hintText: 'Description...',
+                            textInputType: TextInputType.text,
                             maxLine: 4,
                             padding: const EdgeInsetsDirectional.fromSTEB(
                               0,

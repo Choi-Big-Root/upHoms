@@ -8,7 +8,7 @@ part of 'property_model.dart';
 
 _PropertyModel _$PropertyModelFromJson(Map<String, dynamic> json) =>
     _PropertyModel(
-      propertyId: json['propertyId'] as String?,
+      propertyId: (json['propertyId'] as num?)?.toInt(),
       propertyName: json['propertyName'] as String?,
       propertyDescription: json['propertyDescription'] as String?,
       mainImage: json['mainImage'] as String?,

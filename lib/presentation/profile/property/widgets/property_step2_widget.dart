@@ -23,17 +23,17 @@ class PropertyStep2Widget extends StatefulWidget {
 class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
   final logger = Logger();
 
-  final bool _isAC = false;
-  final bool _isHeater = false;
-  final bool _isPool = false;
-  final bool _isDogFriendly = false;
-  final bool _isWasher = false;
-  final bool _isDryer = false;
-  final bool _isWorkOut = false;
-  final bool _isHip = false;
-  final bool _isNightLife = false;
-  final bool _isExtraOutlets = false;
-  final bool _isEvCharger = false;
+  bool _isAC = false;
+  bool _isHeater = false;
+  bool _isPool = false;
+  bool _isDogFriendly = false;
+  bool _isWasher = false;
+  bool _isDryer = false;
+  bool _isWorkOut = false;
+  bool _isHip = false;
+  bool _isNightLife = false;
+  bool _isExtraOutlets = false;
+  bool _isEvCharger = false;
 
   PropertyModel _saveProperty(PropertyModel property) {
     final amenity = AmenityModel(
@@ -54,8 +54,8 @@ class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
   }
 
   void _onPressedNextStep(PropertyModel property) {
-    context.read<PropertyBloc>().add(EditingProperty(_saveProperty(property)));
-    context.push('/property_step3_widget');
+    final amenityAddPropertyModel = _saveProperty(property);
+    context.read<PropertyBloc>().add(EditingProperty(amenityAddPropertyModel));
   }
 
   @override
@@ -63,249 +63,314 @@ class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
     final colorScheme = context.colors;
     final textScheme = Theme.of(context).textTheme;
 
-    return BlocBuilder<PropertyBloc, PropertyState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: colorScheme.secondaryBackground,
-          appBar: const CustomPropertyAppBar(),
-          body: SafeArea(
-            top: true,
-            child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(
-                        16,
-                        0,
-                        16,
-                        0,
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                0,
-                                0,
-                                0,
-                                12,
+    return BlocListener<PropertyBloc, PropertyState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          editing: (data) {
+            context.push('/property_step3_widget');
+          },
+          orElse: () => const SizedBox.shrink(),
+        );
+      },
+      child: BlocBuilder<PropertyBloc, PropertyState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: colorScheme.secondaryBackground,
+            appBar: const CustomPropertyAppBar(),
+            body: SafeArea(
+              top: true,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          16,
+                          0,
+                          16,
+                          0,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0,
+                                  0,
+                                  0,
+                                  12,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'CHOOSE YOUR AMENITIES',
+                                      style: GoogleFonts.urbanist(
+                                        textStyle: textScheme.bodyMedium
+                                            ?.copyWith(
+                                              color: colorScheme.gray600,
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Row(
+                              Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'CHOOSE YOUR AMENITIES',
-                                    style: GoogleFonts.urbanist(
-                                      textStyle: textScheme.bodyMedium
-                                          ?.copyWith(
-                                            color: colorScheme.gray600,
-                                          ),
-                                    ),
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.pool_rounded,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Pool',
+                                    switchVal: _isPool,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isPool = newValue;
+                                      });
+                                    },
                                   ),
                                 ],
                               ),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.pool_rounded,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Pool',
-                                  switchVal: _isPool,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.ev_station_rounded,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'EV Car Charging',
-                                  switchVal: _isEvCharger,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.power_outlined,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Extra Outlets',
-                                  switchVal: _isExtraOutlets,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.ac_unit_rounded,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Air Conditioning (AC)',
-                                  switchVal: _isAC,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.wb_sunny_rounded,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Heating',
-                                  switchVal: _isHeater,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData:
-                                      Icons.local_laundry_service_outlined,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Washer',
-                                  switchVal: _isWasher,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData:
-                                      Icons.local_laundry_service_outlined,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Dryer',
-                                  switchVal: _isDryer,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.pets_rounded,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Pet Friendly',
-                                  switchVal: _isDogFriendly,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.fitness_center_rounded,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Workout Facility',
-                                  switchVal: _isWorkOut,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.theater_comedy,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Hip',
-                                  switchVal: _isHip,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const CustomAmenitityIndicatorWidget(
-                                  iconData: Icons.nightlife,
-                                ),
-                                CustomPropertyAmenlty(
-                                  text: 'Night Life',
-                                  switchVal: _isNightLife,
-                                ),
-                              ],
-                            ),
-                          ],
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.ev_station_rounded,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'EV Car Charging',
+                                    switchVal: _isEvCharger,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isEvCharger = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.power_outlined,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Extra Outlets',
+                                    switchVal: _isExtraOutlets,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isExtraOutlets = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.ac_unit_rounded,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Air Conditioning (AC)',
+                                    switchVal: _isAC,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isAC = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.wb_sunny_rounded,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Heating',
+                                    switchVal: _isHeater,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isHeater = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData:
+                                        Icons.local_laundry_service_outlined,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Washer',
+                                    switchVal: _isWasher,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isWasher = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData:
+                                        Icons.local_laundry_service_outlined,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Dryer',
+                                    switchVal: _isDryer,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isDryer = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.pets_rounded,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Pet Friendly',
+                                    switchVal: _isDogFriendly,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isDogFriendly = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.fitness_center_rounded,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Workout Facility',
+                                    switchVal: _isWorkOut,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isWorkOut = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.theater_comedy,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Hip',
+                                    switchVal: _isHip,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isHip = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const CustomAmenitityIndicatorWidget(
+                                    iconData: Icons.nightlife,
+                                  ),
+                                  CustomPropertyAmenlty(
+                                    text: 'Night Life',
+                                    switchVal: _isNightLife,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _isNightLife = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                      24,
-                      12,
-                      24,
-                      12,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'STEP',
-                              style: GoogleFonts.urbanist(
-                                textStyle: textScheme.bodyMedium,
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                        24,
+                        12,
+                        24,
+                        12,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'STEP',
+                                style: GoogleFonts.urbanist(
+                                  textStyle: textScheme.bodyMedium,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '2/3',
-                              style: GoogleFonts.urbanist(
-                                textStyle: textScheme.headlineMedium,
+                              Text(
+                                '2/3',
+                                style: GoogleFonts.urbanist(
+                                  textStyle: textScheme.headlineMedium,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        CustomButtonWidget(
-                          color: colorScheme.primary,
-                          onPressed: () {
-                            state.maybeWhen(
-                              orElse: () => const SizedBox.shrink(),
-                              editing: (property) {
-                                _onPressedNextStep(property);
-                              },
-                            );
-                          },
-                          elevation: 2.0,
-                          circular: 60,
-                          size: const Size(120, 50),
-                          text: 'NEXT',
-                          style: GoogleFonts.urbanist(
-                            textStyle: textScheme.titleSmall?.copyWith(
-                              color: Colors.white,
+                            ],
+                          ),
+                          CustomButtonWidget(
+                            color: colorScheme.primary,
+                            onPressed: () {
+                              state.maybeWhen(
+                                orElse: () => const SizedBox.shrink(),
+                                editing: (property) {
+                                  _onPressedNextStep(property);
+                                },
+                              );
+                            },
+                            elevation: 2.0,
+                            circular: 60,
+                            size: const Size(120, 50),
+                            text: 'NEXT',
+                            style: GoogleFonts.urbanist(
+                              textStyle: textScheme.titleSmall?.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

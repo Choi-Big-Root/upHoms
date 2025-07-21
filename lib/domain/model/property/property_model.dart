@@ -12,7 +12,7 @@ part 'property_model.g.dart';
 @freezed
 abstract class PropertyModel with _$PropertyModel {
   const factory PropertyModel({
-    String? propertyId,
+    int? propertyId,
     String? propertyName,
     String? propertyDescription,
     String? mainImage,

@@ -8,32 +8,25 @@ class CustomPropertyAmenlty extends StatefulWidget {
     super.key,
     required this.text,
     required this.switchVal,
+    required this.onChanged, 
   });
 
   final String text;
   final bool switchVal;
+  final ValueChanged<bool> onChanged;
 
   @override
   State<CustomPropertyAmenlty> createState() => _CustomPropertyAmenltyState();
 }
 
 class _CustomPropertyAmenltyState extends State<CustomPropertyAmenlty> {
-  late bool isOn;
-  @override
-  void initState() {
-    super.initState();
-    isOn = widget.switchVal;
-
-  }
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: SwitchListTile.adaptive(
-        value: isOn,
-        onChanged: (newValue) async {
-          setState(() {
-            isOn = newValue;
-          });
+        value: widget.switchVal,
+        onChanged: (newValue) {
+          widget.onChanged(newValue);
         },
         title: Text(
           widget.text,

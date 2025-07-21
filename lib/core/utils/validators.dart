@@ -9,6 +9,8 @@ class AppValidators {
   // 전화번호 정규식 숫자로만 구성되었는지 확인
   static const String _phoneNumberRegex = r'^[0-9]+$';
 
+  static const String _numberRegex = r'^[0-9]+$';
+
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return '이메일을(를) 입력해주세요.';
@@ -35,9 +37,12 @@ class AppValidators {
   }
 
   /// 일반적인 필수 입력 필드 검사
-  static String? validateRequired(String? value, String fieldName) {
+  static String? validateRequired(String? value, String fieldName,{bool isOnlyNumber = false}) {
     if (value == null || value.isEmpty) {
       return '$fieldName을(를) 입력해주세요.';
+    }
+    if (!RegExp(_numberRegex).hasMatch(value) && isOnlyNumber ) {
+      return '숫자만 입력이 가능합니다.';
     }
     return null;
   }

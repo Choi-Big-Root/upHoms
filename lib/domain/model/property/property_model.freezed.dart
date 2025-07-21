@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PropertyModel {
 
- String? get propertyId; String? get propertyName; String? get propertyDescription; String? get mainImage; String? get propertyLocation; String? get propertyAddress; bool? get isDraft; UserModel? get user; AmenityModel? get amenity; String? get propertyNeighborhood; double? get ratingSummary; int? get price; double? get taxRate; int? get cleaningFee; String? get notes; int? get minNightStay; String? get lastUpdated; int? get minNights; bool? get isLive;
+ int? get propertyId; String? get propertyName; String? get propertyDescription; String? get mainImage; String? get propertyLocation; String? get propertyAddress; bool? get isDraft; UserModel? get user; AmenityModel? get amenity; String? get propertyNeighborhood; double? get ratingSummary; int? get price; double? get taxRate; int? get cleaningFee; String? get notes; int? get minNightStay; String? get lastUpdated; int? get minNights; bool? get isLive;
 /// Create a copy of PropertyModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $PropertyModelCopyWith<$Res>  {
   factory $PropertyModelCopyWith(PropertyModel value, $Res Function(PropertyModel) _then) = _$PropertyModelCopyWithImpl;
 @useResult
 $Res call({
- String? propertyId, String? propertyName, String? propertyDescription, String? mainImage, String? propertyLocation, String? propertyAddress, bool? isDraft, UserModel? user, AmenityModel? amenity, String? propertyNeighborhood, double? ratingSummary, int? price, double? taxRate, int? cleaningFee, String? notes, int? minNightStay, String? lastUpdated, int? minNights, bool? isLive
+ int? propertyId, String? propertyName, String? propertyDescription, String? mainImage, String? propertyLocation, String? propertyAddress, bool? isDraft, UserModel? user, AmenityModel? amenity, String? propertyNeighborhood, double? ratingSummary, int? price, double? taxRate, int? cleaningFee, String? notes, int? minNightStay, String? lastUpdated, int? minNights, bool? isLive
 });
 
 
@@ -68,7 +68,7 @@ class _$PropertyModelCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? propertyId = freezed,Object? propertyName = freezed,Object? propertyDescription = freezed,Object? mainImage = freezed,Object? propertyLocation = freezed,Object? propertyAddress = freezed,Object? isDraft = freezed,Object? user = freezed,Object? amenity = freezed,Object? propertyNeighborhood = freezed,Object? ratingSummary = freezed,Object? price = freezed,Object? taxRate = freezed,Object? cleaningFee = freezed,Object? notes = freezed,Object? minNightStay = freezed,Object? lastUpdated = freezed,Object? minNights = freezed,Object? isLive = freezed,}) {
   return _then(_self.copyWith(
 propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
-as String?,propertyName: freezed == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
+as int?,propertyName: freezed == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
 as String?,propertyDescription: freezed == propertyDescription ? _self.propertyDescription : propertyDescription // ignore: cast_nullable_to_non_nullable
 as String?,mainImage: freezed == mainImage ? _self.mainImage : mainImage // ignore: cast_nullable_to_non_nullable
 as String?,propertyLocation: freezed == propertyLocation ? _self.propertyLocation : propertyLocation // ignore: cast_nullable_to_non_nullable
@@ -195,7 +195,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserModel? user,  AmenityModel? amenity,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  int? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserModel? user,  AmenityModel? amenity,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  int? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PropertyModel() when $default != null:
 return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.amenity,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
@@ -216,7 +216,7 @@ return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserModel? user,  AmenityModel? amenity,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  int? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserModel? user,  AmenityModel? amenity,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  int? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)  $default,) {final _that = this;
 switch (_that) {
 case _PropertyModel():
 return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.amenity,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
@@ -236,7 +236,7 @@ return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserModel? user,  AmenityModel? amenity,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  int? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? propertyId,  String? propertyName,  String? propertyDescription,  String? mainImage,  String? propertyLocation,  String? propertyAddress,  bool? isDraft,  UserModel? user,  AmenityModel? amenity,  String? propertyNeighborhood,  double? ratingSummary,  int? price,  double? taxRate,  int? cleaningFee,  String? notes,  int? minNightStay,  String? lastUpdated,  int? minNights,  bool? isLive)?  $default,) {final _that = this;
 switch (_that) {
 case _PropertyModel() when $default != null:
 return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_that.mainImage,_that.propertyLocation,_that.propertyAddress,_that.isDraft,_that.user,_that.amenity,_that.propertyNeighborhood,_that.ratingSummary,_that.price,_that.taxRate,_that.cleaningFee,_that.notes,_that.minNightStay,_that.lastUpdated,_that.minNights,_that.isLive);case _:
@@ -254,7 +254,7 @@ class _PropertyModel implements PropertyModel {
   const _PropertyModel({this.propertyId, this.propertyName, this.propertyDescription, this.mainImage, this.propertyLocation, this.propertyAddress, this.isDraft, this.user, this.amenity, this.propertyNeighborhood, this.ratingSummary, this.price, this.taxRate, this.cleaningFee, this.notes, this.minNightStay, this.lastUpdated, this.minNights, this.isLive});
   factory _PropertyModel.fromJson(Map<String, dynamic> json) => _$PropertyModelFromJson(json);
 
-@override final  String? propertyId;
+@override final  int? propertyId;
 @override final  String? propertyName;
 @override final  String? propertyDescription;
 @override final  String? mainImage;
@@ -307,7 +307,7 @@ abstract mixin class _$PropertyModelCopyWith<$Res> implements $PropertyModelCopy
   factory _$PropertyModelCopyWith(_PropertyModel value, $Res Function(_PropertyModel) _then) = __$PropertyModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? propertyId, String? propertyName, String? propertyDescription, String? mainImage, String? propertyLocation, String? propertyAddress, bool? isDraft, UserModel? user, AmenityModel? amenity, String? propertyNeighborhood, double? ratingSummary, int? price, double? taxRate, int? cleaningFee, String? notes, int? minNightStay, String? lastUpdated, int? minNights, bool? isLive
+ int? propertyId, String? propertyName, String? propertyDescription, String? mainImage, String? propertyLocation, String? propertyAddress, bool? isDraft, UserModel? user, AmenityModel? amenity, String? propertyNeighborhood, double? ratingSummary, int? price, double? taxRate, int? cleaningFee, String? notes, int? minNightStay, String? lastUpdated, int? minNights, bool? isLive
 });
 
 
@@ -327,7 +327,7 @@ class __$PropertyModelCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? propertyId = freezed,Object? propertyName = freezed,Object? propertyDescription = freezed,Object? mainImage = freezed,Object? propertyLocation = freezed,Object? propertyAddress = freezed,Object? isDraft = freezed,Object? user = freezed,Object? amenity = freezed,Object? propertyNeighborhood = freezed,Object? ratingSummary = freezed,Object? price = freezed,Object? taxRate = freezed,Object? cleaningFee = freezed,Object? notes = freezed,Object? minNightStay = freezed,Object? lastUpdated = freezed,Object? minNights = freezed,Object? isLive = freezed,}) {
   return _then(_PropertyModel(
 propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
-as String?,propertyName: freezed == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
+as int?,propertyName: freezed == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
 as String?,propertyDescription: freezed == propertyDescription ? _self.propertyDescription : propertyDescription // ignore: cast_nullable_to_non_nullable
 as String?,mainImage: freezed == mainImage ? _self.mainImage : mainImage // ignore: cast_nullable_to_non_nullable
 as String?,propertyLocation: freezed == propertyLocation ? _self.propertyLocation : propertyLocation // ignore: cast_nullable_to_non_nullable

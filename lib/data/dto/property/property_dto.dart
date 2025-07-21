@@ -10,7 +10,7 @@ part 'property_dto.g.dart';
 @freezed
 abstract class PropertyDto with _$PropertyDto {
   const factory PropertyDto({
-    @Default('') String propertyId,
+    @Default(-1) int propertyId,
     @Default('') String propertyName,
     @Default('') String propertyDescription,
     @Default('') String mainImage,

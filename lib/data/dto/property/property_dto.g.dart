@@ -7,7 +7,7 @@ part of 'property_dto.dart';
 // **************************************************************************
 
 _PropertyDto _$PropertyDtoFromJson(Map<String, dynamic> json) => _PropertyDto(
-  propertyId: json['propertyId'] as String? ?? '',
+  propertyId: (json['propertyId'] as num?)?.toInt() ?? -1,
   propertyName: json['propertyName'] as String? ?? '',
   propertyDescription: json['propertyDescription'] as String? ?? '',
   mainImage: json['mainImage'] as String? ?? '',

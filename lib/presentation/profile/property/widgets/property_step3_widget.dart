@@ -53,10 +53,11 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
 
   void _onPressedSubmit(PropertyModel property, UserModel? user) {
     //logger.d(_saveProperty(property, user));
-
-    context.read<PropertyBloc>().add(
-      AddProperty(_saveProperty(property, user)),
-    );
+    if (_formKey.currentState!.validate()) {
+      context.read<PropertyBloc>().add(
+        AddProperty(_saveProperty(property, user)),
+      );
+    }
   }
 
   void _increment() {
@@ -158,11 +159,13 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
                                     ),
                                     CustomPropertyTextField(
                                       controller: _priceTextController,
-                                      hintText: '\$ Price',
+                                      hintText: 'Price',
+                                      textInputType: TextInputType.number,
                                       validator: (value) {
                                         return AppValidators.validateRequired(
                                           value,
                                           '상품 가격',
+                                          isOnlyNumber: true,
                                         );
                                       },
                                     ),
@@ -257,6 +260,7 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
                                         return AppValidators.validateRequired(
                                           value,
                                           '세금',
+                                          isOnlyNumber: true,
                                         );
                                       },
                                     ),
@@ -267,11 +271,12 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
                                     ),
                                     CustomPropertyTextField(
                                       controller: _cleaningFeeTextController,
-                                      hintText: '\$ Price',
+                                      hintText: 'Price',
                                       validator: (value) {
                                         return AppValidators.validateRequired(
                                           value,
                                           '정리 수수료',
+                                          isOnlyNumber: true,
                                         );
                                       },
                                     ),

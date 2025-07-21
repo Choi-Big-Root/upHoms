@@ -8,12 +8,14 @@ class CustomPropertyTextField extends StatefulWidget {
     super.key,
     required this.hintText,
     this.controller,
+    this.textInputType,
     this.padding = const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
     this.maxLine = 1,
     this.validator,
   });
 
   final TextEditingController? controller;
+  final TextInputType? textInputType;
   final String hintText;
   final EdgeInsetsDirectional padding;
   final int maxLine;
@@ -31,6 +33,7 @@ class _CustomPropertyTextFieldState extends State<CustomPropertyTextField> {
       padding: widget.padding,
       child: TextFormField(
         controller: widget.controller,
+        keyboardType: widget.textInputType,
         focusNode: FocusNode(),
         maxLines: widget.maxLine,
         obscureText: false,

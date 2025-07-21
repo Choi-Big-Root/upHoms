@@ -136,6 +136,61 @@ app.post('/user_create', (req, res) => {
     });
 });
 
+// /add_property: 부동산 정보 생성 및 저장
+const PROPERTIES_FILE = path.join(__dirname, 'properties.json');
+app.post('/add_property', (req, res) => {
+    const newPropertyRequest = req.body;
+
+    // 필수 필드 검증 (예시: propertyName, propertyAddress, price)
+    if (!newPropertyRequest.propertyName || !newPropertyRequest.propertyAddress || !newPropertyRequest.price) {
+        return res.status(400).send('Missing required property fields: propertyName, propertyAddress, price.');
+    }
+
+    fs.readFile(PROPERTIES_FILE, 'utf8', (err, data) => {
+        let properties = [];
+        if (err) {
+            if (err.code === 'ENOENT') {
+                console.log('properties.json not found, creating a new one.');
+            } else {
+                console.error('Error reading properties.json:', err);
+                return res.status(500).send('SERVER ERROR while reading property data.');
+            }
+        } else {
+            try {
+                properties = JSON.parse(data);
+            } catch (parseErr) {
+                console.error('Error parsing properties.json:', parseErr);
+                return res.status(500).send('Property data is corrupted.');
+            }
+        }
+
+        const lastPropertyId = properties.length > 0
+            ? Math.max(...properties.map(p => {
+                return parseInt(p.propertyId) || 0;
+            }))
+            : 0;
+        const newPropertyId = lastPropertyId + 1;
+
+        const newProperty = {
+            ...newPropertyRequest,           // 클라이언트에서 넘어온 모든 필드를 먼저 스프레드
+            propertyId: newPropertyId,       // ✨ propertyId를 마지막에 할당하여 항상 이 값이 적용되도록 함
+            createdTime: new Date().toISOString(),
+            lastUpdated: new Date().toISOString()
+        };
+
+        properties.push(newProperty);
+
+        fs.writeFile(PROPERTIES_FILE, JSON.stringify(properties, null, 2), (err) => {
+            if (err) {
+                console.error('Error writing properties.json:', err);
+                return res.status(500).send('SERVER ERROR while writing property data.');
+            }
+            console.log(`Property with ID ${newProperty.propertyId} added successfully.`);
+            res.status(201).json(newProperty);
+        });
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
