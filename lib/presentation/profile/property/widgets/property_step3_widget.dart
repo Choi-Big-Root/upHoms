@@ -89,9 +89,7 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
       listeners: [
         BlocListener<PropertyBloc, PropertyState>(
           listener: (context, state) {
-            state.when(
-              initial: () {},
-              loading: () {},
+            state.maybeWhen(
               success: () {
                 context.read<MessageCubit>().showSuccessMessage('성공적으로 등록 되었습니다!');
                 context.go('/profile');
@@ -103,6 +101,7 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
               editing: (property) {
                 logger.d(property);
               },
+              orElse: () => const SizedBox.shrink(),
             );
           },
         ),
