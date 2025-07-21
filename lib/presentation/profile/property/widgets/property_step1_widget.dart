@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'dart:io';
+import 'dart:convert';
 
 import '../../../../core/custom/custom_button_widget.dart';
 import '../../../../core/custom/custom_font_weight.dart';
@@ -29,9 +32,59 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
   final TextEditingController _propertyAddressController =
       TextEditingController();
   final TextEditingController _propertyNeighborhoodController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _propertyDescriptionController =
       TextEditingController();
+
+  XFile? _selectedImageFile;
+  String? _selectedImageBase64;
+
+  Future<void> _pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: source);
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _selectedImageFile = image;
+        _selectedImageBase64 = base64Encode(bytes);
+      });
+    }
+  }
+
+  void _showImageSourceSelection() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: context.colors.secondaryBackground,
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Gallery'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.gallery);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   void dispose() {
@@ -48,6 +101,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
       propertyAddress: _propertyAddressController.text,
       propertyNeighborhood: _propertyNeighborhoodController.text,
       propertyDescription: _propertyDescriptionController.text,
+      mainImage: _selectedImageBase64,
     );
     return propertyModel;
   }
@@ -88,7 +142,7 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
                             focusColor: Colors.transparent,
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
-                            onTap: () {},
+                            onTap: _showImageSourceSelection,
                             child: Container(
                               width: double.infinity,
                               height: 180,
@@ -96,23 +150,24 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
                                 color: const Color(0xFFEEEEEE),
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      'https://picsum.photos/id/328/200/200.jpg',
-                                  fadeOutDuration: const Duration(
-                                    milliseconds: 500,
-                                  ),
-                                  fadeInDuration: const Duration(
-                                    milliseconds: 500,
-                                  ),
-                                  width: double.infinity,
-                                  height: 180,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              child: _selectedImageFile == null
+                                  ? Center(
+                                      child: Text(
+                                        'Add Cover Image',
+                                        style: textScheme.headlineSmall?.copyWith(
+                                          color: colorScheme.gray600,
+                                        ),
+                                      ),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.file(
+                                        File(_selectedImageFile!.path),
+                                        width: double.infinity,
+                                        height: 180,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                             ),
                           ),
                           const CustomPropertyTextFieldDec(
