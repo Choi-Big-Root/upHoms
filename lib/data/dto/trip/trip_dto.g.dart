@@ -30,6 +30,7 @@ _TripDto _$TripDtoFromJson(Map<String, dynamic> json) => _TripDto(
   cancelReason: json['cancelReason'] as String? ?? '',
   tripTotal: (json['tripTotal'] as num?)?.toInt() ?? -1,
   upcoming: json['upcoming'] as bool? ?? false,
+  complete: json['complete'] as bool? ?? false,
   rated: json['rated'] as bool? ?? false,
 );
 
@@ -51,5 +52,6 @@ Map<String, dynamic> _$TripDtoToJson(_TripDto instance) => <String, dynamic>{
   'cancelReason': instance.cancelReason,
   'tripTotal': instance.tripTotal,
   'upcoming': instance.upcoming,
+  'complete': instance.complete,
   'rated': instance.rated,
 };

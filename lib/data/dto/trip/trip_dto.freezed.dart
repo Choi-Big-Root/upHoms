@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TripDto {
 
- int get tripId; int get propertyId; int get userId; PropertyDto get property; UserDto get user; String get tripBeginDate; String get tripEndDate; double get tripCost; int get guests; String get paymentMethod; String get tripCreated; dynamic get hostId; UserDto get host; bool get cancelTrip; String get cancelReason; int get tripTotal; bool get upcoming; bool get rated;
+ int get tripId; int get propertyId; int get userId; PropertyDto get property; UserDto get user; String get tripBeginDate; String get tripEndDate; double get tripCost; int get guests; String get paymentMethod; String get tripCreated; dynamic get hostId; UserDto get host; bool get cancelTrip; String get cancelReason; int get tripTotal; bool get upcoming; bool get complete; bool get rated;
 /// Create a copy of TripDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TripDtoCopyWith<TripDto> get copyWith => _$TripDtoCopyWithImpl<TripDto>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripDto&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.property, property) || other.property == property)&&(identical(other.user, user) || other.user == user)&&(identical(other.tripBeginDate, tripBeginDate) || other.tripBeginDate == tripBeginDate)&&(identical(other.tripEndDate, tripEndDate) || other.tripEndDate == tripEndDate)&&(identical(other.tripCost, tripCost) || other.tripCost == tripCost)&&(identical(other.guests, guests) || other.guests == guests)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.tripCreated, tripCreated) || other.tripCreated == tripCreated)&&const DeepCollectionEquality().equals(other.hostId, hostId)&&(identical(other.host, host) || other.host == host)&&(identical(other.cancelTrip, cancelTrip) || other.cancelTrip == cancelTrip)&&(identical(other.cancelReason, cancelReason) || other.cancelReason == cancelReason)&&(identical(other.tripTotal, tripTotal) || other.tripTotal == tripTotal)&&(identical(other.upcoming, upcoming) || other.upcoming == upcoming)&&(identical(other.rated, rated) || other.rated == rated));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripDto&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.property, property) || other.property == property)&&(identical(other.user, user) || other.user == user)&&(identical(other.tripBeginDate, tripBeginDate) || other.tripBeginDate == tripBeginDate)&&(identical(other.tripEndDate, tripEndDate) || other.tripEndDate == tripEndDate)&&(identical(other.tripCost, tripCost) || other.tripCost == tripCost)&&(identical(other.guests, guests) || other.guests == guests)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.tripCreated, tripCreated) || other.tripCreated == tripCreated)&&const DeepCollectionEquality().equals(other.hostId, hostId)&&(identical(other.host, host) || other.host == host)&&(identical(other.cancelTrip, cancelTrip) || other.cancelTrip == cancelTrip)&&(identical(other.cancelReason, cancelReason) || other.cancelReason == cancelReason)&&(identical(other.tripTotal, tripTotal) || other.tripTotal == tripTotal)&&(identical(other.upcoming, upcoming) || other.upcoming == upcoming)&&(identical(other.complete, complete) || other.complete == complete)&&(identical(other.rated, rated) || other.rated == rated));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,tripId,propertyId,userId,property,user,tripBeginDate,tripEndDate,tripCost,guests,paymentMethod,tripCreated,const DeepCollectionEquality().hash(hostId),host,cancelTrip,cancelReason,tripTotal,upcoming,rated);
+int get hashCode => Object.hashAll([runtimeType,tripId,propertyId,userId,property,user,tripBeginDate,tripEndDate,tripCost,guests,paymentMethod,tripCreated,const DeepCollectionEquality().hash(hostId),host,cancelTrip,cancelReason,tripTotal,upcoming,complete,rated]);
 
 @override
 String toString() {
-  return 'TripDto(tripId: $tripId, propertyId: $propertyId, userId: $userId, property: $property, user: $user, tripBeginDate: $tripBeginDate, tripEndDate: $tripEndDate, tripCost: $tripCost, guests: $guests, paymentMethod: $paymentMethod, tripCreated: $tripCreated, hostId: $hostId, host: $host, cancelTrip: $cancelTrip, cancelReason: $cancelReason, tripTotal: $tripTotal, upcoming: $upcoming, rated: $rated)';
+  return 'TripDto(tripId: $tripId, propertyId: $propertyId, userId: $userId, property: $property, user: $user, tripBeginDate: $tripBeginDate, tripEndDate: $tripEndDate, tripCost: $tripCost, guests: $guests, paymentMethod: $paymentMethod, tripCreated: $tripCreated, hostId: $hostId, host: $host, cancelTrip: $cancelTrip, cancelReason: $cancelReason, tripTotal: $tripTotal, upcoming: $upcoming, complete: $complete, rated: $rated)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TripDtoCopyWith<$Res>  {
   factory $TripDtoCopyWith(TripDto value, $Res Function(TripDto) _then) = _$TripDtoCopyWithImpl;
 @useResult
 $Res call({
- int tripId, int propertyId, int userId, PropertyDto property, UserDto user, String tripBeginDate, String tripEndDate, double tripCost, int guests, String paymentMethod, String tripCreated, dynamic hostId, UserDto host, bool cancelTrip, String cancelReason, int tripTotal, bool upcoming, bool rated
+ int tripId, int propertyId, int userId, PropertyDto property, UserDto user, String tripBeginDate, String tripEndDate, double tripCost, int guests, String paymentMethod, String tripCreated, dynamic hostId, UserDto host, bool cancelTrip, String cancelReason, int tripTotal, bool upcoming, bool complete, bool rated
 });
 
 
@@ -65,7 +65,7 @@ class _$TripDtoCopyWithImpl<$Res>
 
 /// Create a copy of TripDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tripId = null,Object? propertyId = null,Object? userId = null,Object? property = null,Object? user = null,Object? tripBeginDate = null,Object? tripEndDate = null,Object? tripCost = null,Object? guests = null,Object? paymentMethod = null,Object? tripCreated = null,Object? hostId = freezed,Object? host = null,Object? cancelTrip = null,Object? cancelReason = null,Object? tripTotal = null,Object? upcoming = null,Object? rated = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? tripId = null,Object? propertyId = null,Object? userId = null,Object? property = null,Object? user = null,Object? tripBeginDate = null,Object? tripEndDate = null,Object? tripCost = null,Object? guests = null,Object? paymentMethod = null,Object? tripCreated = null,Object? hostId = freezed,Object? host = null,Object? cancelTrip = null,Object? cancelReason = null,Object? tripTotal = null,Object? upcoming = null,Object? complete = null,Object? rated = null,}) {
   return _then(_self.copyWith(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as int,propertyId: null == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
@@ -84,6 +84,7 @@ as UserDto,cancelTrip: null == cancelTrip ? _self.cancelTrip : cancelTrip // ign
 as bool,cancelReason: null == cancelReason ? _self.cancelReason : cancelReason // ignore: cast_nullable_to_non_nullable
 as String,tripTotal: null == tripTotal ? _self.tripTotal : tripTotal // ignore: cast_nullable_to_non_nullable
 as int,upcoming: null == upcoming ? _self.upcoming : upcoming // ignore: cast_nullable_to_non_nullable
+as bool,complete: null == complete ? _self.complete : complete // ignore: cast_nullable_to_non_nullable
 as bool,rated: null == rated ? _self.rated : rated // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -197,10 +198,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int tripId,  int propertyId,  int userId,  PropertyDto property,  UserDto user,  String tripBeginDate,  String tripEndDate,  double tripCost,  int guests,  String paymentMethod,  String tripCreated,  dynamic hostId,  UserDto host,  bool cancelTrip,  String cancelReason,  int tripTotal,  bool upcoming,  bool rated)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int tripId,  int propertyId,  int userId,  PropertyDto property,  UserDto user,  String tripBeginDate,  String tripEndDate,  double tripCost,  int guests,  String paymentMethod,  String tripCreated,  dynamic hostId,  UserDto host,  bool cancelTrip,  String cancelReason,  int tripTotal,  bool upcoming,  bool complete,  bool rated)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripDto() when $default != null:
-return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.user,_that.tripBeginDate,_that.tripEndDate,_that.tripCost,_that.guests,_that.paymentMethod,_that.tripCreated,_that.hostId,_that.host,_that.cancelTrip,_that.cancelReason,_that.tripTotal,_that.upcoming,_that.rated);case _:
+return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.user,_that.tripBeginDate,_that.tripEndDate,_that.tripCost,_that.guests,_that.paymentMethod,_that.tripCreated,_that.hostId,_that.host,_that.cancelTrip,_that.cancelReason,_that.tripTotal,_that.upcoming,_that.complete,_that.rated);case _:
   return orElse();
 
 }
@@ -218,10 +219,10 @@ return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int tripId,  int propertyId,  int userId,  PropertyDto property,  UserDto user,  String tripBeginDate,  String tripEndDate,  double tripCost,  int guests,  String paymentMethod,  String tripCreated,  dynamic hostId,  UserDto host,  bool cancelTrip,  String cancelReason,  int tripTotal,  bool upcoming,  bool rated)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int tripId,  int propertyId,  int userId,  PropertyDto property,  UserDto user,  String tripBeginDate,  String tripEndDate,  double tripCost,  int guests,  String paymentMethod,  String tripCreated,  dynamic hostId,  UserDto host,  bool cancelTrip,  String cancelReason,  int tripTotal,  bool upcoming,  bool complete,  bool rated)  $default,) {final _that = this;
 switch (_that) {
 case _TripDto():
-return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.user,_that.tripBeginDate,_that.tripEndDate,_that.tripCost,_that.guests,_that.paymentMethod,_that.tripCreated,_that.hostId,_that.host,_that.cancelTrip,_that.cancelReason,_that.tripTotal,_that.upcoming,_that.rated);case _:
+return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.user,_that.tripBeginDate,_that.tripEndDate,_that.tripCost,_that.guests,_that.paymentMethod,_that.tripCreated,_that.hostId,_that.host,_that.cancelTrip,_that.cancelReason,_that.tripTotal,_that.upcoming,_that.complete,_that.rated);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -238,10 +239,10 @@ return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int tripId,  int propertyId,  int userId,  PropertyDto property,  UserDto user,  String tripBeginDate,  String tripEndDate,  double tripCost,  int guests,  String paymentMethod,  String tripCreated,  dynamic hostId,  UserDto host,  bool cancelTrip,  String cancelReason,  int tripTotal,  bool upcoming,  bool rated)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int tripId,  int propertyId,  int userId,  PropertyDto property,  UserDto user,  String tripBeginDate,  String tripEndDate,  double tripCost,  int guests,  String paymentMethod,  String tripCreated,  dynamic hostId,  UserDto host,  bool cancelTrip,  String cancelReason,  int tripTotal,  bool upcoming,  bool complete,  bool rated)?  $default,) {final _that = this;
 switch (_that) {
 case _TripDto() when $default != null:
-return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.user,_that.tripBeginDate,_that.tripEndDate,_that.tripCost,_that.guests,_that.paymentMethod,_that.tripCreated,_that.hostId,_that.host,_that.cancelTrip,_that.cancelReason,_that.tripTotal,_that.upcoming,_that.rated);case _:
+return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.user,_that.tripBeginDate,_that.tripEndDate,_that.tripCost,_that.guests,_that.paymentMethod,_that.tripCreated,_that.hostId,_that.host,_that.cancelTrip,_that.cancelReason,_that.tripTotal,_that.upcoming,_that.complete,_that.rated);case _:
   return null;
 
 }
@@ -253,7 +254,7 @@ return $default(_that.tripId,_that.propertyId,_that.userId,_that.property,_that.
 @JsonSerializable()
 
 class _TripDto implements TripDto {
-  const _TripDto({this.tripId = -1, this.propertyId = -1, this.userId = -1, this.property = const PropertyDto(), this.user = const UserDto(), this.tripBeginDate = '', this.tripEndDate = '', this.tripCost = 0.0, this.guests = -1, this.paymentMethod = '', this.tripCreated = '', this.hostId = -1, this.host = const UserDto(), this.cancelTrip = false, this.cancelReason = '', this.tripTotal = -1, this.upcoming = false, this.rated = false});
+  const _TripDto({this.tripId = -1, this.propertyId = -1, this.userId = -1, this.property = const PropertyDto(), this.user = const UserDto(), this.tripBeginDate = '', this.tripEndDate = '', this.tripCost = 0.0, this.guests = -1, this.paymentMethod = '', this.tripCreated = '', this.hostId = -1, this.host = const UserDto(), this.cancelTrip = false, this.cancelReason = '', this.tripTotal = -1, this.upcoming = false, this.complete = false, this.rated = false});
   factory _TripDto.fromJson(Map<String, dynamic> json) => _$TripDtoFromJson(json);
 
 @override@JsonKey() final  int tripId;
@@ -273,6 +274,7 @@ class _TripDto implements TripDto {
 @override@JsonKey() final  String cancelReason;
 @override@JsonKey() final  int tripTotal;
 @override@JsonKey() final  bool upcoming;
+@override@JsonKey() final  bool complete;
 @override@JsonKey() final  bool rated;
 
 /// Create a copy of TripDto
@@ -288,16 +290,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripDto&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.property, property) || other.property == property)&&(identical(other.user, user) || other.user == user)&&(identical(other.tripBeginDate, tripBeginDate) || other.tripBeginDate == tripBeginDate)&&(identical(other.tripEndDate, tripEndDate) || other.tripEndDate == tripEndDate)&&(identical(other.tripCost, tripCost) || other.tripCost == tripCost)&&(identical(other.guests, guests) || other.guests == guests)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.tripCreated, tripCreated) || other.tripCreated == tripCreated)&&const DeepCollectionEquality().equals(other.hostId, hostId)&&(identical(other.host, host) || other.host == host)&&(identical(other.cancelTrip, cancelTrip) || other.cancelTrip == cancelTrip)&&(identical(other.cancelReason, cancelReason) || other.cancelReason == cancelReason)&&(identical(other.tripTotal, tripTotal) || other.tripTotal == tripTotal)&&(identical(other.upcoming, upcoming) || other.upcoming == upcoming)&&(identical(other.rated, rated) || other.rated == rated));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripDto&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.property, property) || other.property == property)&&(identical(other.user, user) || other.user == user)&&(identical(other.tripBeginDate, tripBeginDate) || other.tripBeginDate == tripBeginDate)&&(identical(other.tripEndDate, tripEndDate) || other.tripEndDate == tripEndDate)&&(identical(other.tripCost, tripCost) || other.tripCost == tripCost)&&(identical(other.guests, guests) || other.guests == guests)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.tripCreated, tripCreated) || other.tripCreated == tripCreated)&&const DeepCollectionEquality().equals(other.hostId, hostId)&&(identical(other.host, host) || other.host == host)&&(identical(other.cancelTrip, cancelTrip) || other.cancelTrip == cancelTrip)&&(identical(other.cancelReason, cancelReason) || other.cancelReason == cancelReason)&&(identical(other.tripTotal, tripTotal) || other.tripTotal == tripTotal)&&(identical(other.upcoming, upcoming) || other.upcoming == upcoming)&&(identical(other.complete, complete) || other.complete == complete)&&(identical(other.rated, rated) || other.rated == rated));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,tripId,propertyId,userId,property,user,tripBeginDate,tripEndDate,tripCost,guests,paymentMethod,tripCreated,const DeepCollectionEquality().hash(hostId),host,cancelTrip,cancelReason,tripTotal,upcoming,rated);
+int get hashCode => Object.hashAll([runtimeType,tripId,propertyId,userId,property,user,tripBeginDate,tripEndDate,tripCost,guests,paymentMethod,tripCreated,const DeepCollectionEquality().hash(hostId),host,cancelTrip,cancelReason,tripTotal,upcoming,complete,rated]);
 
 @override
 String toString() {
-  return 'TripDto(tripId: $tripId, propertyId: $propertyId, userId: $userId, property: $property, user: $user, tripBeginDate: $tripBeginDate, tripEndDate: $tripEndDate, tripCost: $tripCost, guests: $guests, paymentMethod: $paymentMethod, tripCreated: $tripCreated, hostId: $hostId, host: $host, cancelTrip: $cancelTrip, cancelReason: $cancelReason, tripTotal: $tripTotal, upcoming: $upcoming, rated: $rated)';
+  return 'TripDto(tripId: $tripId, propertyId: $propertyId, userId: $userId, property: $property, user: $user, tripBeginDate: $tripBeginDate, tripEndDate: $tripEndDate, tripCost: $tripCost, guests: $guests, paymentMethod: $paymentMethod, tripCreated: $tripCreated, hostId: $hostId, host: $host, cancelTrip: $cancelTrip, cancelReason: $cancelReason, tripTotal: $tripTotal, upcoming: $upcoming, complete: $complete, rated: $rated)';
 }
 
 
@@ -308,7 +310,7 @@ abstract mixin class _$TripDtoCopyWith<$Res> implements $TripDtoCopyWith<$Res> {
   factory _$TripDtoCopyWith(_TripDto value, $Res Function(_TripDto) _then) = __$TripDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int tripId, int propertyId, int userId, PropertyDto property, UserDto user, String tripBeginDate, String tripEndDate, double tripCost, int guests, String paymentMethod, String tripCreated, dynamic hostId, UserDto host, bool cancelTrip, String cancelReason, int tripTotal, bool upcoming, bool rated
+ int tripId, int propertyId, int userId, PropertyDto property, UserDto user, String tripBeginDate, String tripEndDate, double tripCost, int guests, String paymentMethod, String tripCreated, dynamic hostId, UserDto host, bool cancelTrip, String cancelReason, int tripTotal, bool upcoming, bool complete, bool rated
 });
 
 
@@ -325,7 +327,7 @@ class __$TripDtoCopyWithImpl<$Res>
 
 /// Create a copy of TripDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? propertyId = null,Object? userId = null,Object? property = null,Object? user = null,Object? tripBeginDate = null,Object? tripEndDate = null,Object? tripCost = null,Object? guests = null,Object? paymentMethod = null,Object? tripCreated = null,Object? hostId = freezed,Object? host = null,Object? cancelTrip = null,Object? cancelReason = null,Object? tripTotal = null,Object? upcoming = null,Object? rated = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? propertyId = null,Object? userId = null,Object? property = null,Object? user = null,Object? tripBeginDate = null,Object? tripEndDate = null,Object? tripCost = null,Object? guests = null,Object? paymentMethod = null,Object? tripCreated = null,Object? hostId = freezed,Object? host = null,Object? cancelTrip = null,Object? cancelReason = null,Object? tripTotal = null,Object? upcoming = null,Object? complete = null,Object? rated = null,}) {
   return _then(_TripDto(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as int,propertyId: null == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
@@ -344,6 +346,7 @@ as UserDto,cancelTrip: null == cancelTrip ? _self.cancelTrip : cancelTrip // ign
 as bool,cancelReason: null == cancelReason ? _self.cancelReason : cancelReason // ignore: cast_nullable_to_non_nullable
 as String,tripTotal: null == tripTotal ? _self.tripTotal : tripTotal // ignore: cast_nullable_to_non_nullable
 as int,upcoming: null == upcoming ? _self.upcoming : upcoming // ignore: cast_nullable_to_non_nullable
+as bool,complete: null == complete ? _self.complete : complete // ignore: cast_nullable_to_non_nullable
 as bool,rated: null == rated ? _self.rated : rated // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

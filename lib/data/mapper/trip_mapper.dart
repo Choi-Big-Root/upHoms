@@ -21,11 +21,12 @@ class TripMapper {
       paymentMethod: model.paymentMethod ?? '',
       tripCreated: model.tripCreated ?? '',
       hostId: model.hostId ?? -1,
-      host: UserMapper.toDto(model.user ?? const UserModel()),
+      host: UserMapper.toDto(model.host ?? const UserModel()),
       cancelTrip: model.cancelTrip ?? false,
       cancelReason: model.cancelReason ?? '',
       tripTotal: model.tripTotal ?? -1,
       upcoming: model.upcoming ?? false,
+      complete: model.complete ?? false,
       rated:  model.rated ?? false,
     );
   }
@@ -49,6 +50,7 @@ class TripMapper {
       cancelReason: dto.cancelReason,
       tripTotal: dto.tripTotal,
       upcoming: dto.upcoming,
+      complete: dto.complete,
       rated:  dto.rated,
     );
   }

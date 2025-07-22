@@ -27,6 +27,7 @@ abstract class TripDto with _$TripDto {
     @Default('') String cancelReason,
     @Default(-1) int tripTotal,
     @Default(false) bool upcoming,
+    @Default(false) bool complete,
     @Default(false) bool rated,
   }) = _TripDto;
 

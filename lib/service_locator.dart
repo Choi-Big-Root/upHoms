@@ -7,24 +7,31 @@ import 'data/remote/property/property_remote_data_source_impl.dart';
 import 'data/remote/review/review_api_service.dart';
 import 'data/remote/review/review_remote_data_source.dart';
 import 'data/remote/review/review_remote_data_source_impl.dart';
+import 'data/remote/trip/trip_api_service.dart';
+import 'data/remote/trip/trip_remote_data_source.dart';
+import 'data/remote/trip/trip_remote_data_source_impl.dart';
 import 'data/remote/user/user_api_service.dart';
 import 'data/remote/user/user_remote_data_source.dart';
 import 'data/remote/user/user_remote_data_source_impl.dart';
 import 'data/repositories/property/property_repository_impl.dart';
 import 'data/repositories/review/review_repository_impl.dart';
+import 'data/repositories/trip/trip_repository_impl.dart';
 import 'data/repositories/user/user_repository_impl.dart';
 import 'domain/repositories/property/property_repository.dart';
 import 'domain/repositories/review/review_repository.dart';
+import 'domain/repositories/trip/trip_repository.dart';
 import 'domain/repositories/user/user_repository.dart';
 import 'domain/usecases/property/add_property_usecase.dart';
 import 'domain/usecases/property/get_all_properties_usecase.dart';
 import 'domain/usecases/property/get_property_usecase.dart';
 import 'domain/usecases/property/get_search_propertiesa_usecase.dart';
 import 'domain/usecases/review/get_reviews_usecase.dart';
+import 'domain/usecases/trip/add_trip_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/property/property_bloc.bloc.dart';
 import 'presentation/bloc/review/review_bloc.bloc.dart';
+import 'presentation/bloc/trip/trip_bloc.bloc.dart';
 import 'presentation/bloc/user/user_bloc.bloc.dart';
 import 'presentation/cubit/message_cubit.dart';
 
@@ -72,6 +79,16 @@ void _data() {
   locator.registerSingleton<ReviewRepository>(
     ReviewRepositoryImpl(locator<ReviewRemoteDataSource>()),
   );
+
+  //trip
+  locator.registerSingleton<TripApiService>(TripApiService(locator<Dio>()));
+  locator.registerSingleton<TripRemoteDataSource>(
+    TripRemoteDataSourceImpl(locator<TripApiService>()),
+  );
+  locator.registerSingleton<TripRepository>(
+    TripRepositoryImpl(locator<TripRemoteDataSource>()),
+  );
+
 }
 
 void _domain() {
@@ -101,6 +118,11 @@ void _domain() {
   locator.registerSingleton<GetReviewsUsecase>(
     GetReviewsUsecase(locator<ReviewRepository>()),
   );
+
+  //trip
+  locator.registerSingleton<AddTripUsecase>(
+    AddTripUsecase(locator<TripRepository>()),
+  );
 }
 
 void _presentation() {
@@ -126,6 +148,10 @@ void _presentation() {
 
   locator.registerFactory(
     () => ReviewBloc(getReviewsUsecase: locator<GetReviewsUsecase>(),),
+  );
+
+  locator.registerFactory(
+      () => TripBloc(addTripUsecase: locator<AddTripUsecase>(),),
   );
 
   locator.registerSingleton<MessageCubit>(MessageCubit());

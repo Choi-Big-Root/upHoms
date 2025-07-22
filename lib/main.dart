@@ -6,6 +6,7 @@ import 'package:uphoms/presentation/bloc/user/user_bloc.bloc.dart';
 import 'package:uphoms/presentation/cubit/message_cubit.dart';
 import 'presentation/bloc/property/property_bloc.bloc.dart';
 import 'presentation/bloc/review/review_bloc.bloc.dart';
+import 'presentation/bloc/trip/trip_bloc.bloc.dart';
 import 'service_locator.dart';
 import 'core/constants.dart';
 import 'core/custom/custom_theme.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => locator<PropertyBloc>()), // property 관련
         BlocProvider(create: (context) => locator<ReviewBloc>()), // review 관련
         BlocProvider(create: (context) => locator<MessageCubit>()), // snackbar message 관련
+        BlocProvider(create: (context) => locator<TripBloc>()),
       ],
       child: ValueListenableBuilder(
         valueListenable: AppConstants.themeNotifier,

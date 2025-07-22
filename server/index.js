@@ -41,6 +41,7 @@ app.use(express.text());
 const PROPERTIES_FILE = path.join(__dirname, 'properties.json');
 const USERS_FILE = path.join(__dirname, 'users.json'); 
 const REVIEWS_FILE = path.join(__dirname, 'reviews.json'); 
+const TRIPS_FILE = path.join(__dirname, 'trips.json');
 
 
 // Image upload endpoint
@@ -542,6 +543,87 @@ app.post('/get_reviews', (req, res) => {
             }
             console.error('SERVER ERROR during /get_reviews data retrieval:', err);
             return res.status(500).send('SERVER ERROR while processing review data.');
+        });
+});
+
+
+//trip Add
+// --- ✨ 새로운 POST /add_trip 엔드포인트 추가 ✨ ---
+app.post('/add_trip', (req, res) => {
+    let newTripRequest = req.body;
+
+    // JSON 형식 검증 및 파싱 (plain text로 오는 경우 대비)
+    if (typeof newTripRequest === 'string') {
+        try {
+            newTripRequest = JSON.parse(newTripRequest);
+        } catch (e) {
+            console.error('Error parsing newTripRequest as JSON string:', e);
+            return res.status(400).send('Invalid JSON format for trip addition. (If sending as plain text, it must be valid JSON)');
+        }
+    }
+
+    // 필수 필드 유효성 검사 (TripDto 구조에 따라 추가/수정 필요)
+    // 예시: userId, propertyId, startDate, endDate가 필수라고 가정합니다.
+    if (!newTripRequest || 
+        !newTripRequest.userId || 
+        !newTripRequest.propertyId) {
+        return res.status(400).send('Missing required trip fields: userId, propertyId, startDate, endDate.');
+    }
+
+    // trips.json 파일 읽기
+    fs.promises.readFile(TRIPS_FILE, 'utf8')
+        .then(data => {
+            let trips = [];
+            try {
+                trips = JSON.parse(data);
+            } catch (parseErr) {
+                console.error('Error parsing trips.json:', parseErr);
+                // 파일 내용이 손상되었거나 유효한 JSON이 아닌 경우
+                // 기존 데이터를 무시하고 새 배열로 시작합니다.
+                trips = []; 
+                console.warn('Trips data is corrupted, starting with an empty array for /add_trip.');
+            }
+
+            // tripId 시퀀스 생성
+            // 기존 trips 중 가장 큰 tripId를 찾아 1을 더하여 새 ID를 생성합니다.
+            const lastTripId = trips.length > 0 
+                ? Math.max(...trips.map(t => parseInt(t.tripId) || 0)) 
+                : 0;
+            const newTripId = lastTripId + 1;
+
+            // 새로운 Trip 객체 생성
+            const newTrip = {
+                ...newTripRequest,
+                tripId: newTripId, // 서버에서 생성한 ID 할당
+                createdTime: new Date().toISOString(), // 생성 시간 추가 (ISO 8601 형식)
+            };
+
+            trips.push(newTrip); // 새 트립을 배열에 추가
+
+            // trips.json 파일에 저장
+            return fs.promises.writeFile(TRIPS_FILE, JSON.stringify(trips, null, 2))
+                .then(() => {
+                    console.log(`Successfully added trip with ID: ${newTripId}`);
+                    res.status(201).json(newTrip); // 생성된 trip 객체와 201 Created 상태 반환
+                });
+        })
+        .catch(err => {
+            // trips.json 파일이 아예 없는 경우: 파일을 생성하고 첫 트립을 저장합니다.
+            if (err.code === 'ENOENT') {
+                const newTripId = 1; // 첫 트립이므로 ID는 1부터 시작
+                const newTrip = {
+                    ...newTripRequest,
+                    tripId: newTripId,
+                    createdTime: new Date().toISOString(),
+                };
+                return fs.promises.writeFile(TRIPS_FILE, JSON.stringify([newTrip], null, 2))
+                    .then(() => {
+                        console.log(`trips.json created and first trip added with ID: ${newTripId}`);
+                        res.status(201).json(newTrip);
+                    });
+            }
+            console.error('SERVER ERROR during /add_trip:', err);
+            res.status(500).send('SERVER ERROR while adding trip data.');
         });
 });
 
