@@ -27,6 +27,7 @@ import 'domain/usecases/property/get_property_usecase.dart';
 import 'domain/usecases/property/get_search_propertiesa_usecase.dart';
 import 'domain/usecases/review/get_reviews_usecase.dart';
 import 'domain/usecases/trip/add_trip_usecase.dart';
+import 'domain/usecases/trip/get_trip_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/property/property_bloc.bloc.dart';
@@ -88,7 +89,6 @@ void _data() {
   locator.registerSingleton<TripRepository>(
     TripRepositoryImpl(locator<TripRemoteDataSource>()),
   );
-
 }
 
 void _domain() {
@@ -123,6 +123,9 @@ void _domain() {
   locator.registerSingleton<AddTripUsecase>(
     AddTripUsecase(locator<TripRepository>()),
   );
+  locator.registerSingleton<GetTripUsecase>(
+    GetTripUsecase(locator<TripRepository>()),
+  );
 }
 
 void _presentation() {
@@ -147,11 +150,14 @@ void _presentation() {
   );
 
   locator.registerFactory(
-    () => ReviewBloc(getReviewsUsecase: locator<GetReviewsUsecase>(),),
+    () => ReviewBloc(getReviewsUsecase: locator<GetReviewsUsecase>()),
   );
 
   locator.registerFactory(
-      () => TripBloc(addTripUsecase: locator<AddTripUsecase>(),),
+    () => TripBloc(
+      addTripUsecase: locator<AddTripUsecase>(),
+      getTripUsecase: locator<GetTripUsecase>(),
+    ),
   );
 
   locator.registerSingleton<MessageCubit>(MessageCubit());

@@ -626,7 +626,64 @@ app.post('/add_trip', (req, res) => {
             res.status(500).send('SERVER ERROR while adding trip data.');
         });
 });
+// --- ✨ 새로운 POST /get_trip 엔드포인트 추가 ✨ ---
+app.post('/get_trip', (req, res) => {
+    let requestedTripId;
 
+    // 클라이언트에서 @Body() Map<String,dynamic> tripId로 보내므로, req.body는 객체일 것
+    // 요청 본문에서 'tripId' 키를 찾아 값을 추출합니다.
+    if (typeof req.body === 'object' && req.body !== null && (req.body.tripId !== undefined || req.body.tripId !== null)) {
+        requestedTripId = parseInt(req.body.tripId); // 정수로 변환
+    } else if (typeof req.body === 'string') {
+        // 혹시 모르니 문자열로 단일 ID가 왔을 경우도 대비
+        try {
+            const parsedBody = JSON.parse(req.body); // JSON 문자열로 왔을 경우 파싱
+            if (parsedBody && (parsedBody.tripId !== undefined || parsedBody.tripId !== null)) {
+                requestedTripId = parseInt(parsedBody.tripId);
+            }
+        } catch (e) {
+            // JSON 파싱 실패 시, 문자열 자체를 ID로 시도 (fallback)
+            requestedTripId = parseInt(req.body);
+        }
+    }
+
+    if (isNaN(requestedTripId)) { // tripId가 유효한 숫자가 아닐 경우
+        console.error('Invalid or missing tripId in request body for /get_trip:', req.body);
+        return res.status(400).send('Valid tripId is required in the request body.');
+    }
+
+    // trips.json 파일 읽기
+    fs.promises.readFile(TRIPS_FILE, 'utf8')
+        .then(tripsData => {
+            let trips = [];
+            try {
+                trips = JSON.parse(tripsData);
+            } catch (parseErr) {
+                console.error('Error parsing trips.json for /get_trip:', parseErr);
+                return res.status(500).send('Trip data is corrupted or malformed.');
+            }
+
+            // 요청된 tripId에 해당하는 단일 트립을 찾음
+            const foundTrip = trips.find(trip => trip.tripId == requestedTripId);
+
+            if (!foundTrip) {
+                console.log(`Trip with ID ${requestedTripId} not found.`);
+                return res.status(404).send(`Trip with ID ${requestedTripId} not found.`);
+            }
+
+            console.log(`Successfully retrieved trip ID ${requestedTripId}.`);
+            res.status(200).json(foundTrip); // 찾은 trip 객체 반환
+        })
+        .catch(err => {
+            // trips.json 파일 자체가 없거나 읽기 오류 발생 시
+            if (err.code === 'ENOENT') {
+                console.log('trips.json not found for /get_trip, no trips to retrieve.');
+                return res.status(404).send('No trip data file found.');
+            }
+            console.error('SERVER ERROR during /get_trip data retrieval:', err);
+            return res.status(500).send('SERVER ERROR while processing trip data.');
+        });
+});
 
 
 app.listen(port, () => {

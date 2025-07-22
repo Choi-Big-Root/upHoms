@@ -13,6 +13,7 @@ import '../../core/theme/theme_extension.dart';
 import '../../core/utils/image_viewer_utils.dart';
 import '../bloc/property/property_bloc.bloc.dart';
 import '../bloc/review/review_bloc.bloc.dart';
+import '../bloc/trip/trip_bloc.bloc.dart';
 import '../common_widgets/rating_bar_widget.dart';
 
 class TripDetailsWidget extends StatefulWidget {
@@ -21,11 +22,13 @@ class TripDetailsWidget extends StatefulWidget {
     required this.propertyId,
     required this.kind,
     this.searchText,
+    this.tripId,
   });
 
   final Map<String, dynamic> propertyId;
   final String? kind;
   final String? searchText;
+  final String? tripId;
 
   @override
   State<TripDetailsWidget> createState() => _TripDetailsWidgetState();
@@ -61,6 +64,8 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
           context.read<PropertyBloc>().add(
             LoadSearchProperties({'searchText': widget.searchText}),
           );
+        } else if (widget.kind == 'trip_detail') {
+          context.read<TripBloc>().add(GetTrip({'tripId': widget.tripId}));
         }
       },
       child: Scaffold(

@@ -5,7 +5,7 @@ class AddTripUsecase{
   AddTripUsecase(this.tripRepository);
   final TripRepository tripRepository;
 
-  Future<void> call (TripModel trip) async {
-    await tripRepository.addTrip(trip);
+  Future<TripModel> call (TripModel trip) async {
+    return await tripRepository.addTrip(trip);
   }
 }

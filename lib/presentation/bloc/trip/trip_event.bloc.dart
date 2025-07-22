@@ -9,3 +9,8 @@ class AddTrip extends TripEvent {
   AddTrip(this.tripModel);
   final TripModel tripModel;
 }
+
+class GetTrip extends TripEvent {
+  const GetTrip(this.tripId);
+  final Map<String, dynamic> tripId;
+}

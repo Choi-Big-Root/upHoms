@@ -7,7 +7,12 @@ class TripRepositoryImpl implements TripRepository {
   final TripRemoteDataSource tripRemoteDataSource;
 
   @override
-  Future<void> addTrip(TripModel trip) async {
-    await tripRemoteDataSource.addTrip(trip);
+  Future<TripModel> addTrip(TripModel trip) async {
+    return await tripRemoteDataSource.addTrip(trip);
+  }
+
+  @override
+  Future<TripModel> getTrip(Map<String, dynamic> tripId) async {
+    return await tripRemoteDataSource.getTrip(tripId);
   }
 }

@@ -81,7 +81,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.myTripDetails,
       name: 'my_trip_details',
-      builder: (context, state) => const MyTripDetailsWidget(),
+      builder: (context, state) {
+        final tripId = {'tripId' : state.uri.queryParameters['tripId']};
+        return MyTripDetailsWidget(tripId: tripId);
+      },
     ),
 
     GoRoute(
@@ -101,7 +104,7 @@ final GoRouter router = GoRouter(
       path: RoutePath.tripBookNow,
       name: 'trip_book_now',
       builder: (context, state) {
-        return TripBookNowWidget();
+        return const TripBookNowWidget();
       },
     ),
     GoRoute(
@@ -111,7 +114,8 @@ final GoRouter router = GoRouter(
         final propertyId = {'propertyId' : state.uri.queryParameters['propertyId']};
         final kind = state.uri.queryParameters['kind'];
         final searchText = state.uri.queryParameters['searchText'];
-        return TripDetailsWidget(propertyId : propertyId,kind: kind,searchText: searchText??'',);
+        final tripId = state.uri.queryParameters['tripId'];
+        return TripDetailsWidget(propertyId : propertyId,kind: kind,searchText: searchText??'', tripId: tripId??'');
       },
     ),
 

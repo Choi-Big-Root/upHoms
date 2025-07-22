@@ -1,5 +1,6 @@
 import '../../../domain/model/trip/trip_model.dart';
 
 abstract class TripRemoteDataSource {
-  Future<void> addTrip(TripModel trip);
+  Future<TripModel> addTrip(TripModel trip);
+  Future<TripModel> getTrip(Map<String,dynamic> tripId);
 }

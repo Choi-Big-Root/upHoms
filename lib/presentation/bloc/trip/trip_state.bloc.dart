@@ -6,5 +6,6 @@ class TripState with _$TripState {
   const factory TripState.loading() = Loading;
   const factory TripState.success() = Success;
   const factory TripState.error(String message) = Error;
-  const factory TripState.addTripSuccess() = AddTripSuccess;
+  const factory TripState.addTripSuccess(TripModel trip) = AddTripSuccess;
+  const factory TripState.getTripSuccess(TripModel trip) = GetTripSuccess;
 }
