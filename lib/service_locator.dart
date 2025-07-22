@@ -24,6 +24,7 @@ import 'domain/usecases/review/get_reviews_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/property/property_bloc.bloc.dart';
+import 'presentation/bloc/review/review_bloc.bloc.dart';
 import 'presentation/bloc/user/user_bloc.bloc.dart';
 import 'presentation/cubit/message_cubit.dart';
 
@@ -64,21 +65,16 @@ void _data() {
   );
 
   //review
-  locator.registerSingleton<ReviewApiService>(
-    ReviewApiService(locator<Dio>()),
-  );
+  locator.registerSingleton<ReviewApiService>(ReviewApiService(locator<Dio>()));
   locator.registerSingleton<ReviewRemoteDataSource>(
     ReviewRemoteDataSourceImpl(locator<ReviewApiService>()),
   );
   locator.registerSingleton<ReviewRepository>(
     ReviewRepositoryImpl(locator<ReviewRemoteDataSource>()),
   );
-
-
 }
 
 void _domain() {
-
   //user
   locator.registerSingleton<CreateAccountUsecase>(
     CreateAccountUsecase(locator<UserRepository>()),
@@ -126,6 +122,10 @@ void _presentation() {
       getSearchPropertiesUsecase: locator<GetSearchPropertiesUsecase>(),
       getPropertyUsecase: locator<GetPropertyUsecase>(),
     ),
+  );
+
+  locator.registerFactory(
+    () => ReviewBloc(getReviewsUsecase: locator<GetReviewsUsecase>(),),
   );
 
   locator.registerSingleton<MessageCubit>(MessageCubit());
