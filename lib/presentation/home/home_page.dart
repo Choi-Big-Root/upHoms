@@ -408,9 +408,9 @@ class _HomePageState extends State<HomePage> {
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
-                                            const Icon(
+                                            Icon(
                                               Icons.star_rounded,
-                                              color: Color(0xFFFFA130),
+                                              color: property.ratingSummary! > 0.0 ? const Color(0xFFFFA130) : const Color(0xFFD6D9DB),
                                               size: 24,
                                             ),
                                             Padding(

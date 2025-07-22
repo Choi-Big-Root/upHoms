@@ -285,9 +285,12 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
                                 focusColor: Colors.transparent,
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
-                                onTap: () {
-                                  context.push('/trip_review');
-                                },
+                                onTap: property.ratingSummary! > 0.0 ? () {
+                                  String propertyIdText = Uri.encodeComponent(
+                                    property.propertyId.toString(),
+                                  );
+                                  context.push('/trip_review?propertyId=$propertyIdText');
+                                }:(){},
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
