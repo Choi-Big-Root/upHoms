@@ -305,7 +305,8 @@ class _TripSearchWidgetState extends State<TripSearchWidget> {
                                               0,
                                             ),
                                             child: Text(
-                                              '[tripNeighborhood]',
+                                              property.propertyDescription ??
+                                                  'No Description',
                                               style: GoogleFonts.lexendDeca(
                                                 textStyle: textScheme.bodySmall?.copyWith(
                                                   color: colorScheme.grayIcon,
@@ -340,7 +341,9 @@ class _TripSearchWidgetState extends State<TripSearchWidget> {
                                                       0,
                                                     ),
                                                     child: Text(
-                                                      '[ratingSummaryList(a)]',
+                                                      property.ratingSummary
+                                                          ?.toStringAsFixed(1) ??
+                                                          '0.0',
                                                       style: GoogleFonts.lexendDeca(
                                                         textStyle: textScheme.bodySmall
                                                             ?.copyWith(

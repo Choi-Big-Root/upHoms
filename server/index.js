@@ -37,6 +37,12 @@ app.use(express.text());
 // --- ✨ 여기까지가 body-parser 미들웨어 설정입니다. ---
 
 
+// /add_property: 부동산 정보 생성 및 저장
+const PROPERTIES_FILE = path.join(__dirname, 'properties.json');
+const USERS_FILE = path.join(__dirname, 'users.json'); 
+const REVIEWS_FILE = path.join(__dirname, 'reviews.json'); 
+
+
 // Image upload endpoint
 app.post('/upload', upload.single('image'), (req, res) => {
     if (!req.file) {
@@ -143,153 +149,66 @@ app.post('/user_create', (req, res) => {
     });
 });
 
-// /add_property: 부동산 정보 생성 및 저장
-const PROPERTIES_FILE = path.join(__dirname, 'properties.json');
-const USERS_FILE = path.join(__dirname, 'users.json'); // users.json 파일 경로 추가
-
-app.post('/add_property', (req, res) => {
-    const newPropertyRequest = req.body;
-
-    // 필수 필드 검증 (propertyName, propertyAddress, price)
-    if (!newPropertyRequest.propertyName || !newPropertyRequest.propertyAddress || !newPropertyRequest.price) {
-        return res.status(400).send('Missing required property fields: propertyName, propertyAddress, price.');
-    }
-
-    // 유저 정보 검증 (user.uid 또는 user.email이 존재해야 함)
-    // 클라이언트에서 보낸 user 객체가 있는지 확인하고, uid나 email 중 하나는 필수적으로 있어야 해당 유저를 찾을 수 있습니다.
-    if (!newPropertyRequest.user || (!newPropertyRequest.user.uid && !newPropertyRequest.user.email)) {
-        return res.status(400).send('User information (uid or email) is required in the request body.');
-    }
-
-    // --- 프로퍼티 저장 로직 시작 ---
-    fs.readFile(PROPERTIES_FILE, 'utf8', (err, data) => {
-        let properties = [];
-        if (err) {
-            if (err.code === 'ENOENT') {
-                console.log('properties.json not found, creating a new one.');
-            } else {
-                console.error('Error reading properties.json:', err);
-                return res.status(500).send('SERVER ERROR while reading property data.');
-            }
-        } else {
-            try {
-                properties = JSON.parse(data);
-            } catch (parseErr) {
-                console.error('Error parsing properties.json:', parseErr);
-                return res.status(500).send('Property data is corrupted.');
-            }
-        }
-
-        const lastPropertyId = properties.length > 0
-            ? Math.max(...properties.map(p => {
-                // propertyId가 문자열일 수 있으므로 parseInt로 변환
-                return parseInt(p.propertyId) || 0;
-            }))
-            : 0;
-        const newPropertyId = lastPropertyId + 1;
-
-        const newProperty = {
-            ...newPropertyRequest,
-            propertyId: newPropertyId,
-            createdTime: new Date().toISOString(),
-            lastUpdated: new Date().toISOString()
-        };
-
-        properties.push(newProperty);
-
-        fs.writeFile(PROPERTIES_FILE, JSON.stringify(properties, null, 2), (err) => {
-            if (err) {
-                console.error('Error writing properties.json:', err);
-                return res.status(500).send('SERVER ERROR while writing property data.');
-            }
-
-            // --- users.json 업데이트 로직 시작 ---
-            fs.readFile(USERS_FILE, 'utf8', (userErr, userData) => {
-                if (userErr) {
-                    console.error('Error reading users.json:', userErr);
-                    // users.json 읽기 실패 시, property는 저장했으므로 201 응답은 보내되 로그 남김
-                    console.warn('Property saved, but failed to update user list.');
-                    return res.status(201).json(newProperty);
-                }
-
-                let users = [];
-                try {
-                    users = JSON.parse(userData);
-                } catch (parseUserErr) {
-                    console.error('Error parsing users.json:', parseUserErr);
-                    console.warn('Property saved, but user data is corrupted.');
-                    return res.status(201).json(newProperty);
-                }
-
-                // 해당 유저 찾기 (uid 또는 email로 찾기)
-                const targetUserIdentifier = newPropertyRequest.user.uid || newPropertyRequest.user.email;
-                const userKey = newPropertyRequest.user.uid ? 'uid' : 'email';
-
-                const userIndex = users.findIndex(u => {
-                    // 사용자 UID가 숫자일 경우 대비 parseInt
-                    return u[userKey] == (userKey === 'uid' ? parseInt(targetUserIdentifier) : targetUserIdentifier);
-                });
-
-                if (userIndex !== -1) {
-                    // 유저를 찾았다면 numberPropertyList에 propertyId 추가
-                    if (!users[userIndex].numberPropertyList) {
-                        users[userIndex].numberPropertyList = [];
-                    }
-                    users[userIndex].numberPropertyList.push(newPropertyId);
-
-                    // 업데이트된 users 데이터 저장
-                    fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), (writeUserErr) => {
-                        if (writeUserErr) {
-                            console.error('Error writing users.json:', writeUserErr);
-                            console.warn('Property saved, but failed to update user list.');
-                            return res.status(201).json(newProperty);
-                        }
-                        console.log(`Property ID ${newProperty.propertyId} added to user ${users[userIndex][userKey]}'s numberPropertyList.`);
-                        res.status(201).json(newProperty); // 모든 작업 성공 후 응답
-                    });
-                } else {
-                    // 해당 유저를 찾을 수 없는 경우
-                    console.warn(`Could not find user with ${userKey}: ${targetUserIdentifier} to update numberPropertyList.`);
-                    res.status(201).json(newProperty); // 프로퍼티는 저장되었으므로 201 응답
-                }
-            });
-            // --- users.json 업데이트 로직 끝 ---
-        });
-    });
-});
-
+// --- GET /properties 엔드포인트 수정 ---
 app.get('/properties', (req, res) => {
-    fs.readFile(PROPERTIES_FILE, 'utf8', (err, data) => {
-        if (err) {
-            // 파일이 없으면 빈 배열 반환 (오류가 아님)
+    Promise.all([
+        fs.promises.readFile(PROPERTIES_FILE, 'utf8'),
+        fs.promises.readFile(REVIEWS_FILE, 'utf8').catch(err => {
             if (err.code === 'ENOENT') {
-                console.log('properties.json not found, returning empty array.');
-                return res.status(200).json([]); // 빈 배열 반환
-            } else {
-                console.error('Error reading properties.json:', err);
-                return res.status(500).send('SERVER ERROR while reading property data.');
+                console.log('reviews.json not found, treating as empty for ratingSummary calculation.');
+                return '[]'; 
             }
-        }
-
+            throw err; 
+        })
+    ])
+    .then(([propertiesData, reviewsData]) => {
         let properties = [];
+        let reviews = [];
+
         try {
-            properties = JSON.parse(data);
+            properties = JSON.parse(propertiesData);
         } catch (parseErr) {
             console.error('Error parsing properties.json:', parseErr);
             return res.status(500).send('Property data is corrupted.');
         }
 
-        properties.sort((a, b) => {
-            // lastUpdated 필드가 없는 경우를 대비하여 기본값 설정 (예: 과거 날짜)
-            const dateA = a.lastUpdated ? new Date(a.lastUpdated) : new Date(0); // Epoch 시작
-            const dateB = b.lastUpdated ? new Date(b.lastUpdated) : new Date(0); // Epoch 시작
+        try {
+            reviews = JSON.parse(reviewsData);
+        } catch (parseErr) {
+            console.error('Error parsing reviews.json:', parseErr);
+            reviews = [];
+        }
 
-            // 내림차순 정렬 (최신 날짜가 먼저 오도록)
+        const propertiesWithRatings = properties.map(property => {
+            const relatedReviews = reviews.filter(review => review.propertyId == property.propertyId);
+
+            let calculatedRatingSummary = 0; // 기본값 0
+            if (relatedReviews.length > 0) {
+                const totalRating = relatedReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+                calculatedRatingSummary = parseFloat((totalRating / relatedReviews.length).toFixed(1)); 
+            }
+
+            // ✨ 기존 property 객체의 ratingSummary 필드를 업데이트
+            return {
+                ...property,
+                // property.ratingSummary가 이미 존재한다면 이 값으로 덮어씌워집니다.
+                // 존재하지 않으면 새로 추가됩니다.
+                ratingSummary: calculatedRatingSummary 
+            };
+        });
+
+        propertiesWithRatings.sort((a, b) => {
+            const dateA = a.lastUpdated ? new Date(a.lastUpdated) : new Date(0);
+            const dateB = b.lastUpdated ? new Date(b.lastUpdated) : new Date(0);
             return dateB.getTime() - dateA.getTime();
         });
 
-        console.log(`Successfully retrieved ${properties.length} properties, sorted by lastUpdated.`);
-        res.status(200).json(properties); // 정렬된 프로퍼티 데이터 반환
+        console.log(`Successfully retrieved ${propertiesWithRatings.length} properties, with updated ratingSummary and sorted.`);
+        res.status(200).json(propertiesWithRatings);
+    })
+    .catch(err => {
+        console.error('SERVER ERROR during /properties data retrieval:', err);
+        return res.status(500).send('SERVER ERROR while processing property data.');
     });
 });
 
@@ -297,19 +216,12 @@ app.get('/properties', (req, res) => {
 app.post('/property_search', (req, res) => {
     let searchText;
 
-    // ✨ req.body의 타입에 따라 searchText 추출 방식 결정
-    // 클라이언트가 @Body() String searchText로 보내면 Content-Type이 'text/plain'일 수 있으며,
-    // 이 경우 bodyParser.text()가 req.body를 직접 문자열로 파싱합니다.
     if (typeof req.body === 'string') {
         searchText = req.body.toLowerCase().trim();
     }
-    // 만약 클라이언트가 실수로 Content-Type을 'application/json'으로 보내면서
-    // 유효하지 않은 JSON 문자열(예: 'test')을 보낸다면, bodyParser.json()에서 에러가 날 수 있습니다.
-    // 하지만 유효한 JSON 객체로 보냈다면 (예: {"searchText": "test"}), 이 분기로 올 수 있습니다.
     else if (typeof req.body === 'object' && req.body !== null && req.body.searchText) {
-        searchText = req.body.searchText.toLowerCase().trim();
+        searchText = String(req.body.searchText).toLowerCase().trim();
     } else {
-        // 예상치 못한 req.body 형식
         console.error('Unexpected req.body type for /property_search:', req.body);
         return res.status(400).send('Invalid search text format. Please send a plain string or a JSON object with a "searchText" key.');
     }
@@ -318,43 +230,68 @@ app.post('/property_search', (req, res) => {
         return res.status(400).send('Search text is required in the request body.');
     }
 
-    fs.readFile(PROPERTIES_FILE, 'utf8', (err, data) => {
-        if (err) {
+    Promise.all([
+        fs.promises.readFile(PROPERTIES_FILE, 'utf8'),
+        fs.promises.readFile(REVIEWS_FILE, 'utf8').catch(err => {
             if (err.code === 'ENOENT') {
-                console.log('properties.json not found, returning empty array for search.');
-                return res.status(200).json([]);
-            } else {
-                console.error('Error reading properties.json for search:', err);
-                return res.status(500).send('SERVER ERROR while reading property data for search.');
+                return '[]';
             }
-        }
-
+            throw err;
+        })
+    ])
+    .then(([propertiesData, reviewsData]) => {
         let properties = [];
+        let reviews = [];
+
         try {
-            properties = JSON.parse(data);
+            properties = JSON.parse(propertiesData);
         } catch (parseErr) {
             console.error('Error parsing properties.json for search:', parseErr);
             return res.status(500).send('Property data is corrupted.');
         }
 
+        try {
+            reviews = JSON.parse(reviewsData);
+        } catch (parseErr) {
+            console.error('Error parsing reviews.json for search:', parseErr);
+            reviews = [];
+        }
+
         const searchResults = properties.filter(property => {
-            // 필드가 없을 경우를 대비하여 안전하게 접근하고 소문자로 변환
             const propertyAddress = property.propertyAddress?.toString().toLowerCase() || '';
             const propertyCity = property.propertyCity?.toString().toLowerCase() || '';
             const propertyState = property.propertyState?.toString().toLowerCase() || '';
             const propertyNeighborhood = property.propertyNeighborhood?.toString().toLowerCase() || '';
 
-            // 하나라도 검색어를 포함하면 true 반환
             return propertyAddress.includes(searchText) ||
                    propertyCity.includes(searchText) ||
                    propertyState.includes(searchText) ||
                    propertyNeighborhood.includes(searchText);
         });
 
-        console.log(`Found ${searchResults.length} properties matching "${searchText}".`);
-        res.status(200).json(searchResults); // 검색 결과 반환
+        // 검색된 프로퍼티에도 ratingSummary 업데이트
+        const searchResultsWithRatings = searchResults.map(property => {
+            const relatedReviews = reviews.filter(review => review.propertyId == property.propertyId);
+            let calculatedRatingSummary = 0;
+            if (relatedReviews.length > 0) {
+                const totalRating = relatedReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+                calculatedRatingSummary = parseFloat((totalRating / relatedReviews.length).toFixed(1));
+            }
+            return {
+                ...property,
+                ratingSummary: calculatedRatingSummary // ✨ ratingSummary 필드 업데이트
+            };
+        });
+
+        console.log(`Found ${searchResultsWithRatings.length} properties matching "${searchText}", with updated ratingSummary.`);
+        res.status(200).json(searchResultsWithRatings);
+    })
+    .catch(err => {
+        console.error('SERVER ERROR during /property_search data retrieval:', err);
+        return res.status(500).send('SERVER ERROR while processing search data.');
     });
 });
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);

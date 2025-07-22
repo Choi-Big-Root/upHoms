@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
       body: BlocBuilder<PropertyBloc, PropertyState>(
         // BlocBuilder 추가
         builder: (context, state) {
-          return state.when(
+          return state.maybeWhen(
             loading: () => const Center(child: CircularProgressIndicator()),
             propertiesLoaded: (properties) {
               return SingleChildScrollView(
@@ -780,9 +780,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             },
-            success: () => Center(child: Text('success'),),
-            initial: ()=>Center(child: Text('success22'),),
-            editing: (s)=> Center(child: Text('success2233333'),),
+            orElse: () => const SizedBox.shrink(),
           );
         },
       ),
