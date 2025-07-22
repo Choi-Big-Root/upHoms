@@ -20,4 +20,9 @@ class PropertyRepositoryImpl implements PropertyRepository {
   Future<List<PropertyModel>> getSearchProperties(Map<String, dynamic> searchText) async {
     return await propertyRemoteDataSource.getSearchProperties(searchText);
   }
+
+  @override
+  Future<PropertyModel> getProperty(Map<String, dynamic> propertyId) async {
+    return await propertyRemoteDataSource.getProperty(propertyId);
+  }
 }

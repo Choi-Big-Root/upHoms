@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/error_logger.dart';
 import '../../dto/property/property_dto.dart';
@@ -18,4 +17,7 @@ abstract class PropertyApiService {
 
   @POST('/property_search')
   Future<List<PropertyDto>> getSearchProperties(@Body() Map<String, dynamic> searchText);
+
+  @POST('/get_property')
+  Future<PropertyDto> getProperty(@Body() Map<String,dynamic> propertyId);
 }

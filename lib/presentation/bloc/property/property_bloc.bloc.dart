@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../domain/model/property/property_model.dart';
 import '../../../domain/usecases/property/add_property_usecase.dart';
 import '../../../domain/usecases/property/get_all_properties_usecase.dart';
+import '../../../domain/usecases/property/get_property_usecase.dart';
 import '../../../domain/usecases/property/get_search_propertiesa_usecase.dart';
 
 part 'property_event.bloc.dart';
@@ -15,19 +16,23 @@ class PropertyBloc extends Bloc<PropertyEvent,PropertyState> {
   final AddPropertyUsecase _addPropertyUsecase;
   final GetAllPropertiesUsecase _getAllPropertiesUsecase; // 추가
   final GetSearchPropertiesUsecase _getSearchPropertiesUsecase;
+  final GetPropertyUsecase _getPropertyUsecase;
 
   PropertyBloc({
     required AddPropertyUsecase addPropertyUsecase,
     required GetAllPropertiesUsecase getAllPropertiesUsecase, // 추가
     required GetSearchPropertiesUsecase getSearchPropertiesUsecase, // 추가
+    required GetPropertyUsecase getPropertyUsecase,
   }) : _addPropertyUsecase = addPropertyUsecase,
        _getAllPropertiesUsecase = getAllPropertiesUsecase, // 추가
         _getSearchPropertiesUsecase = getSearchPropertiesUsecase, // 추가
+        _getPropertyUsecase = getPropertyUsecase,
   super(const PropertyState.initial()){
     on<AddProperty>(_onAddProperty);
     on<EditingProperty>(_onEditingProperty);
     on<LoadProperties>(_onLoadProperties); // 추가
     on<LoadSearchProperties>(_onLoadSearchProperties);
+    on<LoadProperty>(_onLoadProperty);
   }
 
   Future<void> _onAddProperty(AddProperty event, Emitter<PropertyState> emit) async {
@@ -68,4 +73,15 @@ class PropertyBloc extends Bloc<PropertyEvent,PropertyState> {
       emit(PropertyState.error(e.toString()));
     }
   }
+
+  Future<void> _onLoadProperty(LoadProperty event, Emitter<PropertyState> emit) async {
+    emit(const PropertyState.loading());
+    try {
+      final property = await _getPropertyUsecase(event.propertyId);
+      emit(PropertyState.propertyLoaded(property));
+    } catch (e) {
+      emit(PropertyState.error(e.toString()));
+    }
+  }
+
 }

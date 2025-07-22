@@ -23,3 +23,8 @@ class LoadSearchProperties extends PropertyEvent {
   const LoadSearchProperties(this.searchText);
   final Map<String, dynamic> searchText;
 }
+
+class LoadProperty extends PropertyEvent {
+  const LoadProperty(this.propertyId);
+  final Map<String, dynamic> propertyId;
+}

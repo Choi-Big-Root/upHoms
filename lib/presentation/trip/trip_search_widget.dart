@@ -247,7 +247,13 @@ class _TripSearchWidgetState extends State<TripSearchWidget> {
                                       hoverColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: () {
-                                        context.push('/trip_details');
+                                        String propertyIdText = Uri.encodeComponent(
+                                          property.propertyId.toString(),
+                                        );
+                                        String searchText = Uri.encodeComponent(
+                                          _searchTextController.text,
+                                        );
+                                        context.push('/trip_details?propertyId=$propertyIdText&kind=search&searchText=$searchText',);
                                       },
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,

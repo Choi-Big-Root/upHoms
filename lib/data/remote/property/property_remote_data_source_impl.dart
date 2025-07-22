@@ -70,4 +70,23 @@ class PropertyRemoteDataSourceImpl implements PropertyRemoteDataSource {
       throw Exception('An unexpected error occurred while getting search properties');
     }
   }
+
+  @override
+  Future<PropertyModel> getProperty(Map<String, dynamic> propertyId) async {
+    try{
+      final propertyDto = await propertyApiService.getProperty(propertyId);
+      return PropertyMapper.toModel(propertyDto);
+    }on DioException catch (e) {
+      if (e.response != null) {
+        logger.e('Error getProperty: ${e.response?.statusCode} - ${e.response?.data}');
+        throw Exception('${e.response?.data}');
+      } else {
+        logger.e('Error getProperty: ${e.message}');
+        throw Exception('Failed to getProperty: Network error or timeout');
+      }
+    } catch (e) {
+      logger.e('Unexpected error getProperty: $e');
+      throw Exception('An unexpected error occurred while getting search properties');
+    }
+  }
 }

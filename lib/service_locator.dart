@@ -4,16 +4,23 @@ import 'core/constants.dart';
 import 'data/remote/property/property_api_service.dart';
 import 'data/remote/property/property_remote_data_source.dart';
 import 'data/remote/property/property_remote_data_source_impl.dart';
+import 'data/remote/review/review_api_service.dart';
+import 'data/remote/review/review_remote_data_source.dart';
+import 'data/remote/review/review_remote_data_source_impl.dart';
 import 'data/remote/user/user_api_service.dart';
 import 'data/remote/user/user_remote_data_source.dart';
 import 'data/remote/user/user_remote_data_source_impl.dart';
 import 'data/repositories/property/property_repository_impl.dart';
+import 'data/repositories/review/review_repository_impl.dart';
 import 'data/repositories/user/user_repository_impl.dart';
 import 'domain/repositories/property/property_repository.dart';
+import 'domain/repositories/review/review_repository.dart';
 import 'domain/repositories/user/user_repository.dart';
 import 'domain/usecases/property/add_property_usecase.dart';
 import 'domain/usecases/property/get_all_properties_usecase.dart';
+import 'domain/usecases/property/get_property_usecase.dart';
 import 'domain/usecases/property/get_search_propertiesa_usecase.dart';
+import 'domain/usecases/review/get_reviews_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
 import 'presentation/bloc/property/property_bloc.bloc.dart';
@@ -32,7 +39,11 @@ void _data() {
   final dio = Dio();
   dio.options.baseUrl = AppConstants.localServerUrl;
   dio.options.headers['Content-Type'] = 'application/json';
+
+  //dio
   locator.registerSingleton<Dio>(dio);
+
+  //user
   locator.registerSingleton<UserApiService>(UserApiService(locator<Dio>()));
   locator.registerSingleton<UserRemoteDataSource>(
     UserRemoteDataSourceImpl(locator<UserApiService>()),
@@ -41,6 +52,7 @@ void _data() {
     UserRepositoryImpl(locator<UserRemoteDataSource>()),
   );
 
+  //property
   locator.registerSingleton<PropertyApiService>(
     PropertyApiService(locator<Dio>()),
   );
@@ -50,15 +62,32 @@ void _data() {
   locator.registerSingleton<PropertyRepository>(
     PropertyRepositoryImpl(locator<PropertyRemoteDataSource>()),
   );
+
+  //review
+  locator.registerSingleton<ReviewApiService>(
+    ReviewApiService(locator<Dio>()),
+  );
+  locator.registerSingleton<ReviewRemoteDataSource>(
+    ReviewRemoteDataSourceImpl(locator<ReviewApiService>()),
+  );
+  locator.registerSingleton<ReviewRepository>(
+    ReviewRepositoryImpl(locator<ReviewRemoteDataSource>()),
+  );
+
+
 }
 
 void _domain() {
+
+  //user
   locator.registerSingleton<CreateAccountUsecase>(
     CreateAccountUsecase(locator<UserRepository>()),
   );
   locator.registerSingleton<GetUserUsecase>(
     GetUserUsecase(locator<UserRepository>()),
   );
+
+  //property
   locator.registerSingleton<AddPropertyUsecase>(
     AddPropertyUsecase(locator<PropertyRepository>()),
   );
@@ -67,6 +96,14 @@ void _domain() {
   );
   locator.registerSingleton<GetSearchPropertiesUsecase>(
     GetSearchPropertiesUsecase(locator<PropertyRepository>()),
+  );
+  locator.registerSingleton<GetPropertyUsecase>(
+    GetPropertyUsecase(locator<PropertyRepository>()),
+  );
+
+  //review
+  locator.registerSingleton<GetReviewsUsecase>(
+    GetReviewsUsecase(locator<ReviewRepository>()),
   );
 }
 
@@ -87,6 +124,7 @@ void _presentation() {
       addPropertyUsecase: locator<AddPropertyUsecase>(),
       getAllPropertiesUsecase: locator<GetAllPropertiesUsecase>(),
       getSearchPropertiesUsecase: locator<GetSearchPropertiesUsecase>(),
+      getPropertyUsecase: locator<GetPropertyUsecase>(),
     ),
   );
 

@@ -1,13 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
+import '../bloc/property/property_bloc.bloc.dart';
 
 class TripDetailsWidget extends StatefulWidget {
-  const TripDetailsWidget({super.key});
+  const TripDetailsWidget({super.key, required this.propertyId, required this.kind, this.searchText});
+  final Map<String,dynamic> propertyId;
+  final String? kind;
+  final String? searchText;
 
   @override
   State<TripDetailsWidget> createState() => _TripDetailsWidgetState();
@@ -15,6 +20,13 @@ class TripDetailsWidget extends StatefulWidget {
 
 class _TripDetailsWidgetState extends State<TripDetailsWidget>
     with TickerProviderStateMixin {
+  
+  @override
+  void initState() {
+    super.initState();
+    context.read<PropertyBloc>().add(LoadProperty(widget.propertyId));
+  }
+  
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colors;
@@ -99,6 +111,11 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
                                               ),
                                               child: IconButton(
                                                 onPressed: () {
+                                                  if(widget.kind == 'home'){
+                                                    context.read<PropertyBloc>().add(const LoadProperties());
+                                                  }else if(widget.kind == 'search') {
+                                                    context.read<PropertyBloc>().add(LoadSearchProperties({'searchText':widget.searchText}));
+                                                  }
                                                   context.pop();
                                                 },
                                                 icon: const Icon(

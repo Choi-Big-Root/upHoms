@@ -292,6 +292,93 @@ app.post('/property_search', (req, res) => {
     });
 });
 
+//프로퍼티 단일
+app.post('/get_property', (req, res) => {
+    let requestedPropertyId;
+
+    // 클라이언트에서 @Body() Map<String,dynamic> propertyId로 보내므로, req.body는 객체일 것
+    // 요청 본문에서 'propertyId' 키를 찾아 값을 추출합니다.
+    if (typeof req.body === 'object' && req.body !== null && (req.body.propertyId !== undefined || req.body.propertyId !== null)) {
+        requestedPropertyId = parseInt(req.body.propertyId); // 정수로 변환
+    } else if (typeof req.body === 'string') {
+        // 혹시 모르니 문자열로 단일 ID가 왔을 경우도 대비
+        try {
+            const parsedBody = JSON.parse(req.body); // JSON 문자열로 왔을 경우 파싱
+            if (parsedBody && (parsedBody.propertyId !== undefined || parsedBody.propertyId !== null)) {
+                requestedPropertyId = parseInt(parsedBody.propertyId);
+            }
+        } catch (e) {
+            // JSON 파싱 실패 시, 문자열 자체를 ID로 시도 (fallback)
+            requestedPropertyId = parseInt(req.body);
+        }
+    }
+
+    if (isNaN(requestedPropertyId)) { // propertyId가 유효한 숫자가 아닐 경우
+        console.error('Invalid or missing propertyId in request body for /get_property:', req.body);
+        return res.status(400).send('Valid propertyId is required in the request body.');
+    }
+
+    // properties.json과 reviews.json 파일을 동시에 읽음
+    Promise.all([
+        fs.promises.readFile(PROPERTIES_FILE, 'utf8'),
+        fs.promises.readFile(REVIEWS_FILE, 'utf8').catch(err => {
+            if (err.code === 'ENOENT') {
+                console.log('reviews.json not found for /get_property, treating as empty.');
+                return '[]'; 
+            }
+            throw err; 
+        })
+    ])
+    .then(([propertiesData, reviewsData]) => {
+        let properties = [];
+        let reviews = [];
+
+        try {
+            properties = JSON.parse(propertiesData);
+        } catch (parseErr) {
+            console.error('Error parsing properties.json for /get_property:', parseErr);
+            return res.status(500).send('Property data is corrupted.');
+        }
+
+        try {
+            reviews = JSON.parse(reviewsData);
+        } catch (parseErr) {
+            console.error('Error parsing reviews.json for /get_property:', parseErr);
+            reviews = []; // 리뷰 데이터 파싱 오류 시 빈 배열로 처리
+        }
+
+        // 요청된 propertyId에 해당하는 단일 프로퍼티를 찾음
+        const foundProperty = properties.find(p => p.propertyId == requestedPropertyId);
+
+        if (!foundProperty) {
+            console.log(`Property with ID ${requestedPropertyId} not found.`);
+            return res.status(404).send(`Property with ID ${requestedPropertyId} not found.`);
+        }
+
+        // 해당 프로퍼티의 리뷰를 필터링하고 ratingSummary 계산
+        const relatedReviews = reviews.filter(review => review.propertyId == foundProperty.propertyId);
+
+        let calculatedRatingSummary = 0;
+        if (relatedReviews.length > 0) {
+            const totalRating = relatedReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+            calculatedRatingSummary = parseFloat((totalRating / relatedReviews.length).toFixed(1));
+        }
+
+        // 찾은 프로퍼티 객체에 ratingSummary를 업데이트하여 반환
+        const propertyWithRating = {
+            ...foundProperty,
+            ratingSummary: calculatedRatingSummary
+        };
+
+        console.log(`Successfully retrieved property ID ${requestedPropertyId} with ratingSummary: ${calculatedRatingSummary}.`);
+        res.status(200).json(propertyWithRating); // 단일 PropertyDto 객체 반환
+    })
+    .catch(err => {
+        console.error('SERVER ERROR during /get_property data retrieval:', err);
+        return res.status(500).send('SERVER ERROR while processing property data for single retrieval.');
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);

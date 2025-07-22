@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 import '../home/home_page.dart';
 import '../my_trips/my_trips_page.dart';
 import '../my_trips/widgets/my_trip_details_widget.dart';
@@ -30,6 +31,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
   debugLabel: 'shell',
 );
 
+final logger = Logger();
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/login',
@@ -103,7 +105,14 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.tripDetails,
       name: 'trip_details',
-      builder: (context, state) => const TripDetailsWidget(),
+      builder: (context, state) {
+        final propertyId = {'propertyId' : state.uri.queryParameters['propertyId']};
+        final kind = state.uri.queryParameters['kind'];
+        final searchText = state.uri.queryParameters['searchText'];
+
+        logger.d('GoRute trip_detail: $propertyId,$kind,$searchText');
+        return TripDetailsWidget(propertyId : propertyId,kind: kind,searchText: searchText??'',);
+      },
     ),
 
     GoRoute(
