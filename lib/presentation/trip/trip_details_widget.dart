@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/constants.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
 import '../bloc/property/property_bloc.bloc.dart';
+import '../bloc/review/review_bloc.bloc.dart';
+import '../common_widgets/rating_bar_widget.dart';
 
 class TripDetailsWidget extends StatefulWidget {
   const TripDetailsWidget({
@@ -29,10 +32,19 @@ class TripDetailsWidget extends StatefulWidget {
 
 class _TripDetailsWidgetState extends State<TripDetailsWidget>
     with TickerProviderStateMixin {
+  final _pageController = PageController();
+
   @override
   void initState() {
     super.initState();
     context.read<PropertyBloc>().add(LoadProperty(widget.propertyId));
+    context.read<ReviewBloc>().add(GetReviews(widget.propertyId));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 
   @override
@@ -516,209 +528,234 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
                                         ],
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                              0,
-                                              8,
-                                              0,
-                                              0,
-                                            ),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 200,
-                                          child: Stack(
-                                            children: [
-                                              Padding(
+                                    BlocBuilder<ReviewBloc, ReviewState>(
+                                      builder: (context, state) {
+                                        return state.maybeWhen(
+                                          orElse: () => const SizedBox.shrink(),
+                                          loadedReviews: (reviews) {
+                                            return Expanded(
+                                              child: Padding(
                                                 padding:
                                                     const EdgeInsetsDirectional.fromSTEB(
                                                       0,
+                                                      8,
                                                       0,
                                                       0,
-                                                      30,
                                                     ),
-                                                child: PageView.builder(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemCount: 4,
-                                                  itemBuilder: (context, pageViewIndex) {
-                                                    final pageViewReviewsRecord;
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                            12,
-                                                          ),
-                                                      child: Container(
-                                                        width: 100,
-                                                        decoration: BoxDecoration(
-                                                          color: colorScheme
-                                                              .secondaryBackground,
-                                                          boxShadow: [
-                                                            const BoxShadow(
-                                                              blurRadius: 5,
-                                                              color: Color(
-                                                                0x24090F13,
-                                                              ),
-                                                              offset: Offset(
-                                                                0.0,
-                                                                2,
-                                                              ),
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  height: 200,
+                                                  color: colorScheme
+                                                      .primaryBackground,
+                                                  child: Stack(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsetsDirectional.fromSTEB(
+                                                              0,
+                                                              0,
+                                                              0,
+                                                              30,
                                                             ),
-                                                          ],
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                16,
-                                                              ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets.all(
-                                                                12,
-                                                              ),
-                                                          child: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .max,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(
-                                                                        '[API 데이터 타이틀]',
-                                                                        style: GoogleFonts.urbanist(
-                                                                          textStyle:
-                                                                              textScheme.headlineSmall,
-                                                                          letterSpacing:
-                                                                              0.0,
-                                                                        ),
+                                                        child: PageView.builder(
+                                                          controller:
+                                                              _pageController,
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          itemCount:
+                                                              reviews.length,
+                                                          itemBuilder:
+                                                              (
+                                                                context,
+                                                                pageViewIndex,
+                                                              ) {
+                                                                final review =
+                                                                    reviews[pageViewIndex];
+                                                                return Padding(
+                                                                  padding:
+                                                                      const EdgeInsets.all(
+                                                                        12,
                                                                       ),
-                                                                      const Padding(
-                                                                        padding:
-                                                                            EdgeInsetsDirectional.fromSTEB(
-                                                                              0,
-                                                                              4,
-                                                                              0,
-                                                                              0,
-                                                                            ),
-                                                                        child: Row(
-                                                                          children: [
-                                                                            Icon(
-                                                                              Icons.star_rounded,
-                                                                              color: Color(
-                                                                                0xFFFFA130,
-                                                                              ),
-                                                                            ),
-                                                                            Icon(
-                                                                              Icons.star_rounded,
-                                                                              color: Color(
-                                                                                0xFFD6D9DB,
-                                                                              ),
-                                                                            ),
-                                                                            Icon(
-                                                                              Icons.star_rounded,
-                                                                              color: Color(
-                                                                                0xFFD6D9DB,
-                                                                              ),
-                                                                            ),
-                                                                            Icon(
-                                                                              Icons.star_rounded,
-                                                                              color: Color(
-                                                                                0xFFD6D9DB,
-                                                                              ),
-                                                                            ),
-                                                                            Icon(
-                                                                              Icons.star_rounded,
-                                                                              color: Color(
-                                                                                0xFFD6D9DB,
-                                                                              ),
-                                                                            ),
-                                                                          ],
+                                                                  child: Container(
+                                                                    width: 100,
+                                                                    decoration: BoxDecoration(
+                                                                      color: colorScheme
+                                                                          .secondaryBackground,
+                                                                      boxShadow: [
+                                                                        const BoxShadow(
+                                                                          blurRadius:
+                                                                              5,
+                                                                          color: Color(
+                                                                            0x24090F13,
+                                                                          ),
+                                                                          offset: Offset(
+                                                                            0.0,
+                                                                            2,
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Container(
-                                                                    width: 50,
-                                                                    height: 50,
-                                                                    clipBehavior:
-                                                                        Clip.antiAlias,
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                          shape:
-                                                                              BoxShape.circle,
-                                                                        ),
-                                                                    child: Image.network(
-                                                                      'https://picsum.photos/id/238/200/200.jpg',
+                                                                      ],
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                            16,
+                                                                          ),
                                                                     ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsetsDirectional.fromSTEB(
-                                                                      0,
-                                                                      8,
-                                                                      0,
-                                                                      0,
-                                                                    ),
-                                                                child: Row(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .max,
-                                                                  children: [
-                                                                    Padding(
+                                                                    child: Padding(
                                                                       padding:
-                                                                          const EdgeInsetsDirectional.fromSTEB(
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                            24,
+                                                                          const EdgeInsets.all(
+                                                                            12,
                                                                           ),
-                                                                      child: Text(
-                                                                        '[API 데이터 리뷰 DESCRIPTION]',
-                                                                        style: GoogleFonts.lexendDeca(
-                                                                          textStyle: textScheme.bodySmall?.copyWith(
-                                                                            fontWeight:
-                                                                                CustomFontWeight.normal,
-                                                                            color: const Color(
-                                                                              0xFF8B97A2,
+                                                                      child: Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.max,
+                                                                        children: [
+                                                                          Row(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.max,
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              Column(
+                                                                                mainAxisSize: MainAxisSize.max,
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  Text(
+                                                                                    review.user!.displayName ??
+                                                                                        '',
+                                                                                    style: GoogleFonts.urbanist(
+                                                                                      textStyle: textScheme.headlineSmall,
+                                                                                      letterSpacing: 0.0,
+                                                                                    ),
+                                                                                  ),
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                                      0,
+                                                                                      4,
+                                                                                      0,
+                                                                                      0,
+                                                                                    ),
+                                                                                    child: RatingBarWidget(
+                                                                                      initalRating:
+                                                                                          review.rating ??
+                                                                                          0.0,
+                                                                                      starSize: 25,
+                                                                                      activeColor: const Color(
+                                                                                        0xFFFFA130,
+                                                                                      ),
+                                                                                      inactiveColor: const Color(
+                                                                                        0xFFD6D9DB,
+                                                                                      ),
+                                                                                      isTouch: false,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              review.user!.photoUrl!.isEmpty
+                                                                                  ? const SizedBox.shrink()
+                                                                                  : Container(
+                                                                                      width: 50,
+                                                                                      height: 50,
+                                                                                      clipBehavior: Clip.antiAlias,
+                                                                                      decoration: const BoxDecoration(
+                                                                                        shape: BoxShape.circle,
+                                                                                      ),
+                                                                                      child:
+                                                                                          review.user!.photoUrl!.startsWith(
+                                                                                            'data:image',
+                                                                                          )
+                                                                                          ? Image.memory(
+                                                                                              base64Decode(
+                                                                                                review.user!.photoUrl!
+                                                                                                    .split(
+                                                                                                      ',',
+                                                                                                    )
+                                                                                                    .last,
+                                                                                              ),
+                                                                                              fit: BoxFit.cover,
+                                                                                            )
+                                                                                          : CachedNetworkImage(
+                                                                                              imageUrl:
+                                                                                                  review.user!.photoUrl ??
+                                                                                                  'https://picsum.photos/id/238/200/200.jpg',
+                                                                                              fit: BoxFit.cover,
+                                                                                            ),
+                                                                                    ),
+                                                                            ],
+                                                                          ),
+                                                                          Padding(
+                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                              0,
+                                                                              8,
+                                                                              0,
+                                                                              0,
+                                                                            ),
+                                                                            child: Row(
+                                                                              mainAxisSize: MainAxisSize.max,
+                                                                              children: [
+                                                                                Padding(
+                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                                    0,
+                                                                                    0,
+                                                                                    0,
+                                                                                    24,
+                                                                                  ),
+                                                                                  child: Text(
+                                                                                    review.ratingDescription ??
+                                                                                        '',
+                                                                                    style: GoogleFonts.lexendDeca(
+                                                                                      textStyle: textScheme.bodySmall?.copyWith(
+                                                                                        fontWeight: CustomFontWeight.normal,
+                                                                                        color: const Color(
+                                                                                          0xFF8B97A2,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
                                                                             ),
                                                                           ),
-                                                                        ),
+                                                                        ],
                                                                       ),
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ],
+                                                                  ),
+                                                                );
+
+                                                              },
+
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment: AlignmentDirectional(0.0, 1.0), // 하단 중앙에 위치
+                                                        child: SmoothPageIndicator(
+                                                          controller: _pageController, // PageController와 연동
+                                                          count: reviews.length, // 총 페이지 수
+                                                          axisDirection: Axis.horizontal,
+                                                          onDotClicked: (index) {
+                                                            _pageController.animateToPage(
+                                                              index,
+                                                              duration: const Duration(milliseconds: 500),
+                                                              curve: Curves.ease,
+                                                            );
+                                                          },
+                                                          effect: ExpandingDotsEffect( // 여러 가지 효과 중 선택
+                                                            expansionFactor: 3, // 확장 비율
+                                                            dotHeight: 8,
+                                                            dotWidth: 8,
+                                                            dotColor: colorScheme.grayIcon, // 비활성 점 색상
+                                                            activeDotColor: colorScheme.dark600, // 활성 점 색상 (원하는 색상으로 변경)
+                                                            spacing: 10.0, // 점들 간의 간격
                                                           ),
                                                         ),
                                                       ),
-                                                    );
-                                                  },
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                            );
+                                          },
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),

@@ -9,6 +9,7 @@ class RatingBarWidget extends StatefulWidget {
     this.activeColor = const Color(0xFFFFA130),
     this.inactiveColor = const Color(0xFFD6D9DB),
     this.onRatingChanged,
+    this.isTouch = true,
   }) : assert(initalRating >= 0 && initalRating <= starCount);
 
   final int starCount; // 총 별 개수
@@ -17,6 +18,7 @@ class RatingBarWidget extends StatefulWidget {
   final Color activeColor; // 선택된 색상
   final Color inactiveColor; // 선택되지 않은 색상
   final ValueChanged<double>? onRatingChanged; // 별점 변경시 호출
+  final bool? isTouch;
 
   @override
   State<RatingBarWidget> createState() => _RatingBarWidgetState();
@@ -37,12 +39,12 @@ class _RatingBarWidgetState extends State<RatingBarWidget> {
         List.generate(widget.starCount, (index){
           final int starValue = index + 1;
           return InkWell(
-            onTap: (){
+            onTap: widget.isTouch! ? (){
               setState(() {
                 _currentRating = starValue.toDouble();
               });
               widget.onRatingChanged?.call(_currentRating);
-            },
+            } : (){},
             child: Icon(starValue <= _currentRating? Icons.star_rounded : Icons.star_rounded,
             color: starValue <= _currentRating ? widget.activeColor : widget.inactiveColor,size: widget.starSize,),
           );

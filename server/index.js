@@ -380,6 +380,62 @@ app.post('/get_property', (req, res) => {
 });
 
 
+//리뷰
+app.post('/get_reviews', (req, res) => {
+    let requestedPropertyId;
+
+    // 클라이언트에서 @Body() Map<String,dynamic> propertyId로 보내므로, req.body는 객체일 것
+    // 요청 본문에서 'propertyId' 키를 찾아 값을 추출합니다.
+    if (typeof req.body === 'object' && req.body !== null && (req.body.propertyId !== undefined || req.body.propertyId !== null)) {
+        requestedPropertyId = parseInt(req.body.propertyId); // 정수로 변환
+    } else if (typeof req.body === 'string') {
+        // 혹시 모르니 문자열로 단일 ID가 왔을 경우도 대비
+        try {
+            const parsedBody = JSON.parse(req.body); // JSON 문자열로 왔을 경우 파싱
+            if (parsedBody && (parsedBody.propertyId !== undefined || parsedBody.propertyId !== null)) {
+                requestedPropertyId = parseInt(parsedBody.propertyId);
+            }
+        } catch (e) {
+            // JSON 파싱 실패 시, 문자열 자체를 ID로 시도 (fallback)
+            requestedPropertyId = parseInt(req.body);
+        }
+    }
+
+    if (isNaN(requestedPropertyId)) { // propertyId가 유효한 숫자가 아닐 경우
+        console.error('Invalid or missing propertyId in request body for /get_reviews:', req.body);
+        return res.status(400).send('Valid propertyId is required in the request body.');
+    }
+
+    fs.promises.readFile(REVIEWS_FILE, 'utf8')
+        .then(reviewsData => {
+            let reviews = [];
+            try {
+                reviews = JSON.parse(reviewsData);
+            } catch (parseErr) {
+                console.error('Error parsing reviews.json for /get_reviews:', parseErr);
+                // 리뷰 데이터 파싱 오류 시 빈 배열 반환 (에러 응답 대신)
+                return res.status(200).json([]);
+            }
+
+            // 요청된 propertyId에 해당하는 모든 리뷰를 필터링
+            const filteredReviews = reviews.filter(review => review.propertyId == requestedPropertyId);
+
+            console.log(`Successfully retrieved ${filteredReviews.length} reviews for property ID ${requestedPropertyId}.`);
+            res.status(200).json(filteredReviews); // 필터링된 리뷰 리스트 반환
+        })
+        .catch(err => {
+            // reviews.json 파일 자체가 없거나 읽기 오류 발생 시
+            if (err.code === 'ENOENT') {
+                console.log('reviews.json not found for /get_reviews, returning empty list.');
+                return res.status(200).json([]); // 파일이 없으면 빈 배열 반환
+            }
+            console.error('SERVER ERROR during /get_reviews data retrieval:', err);
+            return res.status(500).send('SERVER ERROR while processing review data.');
+        });
+});
+
+
+
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 });

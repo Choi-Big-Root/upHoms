@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../user/user_model.dart';
+
 
 part 'review_model.freezed.dart';
 part 'review_model.g.dart';
@@ -10,7 +12,7 @@ abstract class ReviewModel with _$ReviewModel {
   const factory ReviewModel({
     int? reviewId,
     int? propertyId,
-    int? userUid,
+    UserModel? user,
     double? rating,
     String? ratingDescription,
     String? ratingCreated,
