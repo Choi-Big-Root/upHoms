@@ -16,7 +16,8 @@
       3,
       4,
       5,
-      6
+      6,
+      7
     ],
     "numberActiveBookingsList": []
   },
@@ -50,9 +51,9 @@
   },
   {
     "userCity": "23",
-    "email": "czczxc@email.com",
-    "password": "2321313",
-    "displayName": "42342341",
+    "email": "admin",
+    "password": "1234",
+    "displayName": "관리자",
     "photoUrl": "",
     "uid": 4,
     "createdTime": "2025-07-20T07:28:08.367Z",

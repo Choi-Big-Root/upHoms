@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                 success: (data) async {
                   logger.d(data.toString());
                   context.read<MessageCubit>().showSuccessMessage(
-                    '로그인 성공 : ${_emailAddressController.text}',
+                    '로그인 성공 : ${data.displayName}',
                   );
                   context.go('/home');
                 },

@@ -28,7 +28,7 @@ class AppConstants {
     "evCharger": Icons.ev_station_rounded,
     // 여기에 AmenityModel에 추가될 수 있는 다른 어메니티들도 포함
   };
-  static String formatPrice(int price, {String locale = 'ko_KR', String symbol = '₩'}) {
+  static String formatPrice(dynamic price, {String locale = 'ko_KR', String symbol = '₩'}) {
     final formatCurrency = NumberFormat.currency(
       locale: locale,      // 국가 및 언어 설정 (예: 한국 'ko_KR', 미국 'en_US')
       symbol: symbol,      // 통화 심볼 (기본값은 locale에 따라 자동 설정)

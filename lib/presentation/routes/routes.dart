@@ -100,7 +100,9 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.tripBookNow,
       name: 'trip_book_now',
-      builder: (context, state) => const TripBookNowWidget(),
+      builder: (context, state) {
+        return TripBookNowWidget();
+      },
     ),
     GoRoute(
       path: RoutePath.tripDetails,
@@ -109,8 +111,6 @@ final GoRouter router = GoRouter(
         final propertyId = {'propertyId' : state.uri.queryParameters['propertyId']};
         final kind = state.uri.queryParameters['kind'];
         final searchText = state.uri.queryParameters['searchText'];
-
-        logger.d('GoRute trip_detail: $propertyId,$kind,$searchText');
         return TripDetailsWidget(propertyId : propertyId,kind: kind,searchText: searchText??'',);
       },
     ),
