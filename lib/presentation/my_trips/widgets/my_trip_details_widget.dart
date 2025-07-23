@@ -667,7 +667,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                       ],
                                     ),
                                   ),
-                                  !trip.rated! ? Column(
+                                  (!trip.rated! && !trip.cancelTrip!)  ? Column(
                                     mainAxisSize: MainAxisSize.max,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,

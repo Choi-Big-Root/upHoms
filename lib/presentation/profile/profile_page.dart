@@ -460,7 +460,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 20),
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context.go('/login');
+                                  },
                                   style: ButtonStyle(
                                     backgroundColor: WidgetStateProperty.all(
                                       colorScheme.secondaryBackground,

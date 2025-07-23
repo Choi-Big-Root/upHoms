@@ -266,6 +266,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   orElse: () => const SizedBox.shrink(),
                   propertiesLoaded: (properties) {
+                    List<PropertyModel> liveProperties = properties
+                        .where((property) => property.isLive!)
+                        .toList();
                     return Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
                       child: ListView.builder(
@@ -273,11 +276,11 @@ class _HomePageState extends State<HomePage> {
                         primary: false,
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
-                        itemCount: properties.length,
+                        itemCount: liveProperties.length,
                         // 불러온 속성 목록의 길이 사용
                         itemBuilder: (context, index) {
                           final property =
-                              properties[index]; // PropertyModel 사용
+                          liveProperties[index]; // PropertyModel 사용
                           return Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                               16,
