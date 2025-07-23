@@ -12,3 +12,8 @@ class GetUser extends UserEvent {
   GetUser(this.user);
   final UserModel user;
 }
+
+class UpdateUser extends UserEvent {
+  UpdateUser(this.user);
+  final UserModel user;
+}

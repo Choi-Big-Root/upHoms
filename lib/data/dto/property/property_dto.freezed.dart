@@ -245,7 +245,7 @@ return $default(_that.propertyId,_that.propertyName,_that.propertyDescription,_t
 @JsonSerializable()
 
 class _PropertyDto implements PropertyDto {
-  const _PropertyDto({this.propertyId = -1, this.propertyName = '', this.propertyDescription = '', this.mainImage = '', this.propertyLocation = '', this.propertyAddress = '', this.isDraft = false, this.user = const UserDto(), this.amenity = const AmenityDto(), this.propertyNeighborhood = '', this.ratingSummary = 0.0, this.price = -1, this.taxRate = 0.0, this.cleaningFee = -1, this.notes = '', this.minNightStay = -1, this.lastUpdated = '', this.minNights = -1, this.isLive = false});
+  const _PropertyDto({this.propertyId = -1, this.propertyName = '', this.propertyDescription = '', this.mainImage = '', this.propertyLocation = '', this.propertyAddress = '', this.isDraft = false, this.user = const UserDto(), this.amenity = const AmenityDto(), this.propertyNeighborhood = '', this.ratingSummary = 0.0, this.price = -1, this.taxRate = 0.0, this.cleaningFee = -1, this.notes = '', this.minNightStay = -1, this.lastUpdated = '', this.minNights = -1, this.isLive = true});
   factory _PropertyDto.fromJson(Map<String, dynamic> json) => _$PropertyDtoFromJson(json);
 
 @override@JsonKey() final  int propertyId;

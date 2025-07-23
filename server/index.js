@@ -34,6 +34,17 @@ app.use(express.json());
 //    이 미들웨어는 Content-Type이 'text/plain'일 때 req.body를 문자열로 파싱합니다.
 //    (body-parser의존성을 명시적으로 설치하지 않았다면, 'express' 내부에 포함되어 있습니다.)
 app.use(express.text());
+// 💡 여기를 수정합니다:
+// JSON 요청 본문의 최대 크기를 설정합니다.
+// '50mb'는 50메가바이트를 의미합니다. 필요에 따라 더 크게 설정할 수 있습니다.
+app.use(express.json({ limit: '100mb', strict: false })); 
+
+// URL-encoded 데이터(폼 데이터)의 최대 크기도 설정합니다.
+// 이미지 업로드 시 base64 인코딩 등으로 데이터가 커질 수 있으므로 함께 설정하는 것이 좋습니다.
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
+// 일반 텍스트 본문도 사용하는 경우 (현재 코드에 이미 있음)
+app.use(express.text({ limit: '100mb' })); 
 // --- ✨ 여기까지가 body-parser 미들웨어 설정입니다. ---
 
 
@@ -147,6 +158,190 @@ app.post('/user_create', (req, res) => {
             }
             res.status(201).json(newUser); // uid 포함된 유저 정보 반환
         });
+    });
+});
+app.post('/user_update', (req, res) => {
+    let updateUserRequest = req.body;
+
+    if (typeof updateUserRequest === 'string') {
+        try {
+            updateUserRequest = JSON.parse(updateUserRequest);
+        } catch (e) {
+            console.error('Error parsing updateUserRequest as JSON string:', e);
+            return res.status(400).send('Invalid JSON format for user update. (If sending as plain text, it must be valid JSON)');
+        }
+    }
+
+    // 필수 필드 유효성 검사: uid는 반드시 존재해야 합니다.
+    if (updateUserRequest.uid === undefined || updateUserRequest.uid === null) {
+        return res.status(400).send('User UID is required for update.');
+    }
+
+    const requestedUid = parseInt(updateUserRequest.uid);
+    if (isNaN(requestedUid)) {
+        console.error('Invalid UID in request body for /user_update:', updateUserRequest.uid);
+        return res.status(400).send('Valid User UID is required for update.');
+    }
+
+    // 모든 관련 파일들을 동시에 읽기
+    Promise.all([
+        fs.promises.readFile(USERS_FILE, 'utf8').catch(err => {
+            if (err.code === 'ENOENT') throw new Error('USERS_FILE not found.');
+            throw err;
+        }),
+        fs.promises.readFile(PROPERTIES_FILE, 'utf8').catch(err => {
+            if (err.code === 'ENOENT') return '[]'; // properties.json 없으면 빈 배열로 시작
+            throw err;
+        }),
+        fs.promises.readFile(REVIEWS_FILE, 'utf8').catch(err => {
+            if (err.code === 'ENOENT') return '[]'; // reviews.json 없으면 빈 배열로 시작
+            throw err;
+        })
+    ])
+    .then(([usersData, propertiesData, reviewsData]) => {
+        let users = [];
+        let properties = [];
+        let reviews = [];
+
+        let usersChanged = false;
+        let propertiesChanged = false;
+        let reviewsChanged = false;
+
+        try {
+            users = JSON.parse(usersData);
+        } catch (parseErr) {
+            console.error('Error parsing users.json for /user_update:', parseErr);
+            return res.status(500).send('User data is corrupted or malformed.');
+        }
+
+        try {
+            properties = JSON.parse(propertiesData);
+        } catch (parseErr) {
+            console.error('Error parsing properties.json for /user_update:', parseErr);
+            properties = [];
+        }
+
+        try {
+            reviews = JSON.parse(reviewsData);
+        } catch (parseErr) {
+            console.error('Error parsing reviews.json for /user_update:', parseErr);
+            reviews = [];
+        }
+
+        const userIndex = users.findIndex(u => parseInt(u.uid) === requestedUid);
+
+        if (userIndex === -1) {
+            console.log(`User with UID ${requestedUid} not found for update.`);
+            return res.status(404).send(`User with UID ${requestedUid} not found.`);
+        }
+
+        const currentUser = users[userIndex];
+        const oldEmail = currentUser.email; // 변경 전 이메일
+        const oldDisplayName = currentUser.displayName; // 변경 전 displayName
+
+        // 사용자 정보 업데이트
+        // 전달된 필드만 업데이트, 없는 필드는 기존 값 유지
+        if (updateUserRequest.displayName !== undefined && updateUserRequest.displayName !== null) {
+            currentUser.displayName = updateUserRequest.displayName;
+        }
+        if (updateUserRequest.email !== undefined && updateUserRequest.email !== null) {
+            // 이메일 변경 감지
+            if (currentUser.email !== updateUserRequest.email) {
+                 // 새로 변경될 이메일이 이미 존재하는지 확인
+                const emailExists = users.some(u => u.email === updateUserRequest.email && parseInt(u.uid) !== requestedUid);
+                if (emailExists) {
+                    return res.status(409).send('Updated email already exists for another user.');
+                }
+            }
+            currentUser.email = updateUserRequest.email;
+        }
+        if (updateUserRequest.bio !== undefined && updateUserRequest.bio !== null) {
+            currentUser.bio = updateUserRequest.bio;
+        }
+        if (updateUserRequest.photoUrl !== undefined && updateUserRequest.photoUrl !== null) {
+            currentUser.photoUrl = updateUserRequest.photoUrl;
+        }
+        currentUser.lastUpdated = new Date().toISOString(); // 마지막 업데이트 시간
+
+        usersChanged = true; // users.json 변경 플래그 설정
+
+        // properties.json 업데이트
+        properties.forEach(property => {
+            // property.user 필드가 존재하고, 해당 user의 uid가 현재 업데이트하는 사용자의 uid와 일치하며
+            // email 또는 displayName이 변경된 경우 업데이트
+            if (property.user && parseInt(property.user.uid) === requestedUid) {
+                if (property.user.email !== currentUser.email || property.user.displayName !== currentUser.displayName) {
+                    property.user.email = currentUser.email;
+                    property.user.displayName = currentUser.displayName;
+                    propertiesChanged = true;
+                    console.log(`  - Updated user info in property ID ${property.propertyId}`);
+                }
+            }
+        });
+
+        // reviews.json 업데이트
+        reviews.forEach(review => {
+            // review.userUid 또는 review.propertyId.user (이런 구조가 있다면)를 통해 연결될 수 있음
+            // 여기서는 review.userUid (uid만 있고 이메일, displayName 없는 경우)와
+            // review.user (사용자 객체가 통째로 들어있는 경우) 두 가지 가능성을 고려하여 구현
+            
+            // 1. review.userUid만 있는 경우 (UID만으로 연결)
+            if (parseInt(review.userUid) === requestedUid) {
+                // reviews.json에 userEmail 또는 userDisplayName 필드를 직접 업데이트하는 시나리오
+                // review 스키마에 email, displayName 필드가 있다면 여기에 추가
+                if (review.userEmail !== currentUser.email) { // 예시: review에 userEmail 필드가 있다면
+                    review.userEmail = currentUser.email;
+                    reviewsChanged = true;
+                }
+                if (review.userDisplayName !== currentUser.displayName) { // 예시: review에 userDisplayName 필드가 있다면
+                    review.userDisplayName = currentUser.displayName;
+                    reviewsChanged = true;
+                }
+                // (만약 reviews에 user 객체가 통째로 들어있지 않고 uid만 있다면, 이 부분은 생략될 수 있습니다.)
+                console.log(`  - Updated user info in review ID ${review.reviewId} (by userUid)`);
+            }
+            
+            // 2. review 객체 내에 user 객체가 통째로 들어있는 경우 (더 강력한 연동)
+            // 예를 들어 review: { ..., user: { uid: 1, email: "...", displayName: "..." } }
+            if (review.user && parseInt(review.user.uid) === requestedUid) {
+                if (review.user.email !== currentUser.email || review.user.displayName !== currentUser.displayName) {
+                    review.user.email = currentUser.email;
+                    review.user.displayName = currentUser.displayName;
+                    reviewsChanged = true;
+                    console.log(`  - Updated user info in review ID ${review.reviewId} (by user object)`);
+                }
+            }
+        });
+
+
+        // 파일 쓰기 작업들을 Promise.all로 병렬 처리
+        const writePromises = [];
+        if (usersChanged) {
+            writePromises.push(fs.promises.writeFile(USERS_FILE, JSON.stringify(users, null, 2)));
+        }
+        if (propertiesChanged) {
+            writePromises.push(fs.promises.writeFile(PROPERTIES_FILE, JSON.stringify(properties, null, 2)));
+        }
+        if (reviewsChanged) {
+            writePromises.push(fs.promises.writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 2)));
+        }
+
+        return Promise.all(writePromises)
+            .then(() => {
+                // 응답을 위해 비밀번호 필드 제거
+                const userResponse = { ...currentUser };
+                delete userResponse.password;
+
+                console.log(`Successfully updated user with UID: ${requestedUid}.`);
+                res.status(200).json(userResponse); // 업데이트된 UserDto 반환
+            });
+    })
+    .catch(err => {
+        if (err.message === 'USERS_FILE not found.') {
+            return res.status(404).send('User data file not found.');
+        }
+        console.error('SERVER ERROR during /user_update:', err);
+        res.status(500).send('SERVER ERROR while processing user update.');
     });
 });
 

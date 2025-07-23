@@ -16,4 +16,7 @@ abstract class UserApiService {
 
   @POST("/login")
   Future<UserDto> getUser(@Body() UserDto user);
+
+  @POST("/user_update")
+  Future<UserDto> updateUser(@Body() UserDto user);
 }

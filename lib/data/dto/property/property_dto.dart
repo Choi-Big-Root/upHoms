@@ -28,7 +28,7 @@ abstract class PropertyDto with _$PropertyDto {
     @Default(-1) int minNightStay,
     @Default('') String lastUpdated,
     @Default(-1) int minNights,
-    @Default(false) bool isLive,
+    @Default(true) bool isLive,
   }) = _PropertyDto;
 
   factory PropertyDto.fromJson(Map<String, dynamic> json) =>

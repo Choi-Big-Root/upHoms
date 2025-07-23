@@ -53,5 +53,26 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     }
   }
 
+  @override
+  Future<UserModel> updateUser(UserModel user) async {
+    try{
+      final userDto = UserMapper.toDto(user);
+      final responseDto = await userApiService.updateUser(userDto);
+      return UserMapper.toModel(responseDto);
+    } on DioException catch (e) {
+      // DioException을 사용하여 더 상세한 에러 처리
+      if (e.response != null) {
+        logger.e('Error updateUser user: ${e.response?.statusCode} - ${e.response?.data}');
+        throw Exception('${e.response?.data}');
+      } else {
+        logger.e('Error updateUser user: ${e.message}');
+        throw Exception('Failed to get user: Network error or timeout');
+      }
+    } catch (e) {
+      logger.e('Unexpected error updateUser user: $e');
+      throw Exception('An unexpected error occurred while updateUser user');
+    }
+  }
+
 
 }

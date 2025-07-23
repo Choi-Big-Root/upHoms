@@ -29,7 +29,7 @@ _PropertyDto _$PropertyDtoFromJson(Map<String, dynamic> json) => _PropertyDto(
   minNightStay: (json['minNightStay'] as num?)?.toInt() ?? -1,
   lastUpdated: json['lastUpdated'] as String? ?? '',
   minNights: (json['minNights'] as num?)?.toInt() ?? -1,
-  isLive: json['isLive'] as bool? ?? false,
+  isLive: json['isLive'] as bool? ?? true,
 );
 
 Map<String, dynamic> _$PropertyDtoToJson(_PropertyDto instance) =>

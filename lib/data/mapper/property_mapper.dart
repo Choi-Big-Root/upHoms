@@ -28,7 +28,7 @@ class PropertyMapper {
       minNightStay: model.minNightStay ?? -1,
       lastUpdated: model.lastUpdated ?? '',
       minNights: model.minNights ?? -1,
-      isLive: model.isLive ?? false,
+      isLive: model.isLive ?? true,
     );
   }
   static PropertyModel toModel(PropertyDto dto) {

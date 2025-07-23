@@ -33,6 +33,7 @@ import 'domain/usecases/trip/get_trip_usecase.dart';
 import 'domain/usecases/trip/get_trips_with_user_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
+import 'domain/usecases/user/update_user_usecase.dart';
 import 'presentation/bloc/property/property_bloc.bloc.dart';
 import 'presentation/bloc/review/review_bloc.bloc.dart';
 import 'presentation/bloc/trip/trip_bloc.bloc.dart';
@@ -102,6 +103,9 @@ void _domain() {
   locator.registerSingleton<GetUserUsecase>(
     GetUserUsecase(locator<UserRepository>()),
   );
+  locator.registerSingleton<UpdateUserUsecase>(
+    UpdateUserUsecase(locator<UserRepository>()),
+  );
 
   //property
   locator.registerSingleton<AddPropertyUsecase>(
@@ -149,6 +153,7 @@ void _presentation() {
     () => UserBloc(
       createUserUsecase: locator<CreateAccountUsecase>(),
       getUserUsecase: locator<GetUserUsecase>(),
+      updateUserUsecase: locator<UpdateUserUsecase>(),
     ),
   );
 
