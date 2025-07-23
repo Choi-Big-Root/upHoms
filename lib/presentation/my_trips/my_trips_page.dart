@@ -69,8 +69,12 @@ class _MyTripsPageState extends State<MyTripsPage>
           return state.maybeWhen(
             orElse: () => const SizedBox.shrink(),
             getTripsWithUserSuccess: (trips) {
-              List<TripModel> upcomingList = trips.where((trip) => trip.upcoming == true).toList();
-              List<TripModel> completeList = trips.where((trip) => trip.complete == true).toList();
+              List<TripModel> upcomingList = trips
+                  .where((trip) => trip.upcoming == true)
+                  .toList();
+              List<TripModel> completeList = trips
+                  .where((trip) => trip.complete == true)
+                  .toList();
 
               logger.d(upcomingList.toString());
               logger.d(completeList.toString());
@@ -115,12 +119,13 @@ class _MyTripsPageState extends State<MyTripsPage>
                                   height: 100,
                                   color: colorScheme.primaryBackground,
                                   child: Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0,
-                                      8,
-                                      0,
-                                      0,
-                                    ),
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                          0,
+                                          8,
+                                          0,
+                                          0,
+                                        ),
                                     child: ListView.builder(
                                       padding: EdgeInsets.zero,
                                       primary: false,
@@ -129,25 +134,33 @@ class _MyTripsPageState extends State<MyTripsPage>
                                       itemCount: upcomingList.length,
                                       // 데이터로 수정
                                       itemBuilder: (context, index) {
-                                        final upcomingData = upcomingList[index];
-                                        final DateFormat desiredFormatter = DateFormat('yyyy-MM-dd');
-                                        DateTime dateTimeBegin = DateTime.parse(upcomingData.tripBeginDate!);
-                                        DateTime dateTimeEnd = DateTime.parse(upcomingData.tripEndDate!);
-                                        String tripBeginDate = desiredFormatter.format(dateTimeBegin);
-                                        String tripEndDate = desiredFormatter.format(dateTimeEnd);
+                                        final upcomingData =
+                                            upcomingList[index];
+                                        final DateFormat desiredFormatter =
+                                            DateFormat('yyyy-MM-dd');
+                                        DateTime dateTimeBegin = DateTime.parse(
+                                          upcomingData.tripBeginDate!,
+                                        );
+                                        DateTime dateTimeEnd = DateTime.parse(
+                                          upcomingData.tripEndDate!,
+                                        );
+                                        String tripBeginDate = desiredFormatter
+                                            .format(dateTimeBegin);
+                                        String tripEndDate = desiredFormatter
+                                            .format(dateTimeEnd);
                                         return Padding(
                                           padding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                            16,
-                                            0,
-                                            16,
-                                            12,
-                                          ),
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                16,
+                                                0,
+                                                16,
+                                                12,
+                                              ),
                                           child: Container(
                                             width: double.infinity,
                                             decoration: BoxDecoration(
-                                              color:
-                                              colorScheme.secondaryBackground,
+                                              color: colorScheme
+                                                  .secondaryBackground,
                                               boxShadow: [
                                                 const BoxShadow(
                                                   color: Color(0x32000000),
@@ -155,122 +168,151 @@ class _MyTripsPageState extends State<MyTripsPage>
                                                   offset: Offset(0.0, 2),
                                                 ),
                                               ],
-                                              borderRadius: BorderRadius.circular(
-                                                8,
-                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: InkWell(
                                               splashColor: Colors.transparent,
                                               focusColor: Colors.transparent,
                                               hoverColor: Colors.transparent,
-                                              highlightColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
                                               onTap: () {
                                                 // mytrips detail 이동.
-                                                String tripIdText = Uri.encodeComponent(upcomingData.tripId.toString());
-                                                context.go('/my_trip_details?tripId=$tripIdText');
+                                                String tripIdText =
+                                                    Uri.encodeComponent(
+                                                      upcomingData.tripId
+                                                          .toString(),
+                                                    );
+                                                context.go(
+                                                  '/my_trip_details?tripId=$tripIdText',
+                                                );
                                               },
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   InkWell(
-                                                    splashColor: Colors.transparent,
-                                                    focusColor: Colors.transparent,
-                                                    hoverColor: Colors.transparent,
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
                                                     highlightColor:
-                                                    Colors.transparent,
+                                                        Colors.transparent,
                                                     onTap: () {
                                                       // 이미지 선택시 이미지 전체화면 표시
                                                       //await Navigator.push(context,)
                                                       showFullScreenImage(
                                                         context,
-                                                        upcomingData.property!.mainImage ?? '',
+                                                        upcomingData
+                                                                .property!
+                                                                .mainImage ??
+                                                            '',
                                                       );
                                                     },
                                                     child: ClipRRect(
                                                       borderRadius:
-                                                      const BorderRadius.only(
-                                                        bottomLeft:
-                                                        Radius.circular(0),
-                                                        bottomRight:
-                                                        Radius.circular(0),
-                                                        topLeft:
-                                                        Radius.circular(8),
-                                                        topRight:
-                                                        Radius.circular(8),
-                                                      ),
-                                                      child: upcomingData.property!.mainImage != null &&
-                                                          upcomingData.property!.mainImage!
-                                                              .startsWith(
-                                                            'data:image',
-                                                          )
+                                                          const BorderRadius.only(
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                  0,
+                                                                ),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                  0,
+                                                                ),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                  8,
+                                                                ),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                  8,
+                                                                ),
+                                                          ),
+                                                      child:
+                                                          upcomingData
+                                                                      .property!
+                                                                      .mainImage !=
+                                                                  null &&
+                                                              upcomingData
+                                                                  .property!
+                                                                  .mainImage!
+                                                                  .startsWith(
+                                                                    'data:image',
+                                                                  )
                                                           ? Image.memory(
-                                                        base64Decode(
-                                                          upcomingData.property!.mainImage!
-                                                              .split(',')
-                                                              .last,
-                                                        ),
-                                                        width:
-                                                        MediaQuery.sizeOf(
-                                                          context,
-                                                        ).width *
-                                                            0.9,
-                                                        height: 140,
-                                                        fit: BoxFit.cover,
-                                                      )
+                                                              base64Decode(
+                                                                upcomingData
+                                                                    .property!
+                                                                    .mainImage!
+                                                                    .split(',')
+                                                                    .last,
+                                                              ),
+                                                              width:
+                                                                  MediaQuery.sizeOf(
+                                                                    context,
+                                                                  ).width *
+                                                                  0.9,
+                                                              height: 140,
+                                                              fit: BoxFit.cover,
+                                                            )
                                                           : CachedNetworkImage(
-                                                        fadeInDuration:
-                                                        const Duration(
-                                                          milliseconds: 500,
-                                                        ),
-                                                        fadeOutDuration:
-                                                        const Duration(
-                                                          milliseconds: 500,
-                                                        ),
-                                                        imageUrl:
-                                                        upcomingData.property!.mainImage ??
-                                                            'https://picsum.photos/id/238/200/200.jpg',
-                                                        width:
-                                                        MediaQuery.sizeOf(
-                                                          context,
-                                                        ).width *
-                                                            0.9,
-                                                        height: 140,
-                                                        fit: BoxFit.cover,
-                                                      ),
+                                                              fadeInDuration:
+                                                                  const Duration(
+                                                                    milliseconds:
+                                                                        500,
+                                                                  ),
+                                                              fadeOutDuration:
+                                                                  const Duration(
+                                                                    milliseconds:
+                                                                        500,
+                                                                  ),
+                                                              imageUrl:
+                                                                  upcomingData
+                                                                      .property!
+                                                                      .mainImage ??
+                                                                  'https://picsum.photos/id/238/200/200.jpg',
+                                                              width:
+                                                                  MediaQuery.sizeOf(
+                                                                    context,
+                                                                  ).width *
+                                                                  0.9,
+                                                              height: 140,
+                                                              fit: BoxFit.cover,
+                                                            ),
                                                     ),
                                                   ),
                                                   Padding(
                                                     padding:
-                                                    const EdgeInsetsDirectional.fromSTEB(
-                                                      16,
-                                                      12,
-                                                      16,
-                                                      8,
-                                                    ),
+                                                        const EdgeInsetsDirectional.fromSTEB(
+                                                          16,
+                                                          12,
+                                                          16,
+                                                          8,
+                                                        ),
                                                     child: Row(
                                                       mainAxisSize:
-                                                      MainAxisSize.max,
+                                                          MainAxisSize.max,
                                                       children: [
                                                         Text(
                                                           tripBeginDate,
-                                                          style:
-                                                          GoogleFonts.urbanist(
+                                                          style: GoogleFonts.urbanist(
                                                             textStyle: textScheme
                                                                 .headlineSmall,
                                                           ),
                                                         ),
                                                         Text(
                                                           ' - ',
-                                                          style:
-                                                          GoogleFonts.urbanist(
+                                                          style: GoogleFonts.urbanist(
                                                             textStyle: textScheme
                                                                 .headlineSmall,
                                                           ),
                                                         ),
                                                         Text(
                                                           tripEndDate,
-                                                          style:
-                                                          GoogleFonts.urbanist(
+                                                          style: GoogleFonts.urbanist(
                                                             textStyle: textScheme
                                                                 .headlineSmall,
                                                           ),
@@ -280,46 +322,48 @@ class _MyTripsPageState extends State<MyTripsPage>
                                                   ),
                                                   Padding(
                                                     padding:
-                                                    const EdgeInsetsDirectional.fromSTEB(
-                                                      16,
-                                                      0,
-                                                      16,
-                                                      0,
-                                                    ),
+                                                        const EdgeInsetsDirectional.fromSTEB(
+                                                          16,
+                                                          0,
+                                                          16,
+                                                          0,
+                                                        ),
                                                     child: Row(
                                                       mainAxisSize:
-                                                      MainAxisSize.max,
+                                                          MainAxisSize.max,
                                                       mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                            const EdgeInsets.only(
-                                                              right: 12,
-                                                            ),
+                                                                const EdgeInsets.only(
+                                                                  right: 12,
+                                                                ),
                                                             child: Text(
-                                                              upcomingData.property!.propertyAddress!,
+                                                              upcomingData
+                                                                  .property!
+                                                                  .propertyAddress!,
                                                               style: GoogleFonts.lexendDeca(
                                                                 textStyle: textScheme
                                                                     .bodySmall
                                                                     ?.copyWith(
-                                                                  color: colorScheme
-                                                                      .grayIcon,
-                                                                ),
+                                                                      color: colorScheme
+                                                                          .grayIcon,
+                                                                    ),
                                                               ),
                                                             ),
                                                           ),
                                                         ),
                                                         Text(
                                                           AppConstants.formatPrice(
-                                                            upcomingData.tripTotal,
+                                                            upcomingData
+                                                                .tripTotal,
                                                             locale: 'en_US',
                                                             symbol: '\$',
                                                           ),
-                                                          style:
-                                                          GoogleFonts.urbanist(
+                                                          style: GoogleFonts.urbanist(
                                                             textStyle: textScheme
                                                                 .titleMedium,
                                                           ),
@@ -329,34 +373,29 @@ class _MyTripsPageState extends State<MyTripsPage>
                                                   ),
                                                   Padding(
                                                     padding:
-                                                    const EdgeInsetsDirectional.fromSTEB(
-                                                      16,
-                                                      4,
-                                                      16,
-                                                      12,
-                                                    ),
+                                                        const EdgeInsetsDirectional.fromSTEB(
+                                                          16,
+                                                          4,
+                                                          16,
+                                                          12,
+                                                        ),
                                                     child: Row(
                                                       mainAxisSize:
-                                                      MainAxisSize.max,
+                                                          MainAxisSize.max,
                                                       mainAxisAlignment:
-                                                      MainAxisAlignment.end,
+                                                          MainAxisAlignment.end,
                                                       children: [
                                                         Padding(
                                                           padding:
-                                                          const EdgeInsets.only(
-                                                            left: 12,
-                                                          ),
+                                                              const EdgeInsets.only(
+                                                                left: 12,
+                                                              ),
                                                           child: Text(
-                                                            'Total ${AppConstants.formatPrice(
-                                                              upcomingData.tripCost,
-                                                              locale: 'en_US',
-                                                              symbol: '\$',
-                                                            )}',
-                                                            style:
-                                                            GoogleFonts.lexendDeca(
+                                                            'Total ${AppConstants.formatPrice(upcomingData.tripCost, locale: 'en_US', symbol: '\$')}',
+                                                            style: GoogleFonts.lexendDeca(
                                                               textStyle:
-                                                              textScheme
-                                                                  .bodyMedium,
+                                                                  textScheme
+                                                                      .bodyMedium,
                                                             ),
                                                           ),
                                                         ),
@@ -381,12 +420,13 @@ class _MyTripsPageState extends State<MyTripsPage>
                                     color: colorScheme.primaryBackground,
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0,
-                                      8,
-                                      0,
-                                      0,
-                                    ),
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                          0,
+                                          8,
+                                          0,
+                                          0,
+                                        ),
                                     child: ListView.builder(
                                       padding: EdgeInsets.zero,
                                       primary: false,
@@ -394,25 +434,33 @@ class _MyTripsPageState extends State<MyTripsPage>
                                       scrollDirection: Axis.vertical,
                                       itemCount: completeList.length,
                                       itemBuilder: (context, index) {
-                                        final completeData = completeList[index];
-                                        final DateFormat desiredFormatter = DateFormat('yyyy-MM-dd');
-                                        DateTime dateTimeBegin = DateTime.parse(completeData.tripBeginDate!);
-                                        DateTime dateTimeEnd = DateTime.parse(completeData.tripEndDate!);
-                                        String tripBeginDate = desiredFormatter.format(dateTimeBegin);
-                                        String tripEndDate = desiredFormatter.format(dateTimeEnd);
+                                        final completeData =
+                                            completeList[index];
+                                        final DateFormat desiredFormatter =
+                                            DateFormat('yyyy-MM-dd');
+                                        DateTime dateTimeBegin = DateTime.parse(
+                                          completeData.tripBeginDate!,
+                                        );
+                                        DateTime dateTimeEnd = DateTime.parse(
+                                          completeData.tripEndDate!,
+                                        );
+                                        String tripBeginDate = desiredFormatter
+                                            .format(dateTimeBegin);
+                                        String tripEndDate = desiredFormatter
+                                            .format(dateTimeEnd);
                                         return Padding(
                                           padding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                            16,
-                                            0,
-                                            16,
-                                            12,
-                                          ),
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                16,
+                                                0,
+                                                16,
+                                                12,
+                                              ),
                                           child: Container(
                                             width: double.infinity,
                                             decoration: BoxDecoration(
-                                              color:
-                                              colorScheme.secondaryBackground,
+                                              color: colorScheme
+                                                  .secondaryBackground,
                                               boxShadow: [
                                                 const BoxShadow(
                                                   color: Color(0x32000000),
@@ -420,18 +468,20 @@ class _MyTripsPageState extends State<MyTripsPage>
                                                   offset: Offset(0.0, 2),
                                                 ),
                                               ],
-                                              borderRadius: BorderRadius.circular(
-                                                8,
-                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: InkWell(
                                               splashColor: Colors.transparent,
                                               focusColor: Colors.transparent,
                                               hoverColor: Colors.transparent,
-                                              highlightColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
                                               onTap: () {
                                                 // mytrips detail 이동.
-                                                context.push('/my_trip_details');
+                                                context.push(
+                                                  '/my_trip_details',
+                                                );
                                               },
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.max,
@@ -440,13 +490,13 @@ class _MyTripsPageState extends State<MyTripsPage>
                                                     children: [
                                                       InkWell(
                                                         splashColor:
-                                                        Colors.transparent,
+                                                            Colors.transparent,
                                                         focusColor:
-                                                        Colors.transparent,
+                                                            Colors.transparent,
                                                         hoverColor:
-                                                        Colors.transparent,
+                                                            Colors.transparent,
                                                         highlightColor:
-                                                        Colors.transparent,
+                                                            Colors.transparent,
                                                         onTap: () {
                                                           showFullScreenImage(
                                                             context,
@@ -454,141 +504,162 @@ class _MyTripsPageState extends State<MyTripsPage>
                                                           );
                                                         },
                                                         child: ClipRRect(
-                                                          borderRadius:
-                                                          const BorderRadius.only(
+                                                          borderRadius: const BorderRadius.only(
                                                             bottomLeft:
-                                                            Radius.circular(0),
+                                                                Radius.circular(
+                                                                  0,
+                                                                ),
                                                             bottomRight:
-                                                            Radius.circular(0),
+                                                                Radius.circular(
+                                                                  0,
+                                                                ),
                                                             topLeft:
-                                                            Radius.circular(8),
+                                                                Radius.circular(
+                                                                  8,
+                                                                ),
                                                             topRight:
-                                                            Radius.circular(8),
+                                                                Radius.circular(
+                                                                  8,
+                                                                ),
                                                           ),
-                                                          child: completeData.property!.mainImage != null &&
-                                                              completeData.property!.mainImage!
-                                                                  .startsWith(
-                                                                'data:image',
-                                                              )
+                                                          child:
+                                                              completeData
+                                                                          .property!
+                                                                          .mainImage !=
+                                                                      null &&
+                                                                  completeData
+                                                                      .property!
+                                                                      .mainImage!
+                                                                      .startsWith(
+                                                                        'data:image',
+                                                                      )
                                                               ? Image.memory(
-                                                            base64Decode(
-                                                              completeData.property!.mainImage!
-                                                                  .split(',')
-                                                                  .last,
-                                                            ),
-                                                            width:
-                                                            MediaQuery.sizeOf(
-                                                              context,
-                                                            ).width *
-                                                                0.9,
-                                                            height: 140,
-                                                            fit: BoxFit.cover,
-                                                          )
+                                                                  base64Decode(
+                                                                    completeData
+                                                                        .property!
+                                                                        .mainImage!
+                                                                        .split(
+                                                                          ',',
+                                                                        )
+                                                                        .last,
+                                                                  ),
+                                                                  width:
+                                                                      MediaQuery.sizeOf(
+                                                                        context,
+                                                                      ).width *
+                                                                      0.9,
+                                                                  height: 140,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )
                                                               : CachedNetworkImage(
-                                                            fadeInDuration:
-                                                            const Duration(
-                                                              milliseconds: 500,
-                                                            ),
-                                                            fadeOutDuration:
-                                                            const Duration(
-                                                              milliseconds: 500,
-                                                            ),
-                                                            imageUrl:
-                                                            completeData.property!.mainImage ??
-                                                                'https://picsum.photos/id/238/200/200.jpg',
-                                                            width:
-                                                            MediaQuery.sizeOf(
-                                                              context,
-                                                            ).width *
-                                                                0.9,
-                                                            height: 140,
-                                                            fit: BoxFit.cover,
-                                                          ),
+                                                                  fadeInDuration:
+                                                                      const Duration(
+                                                                        milliseconds:
+                                                                            500,
+                                                                      ),
+                                                                  fadeOutDuration:
+                                                                      const Duration(
+                                                                        milliseconds:
+                                                                            500,
+                                                                      ),
+                                                                  imageUrl:
+                                                                      completeData
+                                                                          .property!
+                                                                          .mainImage ??
+                                                                      'https://picsum.photos/id/238/200/200.jpg',
+                                                                  width:
+                                                                      MediaQuery.sizeOf(
+                                                                        context,
+                                                                      ).width *
+                                                                      0.9,
+                                                                  height: 140,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
                                                         ),
                                                       ),
 
                                                       /// TODO : 취소된 예약이면 Align 활성화
-                                                      completeData.cancelTrip! ?
-                                                      Align(
-                                                        alignment:
-                                                        const AlignmentDirectional(
-                                                          0.89,
-                                                          -0.76,
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsetsDirectional.fromSTEB(
-                                                            0,
-                                                            12,
-                                                            0,
-                                                            0,
-                                                          ),
-                                                          child: Container(
-                                                            width: 100,
-                                                            height: 36,
-                                                            decoration: BoxDecoration(
-                                                              color: const Color(
-                                                                0xD8ED7070,
-                                                              ),
-                                                              borderRadius:
-                                                              BorderRadius.circular(
-                                                                30,
-                                                              ),
-                                                            ),
-                                                            alignment:
-                                                            const AlignmentDirectional(
-                                                              0,
-                                                              0,
-                                                            ),
-                                                            //결국엔 center.
-                                                            child: Text(
-                                                              'Cancelled',
-                                                              style: GoogleFonts.urbanist(
-                                                                textStyle: textScheme
-                                                                    .bodyMedium
-                                                                    ?.copyWith(
-                                                                  color: colorScheme
-                                                                      .tertiary,
+                                                      completeData.cancelTrip!
+                                                          ? Align(
+                                                              alignment:
+                                                                  const AlignmentDirectional(
+                                                                    0.89,
+                                                                    -0.76,
+                                                                  ),
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsetsDirectional.fromSTEB(
+                                                                      0,
+                                                                      12,
+                                                                      0,
+                                                                      0,
+                                                                    ),
+                                                                child: Container(
+                                                                  width: 100,
+                                                                  height: 36,
+                                                                  decoration: BoxDecoration(
+                                                                    color: const Color(
+                                                                      0xD8ED7070,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          30,
+                                                                        ),
+                                                                  ),
+                                                                  alignment:
+                                                                      const AlignmentDirectional(
+                                                                        0,
+                                                                        0,
+                                                                      ),
+                                                                  //결국엔 center.
+                                                                  child: Text(
+                                                                    'Cancelled',
+                                                                    style: GoogleFonts.urbanist(
+                                                                      textStyle: textScheme
+                                                                          .bodyMedium
+                                                                          ?.copyWith(
+                                                                            color:
+                                                                                colorScheme.tertiary,
+                                                                          ),
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ):const SizedBox.shrink(),
+                                                            )
+                                                          : const SizedBox.shrink(),
                                                     ],
                                                   ),
                                                   Padding(
                                                     padding:
-                                                    const EdgeInsetsDirectional.fromSTEB(
-                                                      16,
-                                                      12,
-                                                      16,
-                                                      8,
-                                                    ),
+                                                        const EdgeInsetsDirectional.fromSTEB(
+                                                          16,
+                                                          12,
+                                                          16,
+                                                          8,
+                                                        ),
                                                     child: Row(
                                                       mainAxisSize:
-                                                      MainAxisSize.max,
+                                                          MainAxisSize.max,
                                                       children: [
                                                         Text(
                                                           tripBeginDate,
-                                                          style:
-                                                          GoogleFonts.urbanist(
+                                                          style: GoogleFonts.urbanist(
                                                             textStyle: textScheme
                                                                 .headlineSmall,
                                                           ),
                                                         ),
                                                         Text(
                                                           ' - ',
-                                                          style:
-                                                          GoogleFonts.urbanist(
+                                                          style: GoogleFonts.urbanist(
                                                             textStyle: textScheme
                                                                 .headlineSmall,
                                                           ),
                                                         ),
                                                         Text(
                                                           tripEndDate,
-                                                          style:
-                                                          GoogleFonts.urbanist(
+                                                          style: GoogleFonts.urbanist(
                                                             textStyle: textScheme
                                                                 .headlineSmall,
                                                           ),
@@ -598,113 +669,120 @@ class _MyTripsPageState extends State<MyTripsPage>
                                                   ),
                                                   Padding(
                                                     padding:
-                                                    const EdgeInsetsDirectional.fromSTEB(
-                                                      16,
-                                                      0,
-                                                      16,
-                                                      12,
-                                                    ),
+                                                        const EdgeInsetsDirectional.fromSTEB(
+                                                          16,
+                                                          0,
+                                                          16,
+                                                          12,
+                                                        ),
                                                     child: Row(
                                                       mainAxisSize:
-                                                      MainAxisSize.max,
+                                                          MainAxisSize.max,
                                                       mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
                                                         Text(
                                                           AppConstants.formatPrice(
-                                                            completeData.tripCost,
+                                                            completeData
+                                                                .tripCost,
                                                             locale: 'en_US',
                                                             symbol: '\$',
                                                           ),
-                                                          style:
-                                                          GoogleFonts.urbanist(
+                                                          style: GoogleFonts.urbanist(
                                                             textStyle: textScheme
                                                                 .titleMedium,
                                                           ),
                                                         ),
 
                                                         /// TODO : 리뷰를 작성하지 않았다면 해당 Button가 표시되도록
-                                                        (!completeData.cancelTrip! && !completeData.rated!) ?
-                                                        ElevatedButton(
-                                                          onPressed: () async {
-                                                            await showModalBottomSheet(
-                                                              isScrollControlled:
-                                                              true,
-                                                              useRootNavigator:
-                                                              true,
-                                                              backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                              barrierColor:
-                                                              const Color(
-                                                                0xB21D2429,
-                                                              ),
-                                                              context: context,
-                                                              builder: (context) {
-                                                                return Padding(
-                                                                  padding:
-                                                                  MediaQuery.viewInsetsOf(
-                                                                    context,
+                                                        (!completeData
+                                                                    .cancelTrip! &&
+                                                                !completeData
+                                                                    .rated!)
+                                                            ? ElevatedButton(
+                                                                onPressed: () async {
+                                                                  await showModalBottomSheet(
+                                                                    isScrollControlled:
+                                                                        true,
+                                                                    useRootNavigator:
+                                                                        true,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    barrierColor:
+                                                                        const Color(
+                                                                          0xB21D2429,
+                                                                        ),
+                                                                    context:
+                                                                        context,
+                                                                    builder: (context) {
+                                                                      return Padding(
+                                                                        padding:
+                                                                            MediaQuery.viewInsetsOf(
+                                                                              context,
+                                                                            ),
+                                                                        child: SizedBox(
+                                                                          height:
+                                                                              450,
+                                                                          child: ReviewTripWidget(
+                                                                            onPressed: () {
+                                                                              context.read<TripBloc>().add(GetTripsWithUser({'userId':completeData.userId}));
+                                                                              context.pop();
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  );
+                                                                },
+                                                                style: ButtonStyle(
+                                                                  backgroundColor:
+                                                                      WidgetStateProperty.all(
+                                                                        colorScheme
+                                                                            .primary,
+                                                                      ),
+                                                                  elevation:
+                                                                      WidgetStateProperty.all(
+                                                                        2.0,
+                                                                      ),
+                                                                  side: WidgetStateProperty.all(
+                                                                    const BorderSide(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      width:
+                                                                          1.0,
+                                                                    ),
                                                                   ),
-                                                                  child: const SizedBox(
-                                                                    height: 450,
-                                                                    child:
-                                                                    ReviewTripWidget(),
+                                                                  minimumSize:
+                                                                      WidgetStateProperty.all(
+                                                                        const Size(
+                                                                          130,
+                                                                          44,
+                                                                        ),
+                                                                      ),
+                                                                  shape: WidgetStateProperty.all(
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                            30,
+                                                                          ),
+                                                                    ),
                                                                   ),
-                                                                );
-                                                              },
-                                                            );
-                                                            if (!context.mounted)
-                                                              return;
-                                                            //context.pop();
-                                                          },
-                                                          style: ButtonStyle(
-                                                            backgroundColor:
-                                                            WidgetStateProperty.all(
-                                                              colorScheme
-                                                                  .primary,
-                                                            ),
-                                                            elevation:
-                                                            WidgetStateProperty.all(
-                                                              2.0,
-                                                            ),
-                                                            side:
-                                                            WidgetStateProperty.all(
-                                                              const BorderSide(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                width: 1.0,
-                                                              ),
-                                                            ),
-                                                            minimumSize:
-                                                            WidgetStateProperty.all(
-                                                              const Size(
-                                                                130,
-                                                                44,
-                                                              ),
-                                                            ),
-                                                            shape: WidgetStateProperty.all(
-                                                              RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                BorderRadius.circular(
-                                                                  30,
                                                                 ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          child:  Text(
-                                                            'Rate Trip',
-                                                            style: GoogleFonts.urbanist(
-                                                              textStyle: textScheme
-                                                                  .titleSmall
-                                                                  ?.copyWith(
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ):const SizedBox.shrink(),
+                                                                child: Text(
+                                                                  'Rate Trip',
+                                                                  style: GoogleFonts.urbanist(
+                                                                    textStyle: textScheme
+                                                                        .titleSmall
+                                                                        ?.copyWith(
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : const SizedBox.shrink(),
                                                       ],
                                                     ),
                                                   ),

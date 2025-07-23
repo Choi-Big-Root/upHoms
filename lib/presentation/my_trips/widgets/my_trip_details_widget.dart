@@ -29,12 +29,9 @@ class MyTripDetailsWidget extends StatefulWidget {
 }
 
 class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
-
-
   DateTime _stripTime(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month, dateTime.day);
   }
-
 
   @override
   void initState() {
@@ -136,8 +133,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                 DateTime dateTimeEnd = DateTime.parse(trip.tripEndDate!);
                 String tripBeginDate = desiredFormatter.format(dateTimeBegin);
                 String tripEndDate = desiredFormatter.format(dateTimeEnd);
-                final taxes = trip.tripTotal! * trip.property!.taxRate! /100;
-
+                final taxes = trip.tripTotal! * trip.property!.taxRate! / 100;
 
                 logger.d(taxes);
                 return Column(
@@ -178,7 +174,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                              tripBeginDate,
+                                    tripBeginDate,
                                     style: GoogleFonts.urbanist(
                                       textStyle: textScheme.displaySmall,
                                     ),
@@ -229,7 +225,8 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      trip.property!.propertyNeighborhood.toString(),
+                                      trip.property!.propertyNeighborhood
+                                          .toString(),
                                       style: GoogleFonts.urbanist(
                                         textStyle: textScheme.headlineMedium,
                                       ),
@@ -261,35 +258,42 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                         trip.property!.mainImage ?? '',
                                       );
                                     },
-                                    child: trip.property!.mainImage != null &&
-                                        trip.property!.mainImage!.startsWith(
-                                          'data:image',
-                                        )
+                                    child:
+                                        trip.property!.mainImage != null &&
+                                            trip.property!.mainImage!
+                                                .startsWith('data:image')
                                         ? Image.memory(
-                                      base64Decode(
-                                        trip.property!.mainImage!
-                                            .split(',')
-                                            .last,
-                                      ),
-                                      width: MediaQuery.sizeOf(context).width * 0.9,
-                                      height: 140,
-                                      fit: BoxFit.cover,
-                                    )
+                                            base64Decode(
+                                              trip.property!.mainImage!
+                                                  .split(',')
+                                                  .last,
+                                            ),
+                                            width:
+                                                MediaQuery.sizeOf(
+                                                  context,
+                                                ).width *
+                                                0.9,
+                                            height: 140,
+                                            fit: BoxFit.cover,
+                                          )
                                         : CachedNetworkImage(
-                                      fadeInDuration: const Duration(
-                                        milliseconds: 500,
-                                      ),
-                                      fadeOutDuration: const Duration(
-                                        milliseconds: 500,
-                                      ),
-                                      imageUrl:
-                                      trip.property!.mainImage ??
-                                          'https://picsum.photos/id/238/200/200.jpg',
-                                      width: MediaQuery.sizeOf(context).width * 0.9,
-                                      height: 140,
-                                      fit: BoxFit.cover,
-
-                                    ),
+                                            fadeInDuration: const Duration(
+                                              milliseconds: 500,
+                                            ),
+                                            fadeOutDuration: const Duration(
+                                              milliseconds: 500,
+                                            ),
+                                            imageUrl:
+                                                trip.property!.mainImage ??
+                                                'https://picsum.photos/id/238/200/200.jpg',
+                                            width:
+                                                MediaQuery.sizeOf(
+                                                  context,
+                                                ).width *
+                                                0.9,
+                                            height: 140,
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
                                 ],
                               ),
@@ -332,7 +336,9 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                   String tripIdText = Uri.encodeComponent(
                                     trip.tripId.toString(),
                                   );
-                                  context.push('/trip_details?propertyId=$propertyIdText&tripId=$tripIdText&kind=trip_detail');
+                                  context.push(
+                                    '/trip_details?propertyId=$propertyIdText&tripId=$tripIdText&kind=trip_detail',
+                                  );
                                 },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
@@ -341,7 +347,8 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        trip.property!.propertyDescription.toString(),
+                                        trip.property!.propertyDescription
+                                            .toString(),
                                         style: GoogleFonts.lexendDeca(
                                           textStyle: textScheme.bodySmall
                                               ?.copyWith(
@@ -617,9 +624,13 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                                     MediaQuery.viewInsetsOf(
                                                       context,
                                                     ),
-                                                child: const SizedBox(
+                                                child: SizedBox(
                                                   height: 450,
-                                                  child: ReviewTripWidget(),
+                                                  child: ReviewTripWidget(
+                                                    onPressed: () {
+                                                      context.go('/my_trips');
+                                                    },
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -729,42 +740,42 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      trip.host!.photoUrl!.isNotEmpty ?
-                                      Container(
-                                        width: 40,
-                                        height: 40,
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: trip.host!.photoUrl != null &&
-                                            trip.host!.photoUrl!
-                                                .startsWith(
-                                              'data:image',
+                                      trip.host!.photoUrl!.isNotEmpty
+                                          ? Container(
+                                              width: 40,
+                                              height: 40,
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child:
+                                                  trip.host!.photoUrl != null &&
+                                                      trip.host!.photoUrl!
+                                                          .startsWith(
+                                                            'data:image',
+                                                          )
+                                                  ? Image.memory(
+                                                      base64Decode(
+                                                        trip.host!.photoUrl!
+                                                            .split(',')
+                                                            .last,
+                                                      ),
+                                                    )
+                                                  : CachedNetworkImage(
+                                                      fadeInDuration:
+                                                          const Duration(
+                                                            milliseconds: 500,
+                                                          ),
+                                                      fadeOutDuration:
+                                                          const Duration(
+                                                            milliseconds: 500,
+                                                          ),
+                                                      imageUrl:
+                                                          trip.host!.photoUrl ??
+                                                          'https://picsum.photos/id/238/200/200.jpg',
+                                                    ),
                                             )
-                                            ? Image.memory(
-                                          base64Decode(
-                                            trip.host!.photoUrl!
-                                                .split(',')
-                                                .last,
-                                          ),
-
-                                        )
-                                            : CachedNetworkImage(
-                                          fadeInDuration:
-                                          const Duration(
-                                            milliseconds: 500,
-                                          ),
-                                          fadeOutDuration:
-                                          const Duration(
-                                            milliseconds: 500,
-                                          ),
-                                          imageUrl:
-                                          trip.host!.photoUrl ??
-                                              'https://picsum.photos/id/238/200/200.jpg',
-
-                                        ),
-                                      ):const SizedBox.shrink(),
+                                          : const SizedBox.shrink(),
                                       Padding(
                                         padding:
                                             const EdgeInsetsDirectional.fromSTEB(

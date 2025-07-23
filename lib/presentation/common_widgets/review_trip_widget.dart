@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
 import 'rating_bar_widget.dart';
 
-class ReviewTripWidget extends StatelessWidget {
-  const ReviewTripWidget({super.key});
+class ReviewTripWidget extends StatefulWidget {
+  const ReviewTripWidget({super.key, required this.onPressed});
+  final VoidCallback onPressed;
+
+  @override
+  State<ReviewTripWidget> createState() => _ReviewTripWidgetState();
+}
+
+class _ReviewTripWidgetState extends State<ReviewTripWidget> {
+  double _selectedRating = 0.0;
+  final TextEditingController _reviewTextController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _reviewTextController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final logger = Logger();
     final textScheme = Theme.of(context).textTheme;
     final colorScheme = context.colors;
     return Padding(
@@ -101,11 +118,18 @@ class ReviewTripWidget extends StatelessWidget {
                     starSize: 48,
                     activeColor: colorScheme.primary,
                     inactiveColor: colorScheme.lineGray,
+                    onRatingChanged: (rating) {
+                      setState(() {
+                        _selectedRating = rating;
+                      });
+                      print('선택된 별점: $_selectedRating'); // 디버깅을 위해 콘솔 출력
+                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                   child: TextFormField(
+                    controller: _reviewTextController,
                     obscureText: false,
                     decoration: InputDecoration(
                       hintText: 'Please leave a description of the place...',
@@ -153,8 +177,10 @@ class ReviewTripWidget extends StatelessWidget {
                     0,
                   ),
                   child: ElevatedButton(
-                    onPressed: () async {
-                     context.go('/my_trips');
+                    onPressed:() {
+                      logger.d('확인 : $_selectedRating');
+                      logger.d('확인 : ${_reviewTextController.text}');
+                      widget.onPressed();
                     },
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(300, 60),
