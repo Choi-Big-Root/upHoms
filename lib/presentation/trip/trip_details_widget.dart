@@ -126,7 +126,6 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
                                             hoverColor: Colors.transparent,
                                             highlightColor: Colors.transparent,
                                             onTap: () {
-                                              print('test');
                                               showFullScreenImage(
                                                 context,
                                                 property.mainImage ?? '',

@@ -122,7 +122,6 @@ class _ReviewTripWidgetState extends State<ReviewTripWidget> {
                       setState(() {
                         _selectedRating = rating;
                       });
-                      print('선택된 별점: $_selectedRating'); // 디버깅을 위해 콘솔 출력
                     },
                   ),
                 ),

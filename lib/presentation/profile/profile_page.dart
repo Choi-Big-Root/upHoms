@@ -73,7 +73,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     List<PropertyModel> propertiesWithUser = properties
                         .where((property) => property.user!.uid == user.uid)
                         .toList();
-                    print(propertiesWithUser.length);
                     return Scaffold(
                       backgroundColor: colorScheme.primaryBackground,
                       body: Column(
