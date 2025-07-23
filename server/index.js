@@ -23,29 +23,14 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
-// Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(uploadsDir));
 
-// --- ✨ 중요: body-parser 미들웨어 순서 변경 및 추가 ---
-// 1. JSON 요청 본문을 파싱하기 위한 미들웨어 (가장 먼저 위치하여 일반적인 JSON 요청을 처리)
+//미들웨어
 app.use(express.json());
-// 2. 평범한 텍스트 요청 본문을 파싱하기 위한 미들웨어 추가
-//    이 미들웨어는 Content-Type이 'text/plain'일 때 req.body를 문자열로 파싱합니다.
-//    (body-parser의존성을 명시적으로 설치하지 않았다면, 'express' 내부에 포함되어 있습니다.)
 app.use(express.text());
-// 💡 여기를 수정합니다:
-// JSON 요청 본문의 최대 크기를 설정합니다.
-// '50mb'는 50메가바이트를 의미합니다. 필요에 따라 더 크게 설정할 수 있습니다.
 app.use(express.json({ limit: '100mb', strict: false })); 
-
-// URL-encoded 데이터(폼 데이터)의 최대 크기도 설정합니다.
-// 이미지 업로드 시 base64 인코딩 등으로 데이터가 커질 수 있으므로 함께 설정하는 것이 좋습니다.
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
-
-// 일반 텍스트 본문도 사용하는 경우 (현재 코드에 이미 있음)
 app.use(express.text({ limit: '100mb' })); 
-// --- ✨ 여기까지가 body-parser 미들웨어 설정입니다. ---
 
 
 // /add_property: 부동산 정보 생성 및 저장
@@ -55,7 +40,7 @@ const REVIEWS_FILE = path.join(__dirname, 'reviews.json');
 const TRIPS_FILE = path.join(__dirname, 'trips.json');
 
 
-// Image upload endpoint
+//이미지 업로드
 app.post('/upload', upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
@@ -72,7 +57,7 @@ app.get('/', (req, res) => {
     res.send('Node.js server is running!');
 });
 
-// User Login : 로그인
+//유저
 app.post('/login', (req, res) => {
     const userRequest = req.body; // 클라이언트로부터 받은 이메일과 비밀번호
 
@@ -113,8 +98,6 @@ app.post('/login', (req, res) => {
         }
     });
 });
-
-// User Create: 유저 생성
 app.post('/user_create', (req, res) => {
     const newUserRequest = req.body;
 
@@ -344,8 +327,7 @@ app.post('/user_update', (req, res) => {
         res.status(500).send('SERVER ERROR while processing user update.');
     });
 });
-
-// --- GET /properties 엔드포인트 수정 ---
+//상품
 app.get('/properties', (req, res) => {
     Promise.all([
         fs.promises.readFile(PROPERTIES_FILE, 'utf8'),
@@ -517,8 +499,6 @@ app.post('/add_property', (req, res) => {
         });
     });
 });
-
-
 // /property_search: 검색어로 부동산 정보 가져오기
 app.post('/property_search', (req, res) => {
     let searchText;
@@ -598,8 +578,6 @@ app.post('/property_search', (req, res) => {
         return res.status(500).send('SERVER ERROR while processing search data.');
     });
 });
-
-//프로퍼티 단일
 app.post('/get_property', (req, res) => {
     let requestedPropertyId;
 
@@ -757,8 +735,6 @@ app.post('/update_property', (req, res) => {
             return res.status(500).send('SERVER ERROR while processing property update.');
         });
 });
-
-
 //리뷰
 app.post('/get_reviews', (req, res) => {
     let requestedPropertyId;
@@ -926,10 +902,7 @@ app.post('/add_review', (req, res) => {
         res.status(500).send('SERVER ERROR while adding review data or updating trip status.');
     });
 });
-
-
-//예약 Trip
-// --- ✨ 새로운 POST /add_trip 엔드포인트 추가 ✨ ---
+//예약
 app.post('/add_trip', (req, res) => {
     let newTripRequest = req.body;
 
@@ -1007,7 +980,6 @@ app.post('/add_trip', (req, res) => {
             res.status(500).send('SERVER ERROR while adding trip data.');
         });
 });
-// --- ✨ 새로운 POST /get_trip 엔드포인트 추가 ✨ ---
 app.post('/get_trip', (req, res) => {
     let requestedTripId;
 
@@ -1065,7 +1037,6 @@ app.post('/get_trip', (req, res) => {
             return res.status(500).send('SERVER ERROR while processing trip data.');
         });
 });
-// --- ✨ 새로운 POST /get_trips_with_user 엔드포인트 추가 ✨ ---
 app.post('/get_trips_with_user', (req, res) => {
     let requestedUserId;
 
@@ -1192,8 +1163,139 @@ app.post('/cancel_trip', (req, res) => {
             return res.status(500).send('SERVER ERROR while processing trip cancellation.');
         });
 });
+app.post('/get_trips_with_host', (req, res) => {
+    let requestedHostId;
 
-// --- ✨ 서버 시작 시 트립 상태 업데이트 로직 추가 ✨ ---
+    // 클라이언트에서 @Body() Map<String,dynamic> hostId로 보내므로, req.body는 객체일 것
+    // 요청 본문에서 'hostId' 키를 찾아 값을 추출합니다.
+    if (typeof req.body === 'object' && req.body !== null && (req.body.hostId !== undefined || req.body.hostId !== null)) {
+        requestedHostId = parseInt(req.body.hostId); // 정수로 변환
+    } else if (typeof req.body === 'string') {
+        // 혹시 모르니 문자열로 단일 ID가 왔을 경우도 대비
+        try {
+            const parsedBody = JSON.parse(req.body); // JSON 문자열로 왔을 경우 파싱
+            if (parsedBody && (parsedBody.hostId !== undefined || parsedBody.hostId !== null)) {
+                requestedHostId = parseInt(parsedBody.hostId);
+            }
+        } catch (e) {
+            // JSON 파싱 실패 시, 문자열 자체를 ID로 시도 (fallback)
+            requestedHostId = parseInt(req.body);
+        }
+    }
+
+    if (isNaN(requestedHostId)) { // hostId가 유효한 숫자가 아닐 경우
+        console.error('Invalid or missing hostId in request body for /get_trips_with_host:', req.body);
+        return res.status(400).send('Valid hostId is required in the request body.');
+    }
+
+    // trips.json 파일 읽기
+    fs.promises.readFile(TRIPS_FILE, 'utf8')
+        .then(tripsData => {
+            let trips = [];
+            try {
+                trips = JSON.parse(tripsData);
+            } catch (parseErr) {
+                console.error('Error parsing trips.json for /get_trips_with_host:', parseErr);
+                // 파일 내용이 손상되었거나 유효한 JSON이 아닌 경우
+                // 빈 배열을 반환하여 클라이언트가 에러 없이 처리하도록 함
+                return res.status(200).json([]);
+            }
+
+            // 요청된 hostId에 해당하는 모든 트립을 필터링
+            // 여기서 trip.hostId는 TripDto 내에 호스트 ID를 나타내는 필드가 있다고 가정합니다.
+            // (예: tripDto에 hostId 필드가 있다고 가정)
+            const filteredTrips = trips.filter(trip => parseInt(trip.hostId) === requestedHostId);
+
+            console.log(`Successfully retrieved ${filteredTrips.length} trips for host ID ${requestedHostId}.`);
+            res.status(200).json(filteredTrips); // 필터링된 트립 리스트 반환
+        })
+        .catch(err => {
+            // trips.json 파일 자체가 없거나 읽기 오류 발생 시
+            if (err.code === 'ENOENT') {
+                console.log('trips.json not found for /get_trips_with_host, returning empty list.');
+                return res.status(200).json([]); // 파일이 없으면 빈 배열 반환
+            }
+            console.error('SERVER ERROR during /get_trips_with_host data retrieval:', err);
+            return res.status(500).send('SERVER ERROR while processing trip data.');
+        });
+});
+app.post('/complete_trip', (req, res) => {
+    let completeTripRequest = req.body;
+
+    // JSON 형식 검증 및 파싱 (plain text로 오는 경우 대비)
+    if (typeof completeTripRequest === 'string') {
+        try {
+            completeTripRequest = JSON.parse(completeTripRequest);
+        } catch (e) {
+            console.error('Error parsing completeTripRequest as JSON string:', e);
+            return res.status(400).send('Invalid JSON format for trip completion. (If sending as plain text, it must be valid JSON)');
+        }
+    }
+
+    // 필수 필드 유효성 검사: tripId가 반드시 필요합니다.
+    if (completeTripRequest.tripId === undefined || completeTripRequest.tripId === null) {
+        return res.status(400).send('Trip ID is required for completion.');
+    }
+
+    const requestedTripId = parseInt(completeTripRequest.tripId);
+    if (isNaN(requestedTripId)) {
+        console.error('Invalid tripId in request body for /complete_trip:', completeTripRequest.tripId);
+        return res.status(400).send('Valid Trip ID is required for completion.');
+    }
+
+    // trips.json 파일 읽기
+    fs.promises.readFile(TRIPS_FILE, 'utf8')
+        .then(tripsData => {
+            let trips = [];
+            try {
+                trips = JSON.parse(tripsData);
+            } catch (parseErr) {
+                console.error('Error parsing trips.json for /complete_trip:', parseErr);
+                return res.status(500).send('Trip data is corrupted or malformed.');
+            }
+
+            // 요청된 tripId에 해당하는 트립을 찾음
+            const tripIndex = trips.findIndex(trip => parseInt(trip.tripId) === requestedTripId);
+
+            if (tripIndex === -1) {
+                console.log(`Trip with ID ${requestedTripId} not found for completion.`);
+                return res.status(404).send(`Trip with ID ${requestedTripId} not found.`);
+            }
+
+            // 해당 트립의 필드 업데이트
+            // upcoming을 false, complete를 true로 변경
+            const updatedTrip = {
+                ...trips[tripIndex], // 기존 트립 정보 복사
+                upcoming: false, // 다가오는 여행 아님
+                complete: true,  // 완료됨
+                lastUpdated: new Date().toISOString() // 마지막 업데이트 시간 기록
+            };
+
+            // 만약 취소된 여행이었다면, complete 상태로 변경하더라도 cancelTrip 필드는 유지할 수 있음
+            // 필요에 따라 cancelTrip: false를 추가할 수도 있으나, 일반적으로는 취소 상태는 유지함
+            // 여기서는 cancelTrip 필드는 건드리지 않습니다.
+
+            trips[tripIndex] = updatedTrip; // 배열 내 트립 정보 업데이트
+
+            // trips.json 파일에 저장
+            return fs.promises.writeFile(TRIPS_FILE, JSON.stringify(trips, null, 2))
+                .then(() => {
+                    console.log(`Successfully completed trip with ID: ${requestedTripId}.`);
+                    res.status(200).json(updatedTrip); // 업데이트된 trip 객체 반환
+                });
+        })
+        .catch(err => {
+            // trips.json 파일 자체가 없거나 읽기 오류 발생 시
+            if (err.code === 'ENOENT') {
+                console.log('trips.json not found for /complete_trip, no trips to complete.');
+                return res.status(404).send('No trip data file found.');
+            }
+            console.error('SERVER ERROR during /complete_trip data retrieval or update:', err);
+            return res.status(500).send('SERVER ERROR while processing trip completion.');
+        });
+});
+
+//서버 시작시 예약 시작 날짜가 오늘 날짜를 지났을경우 complete 상태로 변경하기 위해
 async function updateTripStatusesOnStartup() {
     console.log('Server starting up: Checking and updating trip statuses...');
     const today = new Date();
@@ -1262,7 +1364,8 @@ async function updateTripStatusesOnStartup() {
     }
 }
 
+//서버 시작 포인트.
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
-    updateTripStatusesOnStartup(); // ✨ 서버 시작 후 함수 호출
+    updateTripStatusesOnStartup();
 });

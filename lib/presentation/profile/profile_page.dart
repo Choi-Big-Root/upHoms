@@ -26,6 +26,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
+  void initState() {
+    super.initState();
+    context.read<PropertyBloc>().add(const LoadProperties());
+  }
+  @override
   Widget build(BuildContext context) {
     final logger = Logger();
     final colorScheme = context.colors;
@@ -454,7 +459,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 title: 'My Bookings',
                                 isFirstRow: false,
                                 onTapAction: () {
-                                  context.push('/profile_my_bookings');
+                                  context.push('/profile_my_bookings?hostId=${user.uid}');
                                 },
                               ),
                               Padding(

@@ -20,4 +20,10 @@ abstract class TripApiService {
 
   @POST('/cancel_trip')
   Future<TripDto> cancelTrip(@Body() TripDto trip);
+
+  @POST('/get_trips_with_host')
+  Future<List<TripDto>> getTripsWithHost(@Body() Map<String,dynamic> hostId);
+
+  @POST('/complete_trip')
+  Future<TripDto> completeTrip(@Body() TripDto trip);
 }

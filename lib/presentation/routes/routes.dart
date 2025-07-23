@@ -99,7 +99,8 @@ final GoRouter router = GoRouter(
       name: 'my_trip_details',
       builder: (context, state) {
         final tripId = {'tripId': state.uri.queryParameters['tripId']};
-        return MyTripDetailsWidget(tripId: tripId);
+        final mode = state.uri.queryParameters['mode'];
+        return MyTripDetailsWidget(tripId: tripId,mode:mode);
       },
     ),
 
@@ -169,7 +170,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.profileMyBookings,
       name: 'profile_my_bookings',
-      builder: (context, state) => const ProfileMyBookings(),
+      builder: (context, state) {
+        final hostId = state.uri.queryParameters['hostId'];
+        return ProfileMyBookings(hostId:hostId!);
+      },
     ),
 
     GoRoute(

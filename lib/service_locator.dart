@@ -30,7 +30,9 @@ import 'domain/usecases/review/add_review_usecase.dart';
 import 'domain/usecases/review/get_reviews_usecase.dart';
 import 'domain/usecases/trip/add_trip_usecase.dart';
 import 'domain/usecases/trip/cancel_trip_usecase.dart';
+import 'domain/usecases/trip/complete_trip_usecase.dart';
 import 'domain/usecases/trip/get_trip_usecase.dart';
+import 'domain/usecases/trip/get_trips_with_host_usecase.dart';
 import 'domain/usecases/trip/get_trips_with_user_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
 import 'domain/usecases/user/get_user_usecase.dart';
@@ -147,6 +149,12 @@ void _domain() {
   locator.registerSingleton<CancelTripUsecase>(
     CancelTripUsecase(locator<TripRepository>()),
   );
+  locator.registerSingleton<GetTripsWithHostUsecase>(
+    GetTripsWithHostUsecase(locator<TripRepository>()),
+  );
+  locator.registerSingleton<CompleteTripUsecase>(
+    CompleteTripUsecase(locator<TripRepository>()),
+  );
 }
 
 void _presentation() {
@@ -185,6 +193,8 @@ void _presentation() {
       getTripUsecase: locator<GetTripUsecase>(),
       getTripsWithUserUsecase: locator<GetTripsWithUserUsecase>(),
       cancelTripUsecase: locator<CancelTripUsecase>(),
+      getTripsWithHostUsecase: locator<GetTripsWithHostUsecase>(),
+      completeTripUsecase: locator<CompleteTripUsecase>(),
     ),
   );
 

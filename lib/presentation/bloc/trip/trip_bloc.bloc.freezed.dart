@@ -55,7 +55,7 @@ extension TripStatePatterns on TripState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Success value)?  success,TResult Function( Error value)?  error,TResult Function( AddTripSuccess value)?  addTripSuccess,TResult Function( GetTripSuccess value)?  getTripSuccess,TResult Function( GetTripsWithUserSuccess value)?  getTripsWithUserSuccess,TResult Function( CancelTripSuccess value)?  cancelTripSuccess,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Success value)?  success,TResult Function( Error value)?  error,TResult Function( AddTripSuccess value)?  addTripSuccess,TResult Function( GetTripSuccess value)?  getTripSuccess,TResult Function( GetTripsWithUserSuccess value)?  getTripsWithUserSuccess,TResult Function( CancelTripSuccess value)?  cancelTripSuccess,TResult Function( GetTripsWithHostSuccess value)?  getTripsWithHostSuccess,TResult Function( CompleteTripSuccess value)?  completeTripSuccess,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case Initial() when initial != null:
@@ -66,7 +66,9 @@ return error(_that);case AddTripSuccess() when addTripSuccess != null:
 return addTripSuccess(_that);case GetTripSuccess() when getTripSuccess != null:
 return getTripSuccess(_that);case GetTripsWithUserSuccess() when getTripsWithUserSuccess != null:
 return getTripsWithUserSuccess(_that);case CancelTripSuccess() when cancelTripSuccess != null:
-return cancelTripSuccess(_that);case _:
+return cancelTripSuccess(_that);case GetTripsWithHostSuccess() when getTripsWithHostSuccess != null:
+return getTripsWithHostSuccess(_that);case CompleteTripSuccess() when completeTripSuccess != null:
+return completeTripSuccess(_that);case _:
   return orElse();
 
 }
@@ -84,7 +86,7 @@ return cancelTripSuccess(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Success value)  success,required TResult Function( Error value)  error,required TResult Function( AddTripSuccess value)  addTripSuccess,required TResult Function( GetTripSuccess value)  getTripSuccess,required TResult Function( GetTripsWithUserSuccess value)  getTripsWithUserSuccess,required TResult Function( CancelTripSuccess value)  cancelTripSuccess,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Success value)  success,required TResult Function( Error value)  error,required TResult Function( AddTripSuccess value)  addTripSuccess,required TResult Function( GetTripSuccess value)  getTripSuccess,required TResult Function( GetTripsWithUserSuccess value)  getTripsWithUserSuccess,required TResult Function( CancelTripSuccess value)  cancelTripSuccess,required TResult Function( GetTripsWithHostSuccess value)  getTripsWithHostSuccess,required TResult Function( CompleteTripSuccess value)  completeTripSuccess,}){
 final _that = this;
 switch (_that) {
 case Initial():
@@ -95,7 +97,9 @@ return error(_that);case AddTripSuccess():
 return addTripSuccess(_that);case GetTripSuccess():
 return getTripSuccess(_that);case GetTripsWithUserSuccess():
 return getTripsWithUserSuccess(_that);case CancelTripSuccess():
-return cancelTripSuccess(_that);case _:
+return cancelTripSuccess(_that);case GetTripsWithHostSuccess():
+return getTripsWithHostSuccess(_that);case CompleteTripSuccess():
+return completeTripSuccess(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -112,7 +116,7 @@ return cancelTripSuccess(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Success value)?  success,TResult? Function( Error value)?  error,TResult? Function( AddTripSuccess value)?  addTripSuccess,TResult? Function( GetTripSuccess value)?  getTripSuccess,TResult? Function( GetTripsWithUserSuccess value)?  getTripsWithUserSuccess,TResult? Function( CancelTripSuccess value)?  cancelTripSuccess,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Success value)?  success,TResult? Function( Error value)?  error,TResult? Function( AddTripSuccess value)?  addTripSuccess,TResult? Function( GetTripSuccess value)?  getTripSuccess,TResult? Function( GetTripsWithUserSuccess value)?  getTripsWithUserSuccess,TResult? Function( CancelTripSuccess value)?  cancelTripSuccess,TResult? Function( GetTripsWithHostSuccess value)?  getTripsWithHostSuccess,TResult? Function( CompleteTripSuccess value)?  completeTripSuccess,}){
 final _that = this;
 switch (_that) {
 case Initial() when initial != null:
@@ -123,7 +127,9 @@ return error(_that);case AddTripSuccess() when addTripSuccess != null:
 return addTripSuccess(_that);case GetTripSuccess() when getTripSuccess != null:
 return getTripSuccess(_that);case GetTripsWithUserSuccess() when getTripsWithUserSuccess != null:
 return getTripsWithUserSuccess(_that);case CancelTripSuccess() when cancelTripSuccess != null:
-return cancelTripSuccess(_that);case _:
+return cancelTripSuccess(_that);case GetTripsWithHostSuccess() when getTripsWithHostSuccess != null:
+return getTripsWithHostSuccess(_that);case CompleteTripSuccess() when completeTripSuccess != null:
+return completeTripSuccess(_that);case _:
   return null;
 
 }
@@ -140,7 +146,7 @@ return cancelTripSuccess(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  error,TResult Function( TripModel trip)?  addTripSuccess,TResult Function( TripModel trip)?  getTripSuccess,TResult Function( List<TripModel> trips)?  getTripsWithUserSuccess,TResult Function( TripModel trip)?  cancelTripSuccess,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  error,TResult Function( TripModel trip)?  addTripSuccess,TResult Function( TripModel trip)?  getTripSuccess,TResult Function( List<TripModel> trips)?  getTripsWithUserSuccess,TResult Function( TripModel trip)?  cancelTripSuccess,TResult Function( List<TripModel> trips)?  getTripsWithHostSuccess,TResult Function( TripModel trip)?  completeTripSuccess,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Loading() when loading != null:
@@ -150,7 +156,9 @@ return error(_that.message);case AddTripSuccess() when addTripSuccess != null:
 return addTripSuccess(_that.trip);case GetTripSuccess() when getTripSuccess != null:
 return getTripSuccess(_that.trip);case GetTripsWithUserSuccess() when getTripsWithUserSuccess != null:
 return getTripsWithUserSuccess(_that.trips);case CancelTripSuccess() when cancelTripSuccess != null:
-return cancelTripSuccess(_that.trip);case _:
+return cancelTripSuccess(_that.trip);case GetTripsWithHostSuccess() when getTripsWithHostSuccess != null:
+return getTripsWithHostSuccess(_that.trips);case CompleteTripSuccess() when completeTripSuccess != null:
+return completeTripSuccess(_that.trip);case _:
   return orElse();
 
 }
@@ -168,7 +176,7 @@ return cancelTripSuccess(_that.trip);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  error,required TResult Function( TripModel trip)  addTripSuccess,required TResult Function( TripModel trip)  getTripSuccess,required TResult Function( List<TripModel> trips)  getTripsWithUserSuccess,required TResult Function( TripModel trip)  cancelTripSuccess,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  error,required TResult Function( TripModel trip)  addTripSuccess,required TResult Function( TripModel trip)  getTripSuccess,required TResult Function( List<TripModel> trips)  getTripsWithUserSuccess,required TResult Function( TripModel trip)  cancelTripSuccess,required TResult Function( List<TripModel> trips)  getTripsWithHostSuccess,required TResult Function( TripModel trip)  completeTripSuccess,}) {final _that = this;
 switch (_that) {
 case Initial():
 return initial();case Loading():
@@ -178,7 +186,9 @@ return error(_that.message);case AddTripSuccess():
 return addTripSuccess(_that.trip);case GetTripSuccess():
 return getTripSuccess(_that.trip);case GetTripsWithUserSuccess():
 return getTripsWithUserSuccess(_that.trips);case CancelTripSuccess():
-return cancelTripSuccess(_that.trip);case _:
+return cancelTripSuccess(_that.trip);case GetTripsWithHostSuccess():
+return getTripsWithHostSuccess(_that.trips);case CompleteTripSuccess():
+return completeTripSuccess(_that.trip);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,7 +205,7 @@ return cancelTripSuccess(_that.trip);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  error,TResult? Function( TripModel trip)?  addTripSuccess,TResult? Function( TripModel trip)?  getTripSuccess,TResult? Function( List<TripModel> trips)?  getTripsWithUserSuccess,TResult? Function( TripModel trip)?  cancelTripSuccess,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  error,TResult? Function( TripModel trip)?  addTripSuccess,TResult? Function( TripModel trip)?  getTripSuccess,TResult? Function( List<TripModel> trips)?  getTripsWithUserSuccess,TResult? Function( TripModel trip)?  cancelTripSuccess,TResult? Function( List<TripModel> trips)?  getTripsWithHostSuccess,TResult? Function( TripModel trip)?  completeTripSuccess,}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Loading() when loading != null:
@@ -205,7 +215,9 @@ return error(_that.message);case AddTripSuccess() when addTripSuccess != null:
 return addTripSuccess(_that.trip);case GetTripSuccess() when getTripSuccess != null:
 return getTripSuccess(_that.trip);case GetTripsWithUserSuccess() when getTripsWithUserSuccess != null:
 return getTripsWithUserSuccess(_that.trips);case CancelTripSuccess() when cancelTripSuccess != null:
-return cancelTripSuccess(_that.trip);case _:
+return cancelTripSuccess(_that.trip);case GetTripsWithHostSuccess() when getTripsWithHostSuccess != null:
+return getTripsWithHostSuccess(_that.trips);case CompleteTripSuccess() when completeTripSuccess != null:
+return completeTripSuccess(_that.trip);case _:
   return null;
 
 }
@@ -655,6 +667,153 @@ class _$CancelTripSuccessCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? trip = null,}) {
   return _then(CancelTripSuccess(
+null == trip ? _self.trip : trip // ignore: cast_nullable_to_non_nullable
+as TripModel,
+  ));
+}
+
+/// Create a copy of TripState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TripModelCopyWith<$Res> get trip {
+  
+  return $TripModelCopyWith<$Res>(_self.trip, (value) {
+    return _then(_self.copyWith(trip: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class GetTripsWithHostSuccess implements TripState {
+  const GetTripsWithHostSuccess(final  List<TripModel> trips): _trips = trips;
+  
+
+ final  List<TripModel> _trips;
+ List<TripModel> get trips {
+  if (_trips is EqualUnmodifiableListView) return _trips;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_trips);
+}
+
+
+/// Create a copy of TripState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GetTripsWithHostSuccessCopyWith<GetTripsWithHostSuccess> get copyWith => _$GetTripsWithHostSuccessCopyWithImpl<GetTripsWithHostSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetTripsWithHostSuccess&&const DeepCollectionEquality().equals(other._trips, _trips));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_trips));
+
+@override
+String toString() {
+  return 'TripState.getTripsWithHostSuccess(trips: $trips)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GetTripsWithHostSuccessCopyWith<$Res> implements $TripStateCopyWith<$Res> {
+  factory $GetTripsWithHostSuccessCopyWith(GetTripsWithHostSuccess value, $Res Function(GetTripsWithHostSuccess) _then) = _$GetTripsWithHostSuccessCopyWithImpl;
+@useResult
+$Res call({
+ List<TripModel> trips
+});
+
+
+
+
+}
+/// @nodoc
+class _$GetTripsWithHostSuccessCopyWithImpl<$Res>
+    implements $GetTripsWithHostSuccessCopyWith<$Res> {
+  _$GetTripsWithHostSuccessCopyWithImpl(this._self, this._then);
+
+  final GetTripsWithHostSuccess _self;
+  final $Res Function(GetTripsWithHostSuccess) _then;
+
+/// Create a copy of TripState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? trips = null,}) {
+  return _then(GetTripsWithHostSuccess(
+null == trips ? _self._trips : trips // ignore: cast_nullable_to_non_nullable
+as List<TripModel>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class CompleteTripSuccess implements TripState {
+  const CompleteTripSuccess(this.trip);
+  
+
+ final  TripModel trip;
+
+/// Create a copy of TripState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CompleteTripSuccessCopyWith<CompleteTripSuccess> get copyWith => _$CompleteTripSuccessCopyWithImpl<CompleteTripSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CompleteTripSuccess&&(identical(other.trip, trip) || other.trip == trip));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,trip);
+
+@override
+String toString() {
+  return 'TripState.completeTripSuccess(trip: $trip)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CompleteTripSuccessCopyWith<$Res> implements $TripStateCopyWith<$Res> {
+  factory $CompleteTripSuccessCopyWith(CompleteTripSuccess value, $Res Function(CompleteTripSuccess) _then) = _$CompleteTripSuccessCopyWithImpl;
+@useResult
+$Res call({
+ TripModel trip
+});
+
+
+$TripModelCopyWith<$Res> get trip;
+
+}
+/// @nodoc
+class _$CompleteTripSuccessCopyWithImpl<$Res>
+    implements $CompleteTripSuccessCopyWith<$Res> {
+  _$CompleteTripSuccessCopyWithImpl(this._self, this._then);
+
+  final CompleteTripSuccess _self;
+  final $Res Function(CompleteTripSuccess) _then;
+
+/// Create a copy of TripState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? trip = null,}) {
+  return _then(CompleteTripSuccess(
 null == trip ? _self.trip : trip // ignore: cast_nullable_to_non_nullable
 as TripModel,
   ));

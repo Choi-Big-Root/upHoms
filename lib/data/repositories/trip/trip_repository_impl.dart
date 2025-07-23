@@ -25,4 +25,14 @@ class TripRepositoryImpl implements TripRepository {
   Future<TripModel> cancelTrip(TripModel trip) async {
     return await tripRemoteDataSource.cancelTrip(trip);
   }
+
+  @override
+  Future<TripModel> completeTrip(TripModel trip) async {
+    return await tripRemoteDataSource.completeTrip(trip);
+  }
+
+  @override
+  Future<List<TripModel>> getTripsWithHost(Map<String, dynamic> hostId) async {
+    return await tripRemoteDataSource.getTripsWithHost(hostId);
+  }
 }

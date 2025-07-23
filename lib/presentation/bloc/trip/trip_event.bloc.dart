@@ -23,3 +23,11 @@ class CancelTrip extends TripEvent {
   const CancelTrip(this.trip);
   final TripModel trip;
 }
+class GetTripsWithHost extends TripEvent {
+  const GetTripsWithHost(this.hostId);
+  final Map<String, dynamic> hostId;
+}
+class CompleteTrip extends TripEvent {
+  const CompleteTrip(this.trip);
+  final TripModel trip;
+}

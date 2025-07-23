@@ -10,4 +10,6 @@ class TripState with _$TripState {
   const factory TripState.getTripSuccess(TripModel trip) = GetTripSuccess;
   const factory TripState.getTripsWithUserSuccess(List<TripModel> trips) = GetTripsWithUserSuccess;
   const factory TripState.cancelTripSuccess(TripModel trip) = CancelTripSuccess;
+  const factory TripState.getTripsWithHostSuccess(List<TripModel> trips) = GetTripsWithHostSuccess;
+  const factory TripState.completeTripSuccess(TripModel trip) = CompleteTripSuccess;
 }
