@@ -14,3 +14,8 @@ class GetTrip extends TripEvent {
   const GetTrip(this.tripId);
   final Map<String, dynamic> tripId;
 }
+
+class GetTripsWithUser extends TripEvent {
+  const GetTripsWithUser(this.userId);
+  final Map<String, dynamic> userId;
+}

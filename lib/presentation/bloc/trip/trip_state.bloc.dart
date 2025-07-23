@@ -8,4 +8,5 @@ class TripState with _$TripState {
   const factory TripState.error(String message) = Error;
   const factory TripState.addTripSuccess(TripModel trip) = AddTripSuccess;
   const factory TripState.getTripSuccess(TripModel trip) = GetTripSuccess;
+  const factory TripState.getTripsWithUserSuccess(List<TripModel> trips) = GetTripsWithUserSuccess;
 }

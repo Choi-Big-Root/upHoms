@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import '../bloc/user/user_bloc.bloc.dart';
 import '../home/home_page.dart';
 import '../my_trips/my_trips_page.dart';
 import '../my_trips/widgets/my_trip_details_widget.dart';
@@ -51,7 +53,13 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/my_trips',
           builder: (BuildContext context, GoRouterState state) {
-            return const MyTripsPage();
+            return BlocBuilder<UserBloc,UserState>(
+              builder: (context,state) {
+                var userId;
+                state.when(initial: (){}, loading: (){}, success: (data){logger.d(data); userId = data.uid.toString();}, error: (msg){});
+                return  MyTripsPage(userId:userId);
+              }
+            );
           },
         ),
         GoRoute(

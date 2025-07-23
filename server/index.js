@@ -684,8 +684,132 @@ app.post('/get_trip', (req, res) => {
             return res.status(500).send('SERVER ERROR while processing trip data.');
         });
 });
+// --- ✨ 새로운 POST /get_trips_with_user 엔드포인트 추가 ✨ ---
+app.post('/get_trips_with_user', (req, res) => {
+    let requestedUserId;
 
+    // 클라이언트에서 @Body() Map<String,dynamic> userId로 보내므로, req.body는 객체일 것
+    // 요청 본문에서 'userId' 키를 찾아 값을 추출합니다.
+    if (typeof req.body === 'object' && req.body !== null && (req.body.userId !== undefined || req.body.userId !== null)) {
+        requestedUserId = parseInt(req.body.userId); // 정수로 변환
+    } else if (typeof req.body === 'string') {
+        // 혹시 모르니 문자열로 단일 ID가 왔을 경우도 대비
+        try {
+            const parsedBody = JSON.parse(req.body); // JSON 문자열로 왔을 경우 파싱
+            if (parsedBody && (parsedBody.userId !== undefined || parsedBody.userId !== null)) {
+                requestedUserId = parseInt(parsedBody.userId);
+            }
+        } catch (e) {
+            // JSON 파싱 실패 시, 문자열 자체를 ID로 시도 (fallback)
+            requestedUserId = parseInt(req.body);
+        }
+    }
+
+    if (isNaN(requestedUserId)) { // userId가 유효한 숫자가 아닐 경우
+        console.error('Invalid or missing userId in request body for /get_trips_with_user:', req.body);
+        return res.status(400).send('Valid userId is required in the request body.');
+    }
+
+    // trips.json 파일 읽기
+    fs.promises.readFile(TRIPS_FILE, 'utf8')
+        .then(tripsData => {
+            let trips = [];
+            try {
+                trips = JSON.parse(tripsData);
+            } catch (parseErr) {
+                console.error('Error parsing trips.json for /get_trips_with_user:', parseErr);
+                // 파일 내용이 손상되었거나 유효한 JSON이 아닌 경우
+                // 빈 배열을 반환하여 클라이언트가 에러 없이 처리하도록 함
+                return res.status(200).json([]);
+            }
+
+            // 요청된 userId에 해당하는 모든 트립을 필터링
+            const filteredTrips = trips.filter(trip => trip.userId == requestedUserId);
+
+            console.log(`Successfully retrieved ${filteredTrips.length} trips for user ID ${requestedUserId}.`);
+            res.status(200).json(filteredTrips); // 필터링된 트립 리스트 반환
+        })
+        .catch(err => {
+            // trips.json 파일 자체가 없거나 읽기 오류 발생 시
+            if (err.code === 'ENOENT') {
+                console.log('trips.json not found for /get_trips_with_user, returning empty list.');
+                return res.status(200).json([]); // 파일이 없으면 빈 배열 반환
+            }
+            console.error('SERVER ERROR during /get_trips_with_user data retrieval:', err);
+            return res.status(500).send('SERVER ERROR while processing trip data.');
+        });
+});
+
+// --- ✨ 서버 시작 시 트립 상태 업데이트 로직 추가 ✨ ---
+async function updateTripStatusesOnStartup() {
+    console.log('Server starting up: Checking and updating trip statuses...');
+    const today = new Date();
+    // 오늘 날짜를 YYYY-MM-DD 형식으로 포맷팅 (시간 부분은 무시하고 날짜만 비교하기 위함)
+    const todayFormatted = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+    const todayDateOnly = new Date(todayFormatted); // 시간 정보 없이 날짜만으로 Date 객체 생성
+
+    try {
+        const data = await fs.promises.readFile(TRIPS_FILE, 'utf8');
+        let trips = [];
+        try {
+            trips = JSON.parse(data);
+        } catch (parseErr) {
+            console.error('Error parsing trips.json on startup:', parseErr);
+            console.warn('Trips data is corrupted on startup, skipping status update.');
+            return; // 파싱 오류 시 업데이트 중단
+        }
+
+        let hasChanges = false; // 변경 사항이 있었는지 추적
+
+        const updatedTrips = trips.map(trip => {
+            // tripEndDate가 없거나 유효하지 않으면 건너뜀
+            if (!trip.tripEndDate || typeof trip.tripEndDate !== 'string') {
+                return trip;
+            }
+
+            try {
+                // tripEndDate를 Date 객체로 변환 (시간 정보 없이 날짜만으로)
+                const endDate = new Date(trip.tripEndDate);
+                const endDateFormatted = `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`;
+                const endDateOnly = new Date(endDateFormatted);
+
+                // tripEndDate가 오늘 날짜보다 이전인지 확인
+                // 즉, 오늘 날짜를 기준으로 이미 종료된 트립인지 확인
+                if (endDateOnly < todayDateOnly) {
+                    // 이미 upcoming: false, complete: true 인지 확인하여 불필요한 변경 방지
+                    if (trip.upcoming !== false || trip.complete !== true) {
+                        console.log(`  - Trip ID ${trip.tripId}: End date ${trip.tripEndDate} is in the past. Setting upcoming=false, complete=true.`);
+                        hasChanges = true;
+                        return {
+                            ...trip,
+                            upcoming: false,
+                            complete: true
+                        };
+                    }
+                }
+            } catch (dateParseError) {
+                console.warn(`  - Warning: Could not parse tripEndDate for trip ID ${trip.tripId}: "${trip.tripEndDate}". Skipping status update for this trip.`, dateParseError);
+            }
+            return trip; // 변경 없음
+        });
+
+        if (hasChanges) {
+            await fs.promises.writeFile(TRIPS_FILE, JSON.stringify(updatedTrips, null, 2));
+            console.log('Trip statuses updated and saved to trips.json.');
+        } else {
+            console.log('No trip status changes needed.');
+        }
+
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            console.log('trips.json not found on startup, no trip statuses to update.');
+        } else {
+            console.error('SERVER ERROR during startup trip status update:', err);
+        }
+    }
+}
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
+    updateTripStatusesOnStartup(); // ✨ 서버 시작 후 함수 호출
 });
