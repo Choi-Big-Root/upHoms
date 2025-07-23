@@ -17,4 +17,7 @@ abstract class TripApiService {
 
   @POST('/get_trips_with_user')
   Future<List<TripDto>> getTripsWithUser(@Body() Map<String,dynamic> userId);
+
+  @POST('/cancel_trip')
+  Future<TripDto> cancelTrip(@Body() TripDto trip);
 }

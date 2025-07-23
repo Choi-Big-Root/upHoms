@@ -853,6 +853,78 @@ app.post('/get_trips_with_user', (req, res) => {
             return res.status(500).send('SERVER ERROR while processing trip data.');
         });
 });
+app.post('/cancel_trip', (req, res) => {
+    let cancelTripRequest = req.body;
+
+    // JSON 형식 검증 및 파싱 (plain text로 오는 경우 대비)
+    if (typeof cancelTripRequest === 'string') {
+        try {
+            cancelTripRequest = JSON.parse(cancelTripRequest);
+        } catch (e) {
+            console.error('Error parsing cancelTripRequest as JSON string:', e);
+            return res.status(400).send('Invalid JSON format for trip cancellation. (If sending as plain text, it must be valid JSON)');
+        }
+    }
+
+    // 필수 필드 유효성 검사: tripId가 반드시 필요합니다.
+    if (!cancelTripRequest || cancelTripRequest.tripId === undefined || cancelTripRequest.tripId === null) {
+        return res.status(400).send('Missing required tripId for cancellation.');
+    }
+
+    const requestedTripId = parseInt(cancelTripRequest.tripId);
+    if (isNaN(requestedTripId)) {
+        console.error('Invalid tripId in request body for /cancel_trip:', cancelTripRequest.tripId);
+        return res.status(400).send('Valid tripId is required for cancellation.');
+    }
+
+    // trips.json 파일 읽기
+    fs.promises.readFile(TRIPS_FILE, 'utf8')
+        .then(tripsData => {
+            let trips = [];
+            try {
+                trips = JSON.parse(tripsData);
+            } catch (parseErr) {
+                console.error('Error parsing trips.json for /cancel_trip:', parseErr);
+                return res.status(500).send('Trip data is corrupted or malformed.');
+            }
+
+            // 요청된 tripId에 해당하는 트립을 찾음
+            const tripIndex = trips.findIndex(trip => parseInt(trip.tripId) === requestedTripId);
+
+            if (tripIndex === -1) {
+                console.log(`Trip with ID ${requestedTripId} not found for cancellation.`);
+                return res.status(404).send(`Trip with ID ${requestedTripId} not found.`);
+            }
+
+            // 해당 트립의 필드 업데이트
+            const updatedTrip = {
+                ...trips[tripIndex], // 기존 트립 정보 복사
+                upcoming: false,
+                complete: true, // 완료 상태로 변경
+                cancelTrip: true, // 취소 상태로 변경
+                cancelReason: cancelTripRequest.cancelReason || null, // 취소 사유 (없으면 null)
+                lastUpdated: new Date().toISOString() // 마지막 업데이트 시간 기록
+            };
+
+            trips[tripIndex] = updatedTrip; // 배열 내 트립 정보 업데이트
+
+            // trips.json 파일에 저장
+            return fs.promises.writeFile(TRIPS_FILE, JSON.stringify(trips, null, 2))
+                .then(() => {
+                    console.log(`Successfully cancelled trip with ID: ${requestedTripId}.`);
+                    res.status(200).json(updatedTrip); // 업데이트된 trip 객체 반환
+                });
+        })
+        .catch(err => {
+            // trips.json 파일 자체가 없거나 읽기 오류 발생 시
+            if (err.code === 'ENOENT') {
+                console.log('trips.json not found for /cancel_trip, no trips to cancel.');
+                return res.status(404).send('No trip data file found.');
+            }
+            console.error('SERVER ERROR during /cancel_trip data retrieval or update:', err);
+            return res.status(500).send('SERVER ERROR while processing trip cancellation.');
+        });
+});
 
 // --- ✨ 서버 시작 시 트립 상태 업데이트 로직 추가 ✨ ---
 async function updateTripStatusesOnStartup() {

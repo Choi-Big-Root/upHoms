@@ -28,6 +28,7 @@ import 'domain/usecases/property/get_search_propertiesa_usecase.dart';
 import 'domain/usecases/review/add_review_usecase.dart';
 import 'domain/usecases/review/get_reviews_usecase.dart';
 import 'domain/usecases/trip/add_trip_usecase.dart';
+import 'domain/usecases/trip/cancel_trip_usecase.dart';
 import 'domain/usecases/trip/get_trip_usecase.dart';
 import 'domain/usecases/trip/get_trips_with_user_usecase.dart';
 import 'domain/usecases/user/create_account_usecase.dart';
@@ -134,6 +135,9 @@ void _domain() {
   locator.registerSingleton<GetTripsWithUserUsecase>(
     GetTripsWithUserUsecase(locator<TripRepository>()),
   );
+  locator.registerSingleton<CancelTripUsecase>(
+    CancelTripUsecase(locator<TripRepository>()),
+  );
 }
 
 void _presentation() {
@@ -169,6 +173,7 @@ void _presentation() {
       addTripUsecase: locator<AddTripUsecase>(),
       getTripUsecase: locator<GetTripUsecase>(),
       getTripsWithUserUsecase: locator<GetTripsWithUserUsecase>(),
+      cancelTripUsecase: locator<CancelTripUsecase>(),
     ),
   );
 

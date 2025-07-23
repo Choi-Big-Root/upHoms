@@ -19,3 +19,7 @@ class GetTripsWithUser extends TripEvent {
   const GetTripsWithUser(this.userId);
   final Map<String, dynamic> userId;
 }
+class CancelTrip extends TripEvent {
+  const CancelTrip(this.trip);
+  final TripModel trip;
+}

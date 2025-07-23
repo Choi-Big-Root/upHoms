@@ -13,6 +13,7 @@ import '../../../core/custom/custom_snack_bar.dart';
 import '../../../core/theme/theme_extension.dart';
 import '../../../core/utils/image_viewer_utils.dart';
 import '../../../domain/model/review/review_model.dart';
+import '../../../domain/model/trip/trip_model.dart';
 import '../../bloc/review/review_bloc.bloc.dart';
 import '../../bloc/trip/trip_bloc.bloc.dart';
 import '../../common_widgets/review_trip_widget.dart';
@@ -73,6 +74,17 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
               orElse: () => const SizedBox.shrink(),
               addReviewSuccess: () {
                 context.read<MessageCubit>().showSuccessMessage('리뷰 등록 완료!');
+                context.go('/my_trips');
+              },
+            );
+          },
+        ),
+        BlocListener<TripBloc, TripState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () => const SizedBox.shrink(),
+              cancelTripSuccess: (data) {
+                context.read<MessageCubit>().showSuccessMessage('예약 취소 완료');
                 context.go('/my_trips');
               },
             );
@@ -151,10 +163,19 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                 builder: (context) {
                                   return Padding(
                                     padding: MediaQuery.viewInsetsOf(context),
-                                    child: const SizedBox(
+                                    child: SizedBox(
                                       height: 450,
                                       child: CancelTripWidget(
-                                        tripDetails: true,
+                                        onPressed: (cancelText){
+                                          logger.d(cancelText);
+                                          final tripModel = TripModel(
+                                            tripId: trip.tripId,
+                                            complete: true,
+                                            cancelTrip: true,
+                                            cancelReason: cancelText,
+                                          );
+                                          context.read<TripBloc>().add(CancelTrip(tripModel));
+                                        },
                                       ),
                                     ),
                                   );

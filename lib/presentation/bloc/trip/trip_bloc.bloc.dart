@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/model/trip/trip_model.dart';
 import '../../../domain/usecases/trip/add_trip_usecase.dart';
+import '../../../domain/usecases/trip/cancel_trip_usecase.dart';
 import '../../../domain/usecases/trip/get_trip_usecase.dart';
 import '../../../domain/usecases/trip/get_trips_with_user_usecase.dart';
 import 'trip_bloc.bloc.dart';
@@ -17,18 +18,22 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   final AddTripUsecase _addTripUsecase;
   final GetTripUsecase _getTripUsecase;
   final GetTripsWithUserUsecase _getTripsWithUserUsecase;
+  final CancelTripUsecase _cancelTripUsecase;
 
   TripBloc({
     required AddTripUsecase addTripUsecase,
     required GetTripUsecase getTripUsecase,
     required GetTripsWithUserUsecase getTripsWithUserUsecase,
+    required CancelTripUsecase cancelTripUsecase,
   }) : _addTripUsecase = addTripUsecase,
        _getTripUsecase = getTripUsecase,
        _getTripsWithUserUsecase = getTripsWithUserUsecase,
+  _cancelTripUsecase = cancelTripUsecase,
        super(const TripState.initial()) {
     on<AddTrip>(_onAddTrip);
     on<GetTrip>(_onGetTrip);
     on<GetTripsWithUser>(_onGetTripsWithUser);
+    on<CancelTrip>(_onCancelTrip);
   }
 
   Future<void> _onAddTrip(AddTrip event, Emitter<TripState> emit) async {
@@ -56,6 +61,16 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     try {
       final tripModels = await _getTripsWithUserUsecase(event.userId);
       emit(TripState.getTripsWithUserSuccess(tripModels));
+    } catch (e) {
+      emit(TripState.error(e.toString()));
+    }
+  }
+
+  Future<void> _onCancelTrip(CancelTrip event, Emitter<TripState> emit) async {
+    emit(const TripState.loading());
+    try {
+      final tripModel = await _cancelTripUsecase(event.trip);
+      emit(TripState.cancelTripSuccess(tripModel));
     } catch (e) {
       emit(TripState.error(e.toString()));
     }
