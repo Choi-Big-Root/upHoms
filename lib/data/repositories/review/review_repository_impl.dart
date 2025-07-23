@@ -11,4 +11,9 @@ class ReviewRepositoryImpl implements ReviewRepository {
   Future<List<ReviewModel>> getReviews(Map<String, dynamic> propertyId) async {
     return await reviewRemoteDataSource.getReviews(propertyId);
   }
+
+  @override
+  Future<void> addReview(ReviewModel review) async {
+    return await reviewRemoteDataSource.addReview(review);
+  }
 }

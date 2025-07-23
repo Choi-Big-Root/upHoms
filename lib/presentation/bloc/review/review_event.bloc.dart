@@ -9,3 +9,9 @@ class GetReviews extends ReviewEvent {
 
   final Map<String, dynamic> propertyId;
 }
+
+
+class AddReview extends ReviewEvent {
+  AddReview(this.review);
+  final ReviewModel review;
+}

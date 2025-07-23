@@ -10,6 +10,7 @@ part 'review_dto.g.dart';
 abstract class ReviewDto with _$ReviewDto {
   const factory ReviewDto({
     @Default(-1) int reviewId,
+    @Default(-1) int tripId,
     @Default(-1) int propertyId,
     @Default(UserDto()) UserDto user,
     @Default(0.0) double rating,

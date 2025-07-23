@@ -8,6 +8,7 @@ part of 'review_dto.dart';
 
 _ReviewDto _$ReviewDtoFromJson(Map<String, dynamic> json) => _ReviewDto(
   reviewId: (json['reviewId'] as num?)?.toInt() ?? -1,
+  tripId: (json['tripId'] as num?)?.toInt() ?? -1,
   propertyId: (json['propertyId'] as num?)?.toInt() ?? -1,
   user: json['user'] == null
       ? const UserDto()
@@ -20,6 +21,7 @@ _ReviewDto _$ReviewDtoFromJson(Map<String, dynamic> json) => _ReviewDto(
 Map<String, dynamic> _$ReviewDtoToJson(_ReviewDto instance) =>
     <String, dynamic>{
       'reviewId': instance.reviewId,
+      'tripId': instance.tripId,
       'propertyId': instance.propertyId,
       'user': instance.user,
       'rating': instance.rating,

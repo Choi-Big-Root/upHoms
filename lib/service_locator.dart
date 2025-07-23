@@ -25,6 +25,7 @@ import 'domain/usecases/property/add_property_usecase.dart';
 import 'domain/usecases/property/get_all_properties_usecase.dart';
 import 'domain/usecases/property/get_property_usecase.dart';
 import 'domain/usecases/property/get_search_propertiesa_usecase.dart';
+import 'domain/usecases/review/add_review_usecase.dart';
 import 'domain/usecases/review/get_reviews_usecase.dart';
 import 'domain/usecases/trip/add_trip_usecase.dart';
 import 'domain/usecases/trip/get_trip_usecase.dart';
@@ -119,6 +120,9 @@ void _domain() {
   locator.registerSingleton<GetReviewsUsecase>(
     GetReviewsUsecase(locator<ReviewRepository>()),
   );
+  locator.registerSingleton<AddReviewUsecase>(
+    AddReviewUsecase(locator<ReviewRepository>()),
+  );
 
   //trip
   locator.registerSingleton<AddTripUsecase>(
@@ -154,7 +158,10 @@ void _presentation() {
   );
 
   locator.registerFactory(
-    () => ReviewBloc(getReviewsUsecase: locator<GetReviewsUsecase>()),
+    () => ReviewBloc(
+      getReviewsUsecase: locator<GetReviewsUsecase>(),
+      addReviewUsecase: locator<AddReviewUsecase>(),
+    ),
   );
 
   locator.registerFactory(

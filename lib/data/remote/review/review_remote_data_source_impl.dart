@@ -31,4 +31,23 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
       throw Exception('An unexpected error occurred while getReviews');
     }
   }
+
+  @override
+  Future<void> addReview(ReviewModel review) async {
+    try{
+      final reviewsDto = ReviewMapper.toDto(review);
+      await reviewApiService.addReview(reviewsDto);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        logger.e('Error addReview: ${e.response?.statusCode} - ${e.response?.data}');
+        throw Exception('${e.response?.data}');
+      } else {
+        logger.e('Error addReview: ${e.message}');
+        throw Exception('Failed to addReview: Network error or timeout');
+      }
+    } catch (e) {
+      logger.e('Unexpected error addReview:: $e');
+      throw Exception('An unexpected error occurred while addReview');
+    }
+  }
 }

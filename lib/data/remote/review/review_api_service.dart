@@ -13,4 +13,7 @@ abstract class ReviewApiService {
 
   @POST('/get_reviews')
   Future<List<ReviewDto>> getReviews(@Body() Map<String,dynamic> propertyId);
+
+  @POST('/add_review')
+  Future<void> addReview(@Body() ReviewDto review);
 }

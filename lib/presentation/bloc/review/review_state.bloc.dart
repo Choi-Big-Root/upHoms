@@ -7,4 +7,5 @@ class ReviewState with _$ReviewState {
   const factory ReviewState.success() = Success;
   const factory ReviewState.error(String message) = Error;
   const factory ReviewState.loadedReviews(List<ReviewModel> reviews) = LoadedReviews;
+  const factory ReviewState.addReviewSuccess() = AddReviewSuccess;
 }

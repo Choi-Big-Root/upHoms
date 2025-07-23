@@ -545,9 +545,125 @@ app.post('/get_reviews', (req, res) => {
             return res.status(500).send('SERVER ERROR while processing review data.');
         });
 });
+app.post('/add_review', (req, res) => {
+    let newReviewRequest = req.body;
+
+    // JSON 형식 검증 및 파싱 (plain text로 오는 경우 대비)
+    if (typeof newReviewRequest === 'string') {
+        try {
+            newReviewRequest = JSON.parse(newReviewRequest);
+        } catch (e) {
+            console.error('Error parsing newReviewRequest as JSON string:', e);
+            return res.status(400).send('Invalid JSON format for review addition. (If sending as plain text, it must be valid JSON)');
+        }
+    }
+
+    // 필수 필드 유효성 검사 (ReviewDto 구조에 따라 추가/수정 필요)
+    // 예시: propertyId, userUid, rating, ratingDescription이 필수라고 가정합니다.
+    if (!newReviewRequest || 
+        !newReviewRequest.propertyId || 
+        newReviewRequest.rating === undefined || newReviewRequest.rating === null ||
+        !newReviewRequest.ratingDescription) {
+        return res.status(400).send('Missing required review fields: propertyId, userUid, rating, ratingDescription.');
+    }
+
+    // Promise.all을 사용하여 reviews.json과 trips.json을 동시에 읽습니다.
+    Promise.all([
+        fs.promises.readFile(REVIEWS_FILE, 'utf8').catch(err => {
+            if (err.code === 'ENOENT') return '[]'; // 파일 없으면 빈 배열로 시작
+            throw err;
+        }),
+        fs.promises.readFile(TRIPS_FILE, 'utf8').catch(err => {
+            if (err.code === 'ENOENT') return '[]'; // 파일 없으면 빈 배열로 시작
+            throw err;
+        })
+    ])
+    .then(([reviewsData, tripsData]) => {
+        let reviews = [];
+        let trips = [];
+        let tripsChanged = false; // trips.json 변경 여부 플래그
+
+        try {
+            reviews = JSON.parse(reviewsData);
+        } catch (parseErr) {
+            console.error('Error parsing reviews.json for /add_review:', parseErr);
+            reviews = []; 
+            console.warn('Reviews data is corrupted, starting with an empty array for /add_review.');
+        }
+
+        try {
+            trips = JSON.parse(tripsData);
+        } catch (parseErr) {
+            console.error('Error parsing trips.json for /add_review (for status update):', parseErr);
+            trips = []; 
+            console.warn('Trips data is corrupted for status update, proceeding without updating trips.json.');
+        }
+
+        // reviewId 시퀀스 생성
+        const lastReviewId = reviews.length > 0 
+            ? Math.max(...reviews.map(r => parseInt(r.reviewId) || 0)) 
+            : 0;
+        const newReviewId = lastReviewId + 1;
+
+        // 새로운 Review 객체 생성
+        const newReview = {
+            ...newReviewRequest,
+            reviewId: newReviewId, // 서버에서 생성한 ID 할당
+            ratingCreated: new Date().toISOString(), // 현재 서버 날짜 및 시간 할당 (ISO 8601 형식)
+        };
+
+        reviews.push(newReview); // 새 리뷰를 배열에 추가
+
+        // ✨ tripId가 존재하고 유효하면 해당 트립의 상태를 업데이트
+        if (newReviewRequest.tripId !== undefined && newReviewRequest.tripId !== null) {
+            const requestedTripId = parseInt(newReviewRequest.tripId);
+            if (!isNaN(requestedTripId)) {
+                const tripIndex = trips.findIndex(t => parseInt(t.tripId) === requestedTripId);
+                if (tripIndex !== -1) {
+                    // 해당 트립의 upcoming을 false, complete를 true로 변경
+                    if (trips[tripIndex].upcoming !== false || trips[tripIndex].complete !== true) {
+                        trips[tripIndex].upcoming = false;
+                        trips[tripIndex].complete = true;
+                        trips[tripIndex].rated = true;
+                        tripsChanged = true; // 변경 사항 발생
+                        console.log(`  - Trip ID ${requestedTripId} status updated to upcoming=false, complete=true due to review submission.`);
+                    } else {
+                        console.log(`  - Trip ID ${requestedTripId} status already updated, no change needed.`);
+                    }
+                } else {
+                    console.warn(`  - Trip ID ${requestedTripId} not found in trips.json. Cannot update its status.`);
+                }
+            } else {
+                console.warn(`  - Invalid tripId "${newReviewRequest.tripId}" provided in review. Skipping trip status update.`);
+            }
+        } else {
+            console.log('  - No tripId provided in review. Skipping trip status update.');
+        }
+
+        // 파일 쓰기 작업들을 Promise.all로 병렬 처리
+        const writePromises = [
+            fs.promises.writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 2))
+        ];
+
+        if (tripsChanged) {
+            writePromises.push(fs.promises.writeFile(TRIPS_FILE, JSON.stringify(trips, null, 2)));
+        }
+
+        return Promise.all(writePromises)
+            .then(() => {
+                console.log(`Successfully added review with ID: ${newReviewId} for property ID: ${newReview.propertyId}`);
+                res.status(201).json(newReview); // 생성된 review 객체와 201 Created 상태 반환
+            });
+    })
+    .catch(err => {
+        // 파일 읽기 또는 쓰기 중 발생한 일반적인 오류 처리
+        console.error('SERVER ERROR during /add_review:', err);
+        res.status(500).send('SERVER ERROR while adding review data or updating trip status.');
+    });
+});
 
 
-//trip Add
+//예약 Trip
 // --- ✨ 새로운 POST /add_trip 엔드포인트 추가 ✨ ---
 app.post('/add_trip', (req, res) => {
     let newTripRequest = req.body;

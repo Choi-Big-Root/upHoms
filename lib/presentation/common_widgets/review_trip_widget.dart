@@ -9,7 +9,7 @@ import 'rating_bar_widget.dart';
 
 class ReviewTripWidget extends StatefulWidget {
   const ReviewTripWidget({super.key, required this.onPressed});
-  final VoidCallback onPressed;
+  final Function onPressed;
 
   @override
   State<ReviewTripWidget> createState() => _ReviewTripWidgetState();
@@ -178,9 +178,7 @@ class _ReviewTripWidgetState extends State<ReviewTripWidget> {
                   ),
                   child: ElevatedButton(
                     onPressed:() {
-                      logger.d('확인 : $_selectedRating');
-                      logger.d('확인 : ${_reviewTextController.text}');
-                      widget.onPressed();
+                      widget.onPressed(_selectedRating,_reviewTextController.text);
                     },
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(300, 60),

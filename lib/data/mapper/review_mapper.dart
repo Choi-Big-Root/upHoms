@@ -7,6 +7,7 @@ class ReviewMapper {
   static ReviewDto toDto(ReviewModel model){
     return ReviewDto(
       reviewId: model.reviewId ?? -1,
+      tripId: model.tripId ?? -1,
       propertyId: model.propertyId ?? -1,
       user: UserMapper.toDto(model.user ?? const UserModel()),
       rating: model.rating ?? 0.0,
@@ -18,6 +19,7 @@ class ReviewMapper {
   static ReviewModel toModel(ReviewDto dto) {
     return ReviewModel(
       reviewId: dto.reviewId,
+      tripId: dto.tripId,
       propertyId: dto.propertyId,
       user: UserMapper.toModel(dto.user),
       rating: dto.rating,

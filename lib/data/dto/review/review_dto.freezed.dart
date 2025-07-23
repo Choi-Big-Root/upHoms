@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReviewDto {
 
- int get reviewId; int get propertyId; UserDto get user; double get rating; String get ratingDescription; String get ratingCreated;
+ int get reviewId; int get tripId; int get propertyId; UserDto get user; double get rating; String get ratingDescription; String get ratingCreated;
 /// Create a copy of ReviewDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ReviewDtoCopyWith<ReviewDto> get copyWith => _$ReviewDtoCopyWithImpl<ReviewDto>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReviewDto&&(identical(other.reviewId, reviewId) || other.reviewId == reviewId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.user, user) || other.user == user)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingDescription, ratingDescription) || other.ratingDescription == ratingDescription)&&(identical(other.ratingCreated, ratingCreated) || other.ratingCreated == ratingCreated));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReviewDto&&(identical(other.reviewId, reviewId) || other.reviewId == reviewId)&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.user, user) || other.user == user)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingDescription, ratingDescription) || other.ratingDescription == ratingDescription)&&(identical(other.ratingCreated, ratingCreated) || other.ratingCreated == ratingCreated));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,reviewId,propertyId,user,rating,ratingDescription,ratingCreated);
+int get hashCode => Object.hash(runtimeType,reviewId,tripId,propertyId,user,rating,ratingDescription,ratingCreated);
 
 @override
 String toString() {
-  return 'ReviewDto(reviewId: $reviewId, propertyId: $propertyId, user: $user, rating: $rating, ratingDescription: $ratingDescription, ratingCreated: $ratingCreated)';
+  return 'ReviewDto(reviewId: $reviewId, tripId: $tripId, propertyId: $propertyId, user: $user, rating: $rating, ratingDescription: $ratingDescription, ratingCreated: $ratingCreated)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ReviewDtoCopyWith<$Res>  {
   factory $ReviewDtoCopyWith(ReviewDto value, $Res Function(ReviewDto) _then) = _$ReviewDtoCopyWithImpl;
 @useResult
 $Res call({
- int reviewId, int propertyId, UserDto user, double rating, String ratingDescription, String ratingCreated
+ int reviewId, int tripId, int propertyId, UserDto user, double rating, String ratingDescription, String ratingCreated
 });
 
 
@@ -65,9 +65,10 @@ class _$ReviewDtoCopyWithImpl<$Res>
 
 /// Create a copy of ReviewDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? reviewId = null,Object? propertyId = null,Object? user = null,Object? rating = null,Object? ratingDescription = null,Object? ratingCreated = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? reviewId = null,Object? tripId = null,Object? propertyId = null,Object? user = null,Object? rating = null,Object? ratingDescription = null,Object? ratingCreated = null,}) {
   return _then(_self.copyWith(
 reviewId: null == reviewId ? _self.reviewId : reviewId // ignore: cast_nullable_to_non_nullable
+as int,tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as int,propertyId: null == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as int,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserDto,rating: null == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
@@ -167,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int reviewId,  int propertyId,  UserDto user,  double rating,  String ratingDescription,  String ratingCreated)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int reviewId,  int tripId,  int propertyId,  UserDto user,  double rating,  String ratingDescription,  String ratingCreated)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ReviewDto() when $default != null:
-return $default(_that.reviewId,_that.propertyId,_that.user,_that.rating,_that.ratingDescription,_that.ratingCreated);case _:
+return $default(_that.reviewId,_that.tripId,_that.propertyId,_that.user,_that.rating,_that.ratingDescription,_that.ratingCreated);case _:
   return orElse();
 
 }
@@ -188,10 +189,10 @@ return $default(_that.reviewId,_that.propertyId,_that.user,_that.rating,_that.ra
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int reviewId,  int propertyId,  UserDto user,  double rating,  String ratingDescription,  String ratingCreated)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int reviewId,  int tripId,  int propertyId,  UserDto user,  double rating,  String ratingDescription,  String ratingCreated)  $default,) {final _that = this;
 switch (_that) {
 case _ReviewDto():
-return $default(_that.reviewId,_that.propertyId,_that.user,_that.rating,_that.ratingDescription,_that.ratingCreated);case _:
+return $default(_that.reviewId,_that.tripId,_that.propertyId,_that.user,_that.rating,_that.ratingDescription,_that.ratingCreated);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +209,10 @@ return $default(_that.reviewId,_that.propertyId,_that.user,_that.rating,_that.ra
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int reviewId,  int propertyId,  UserDto user,  double rating,  String ratingDescription,  String ratingCreated)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int reviewId,  int tripId,  int propertyId,  UserDto user,  double rating,  String ratingDescription,  String ratingCreated)?  $default,) {final _that = this;
 switch (_that) {
 case _ReviewDto() when $default != null:
-return $default(_that.reviewId,_that.propertyId,_that.user,_that.rating,_that.ratingDescription,_that.ratingCreated);case _:
+return $default(_that.reviewId,_that.tripId,_that.propertyId,_that.user,_that.rating,_that.ratingDescription,_that.ratingCreated);case _:
   return null;
 
 }
@@ -223,10 +224,11 @@ return $default(_that.reviewId,_that.propertyId,_that.user,_that.rating,_that.ra
 @JsonSerializable()
 
 class _ReviewDto implements ReviewDto {
-  const _ReviewDto({this.reviewId = -1, this.propertyId = -1, this.user = const UserDto(), this.rating = 0.0, this.ratingDescription = '', this.ratingCreated = ''});
+  const _ReviewDto({this.reviewId = -1, this.tripId = -1, this.propertyId = -1, this.user = const UserDto(), this.rating = 0.0, this.ratingDescription = '', this.ratingCreated = ''});
   factory _ReviewDto.fromJson(Map<String, dynamic> json) => _$ReviewDtoFromJson(json);
 
 @override@JsonKey() final  int reviewId;
+@override@JsonKey() final  int tripId;
 @override@JsonKey() final  int propertyId;
 @override@JsonKey() final  UserDto user;
 @override@JsonKey() final  double rating;
@@ -246,16 +248,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReviewDto&&(identical(other.reviewId, reviewId) || other.reviewId == reviewId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.user, user) || other.user == user)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingDescription, ratingDescription) || other.ratingDescription == ratingDescription)&&(identical(other.ratingCreated, ratingCreated) || other.ratingCreated == ratingCreated));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReviewDto&&(identical(other.reviewId, reviewId) || other.reviewId == reviewId)&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.user, user) || other.user == user)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingDescription, ratingDescription) || other.ratingDescription == ratingDescription)&&(identical(other.ratingCreated, ratingCreated) || other.ratingCreated == ratingCreated));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,reviewId,propertyId,user,rating,ratingDescription,ratingCreated);
+int get hashCode => Object.hash(runtimeType,reviewId,tripId,propertyId,user,rating,ratingDescription,ratingCreated);
 
 @override
 String toString() {
-  return 'ReviewDto(reviewId: $reviewId, propertyId: $propertyId, user: $user, rating: $rating, ratingDescription: $ratingDescription, ratingCreated: $ratingCreated)';
+  return 'ReviewDto(reviewId: $reviewId, tripId: $tripId, propertyId: $propertyId, user: $user, rating: $rating, ratingDescription: $ratingDescription, ratingCreated: $ratingCreated)';
 }
 
 
@@ -266,7 +268,7 @@ abstract mixin class _$ReviewDtoCopyWith<$Res> implements $ReviewDtoCopyWith<$Re
   factory _$ReviewDtoCopyWith(_ReviewDto value, $Res Function(_ReviewDto) _then) = __$ReviewDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int reviewId, int propertyId, UserDto user, double rating, String ratingDescription, String ratingCreated
+ int reviewId, int tripId, int propertyId, UserDto user, double rating, String ratingDescription, String ratingCreated
 });
 
 
@@ -283,9 +285,10 @@ class __$ReviewDtoCopyWithImpl<$Res>
 
 /// Create a copy of ReviewDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? reviewId = null,Object? propertyId = null,Object? user = null,Object? rating = null,Object? ratingDescription = null,Object? ratingCreated = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? reviewId = null,Object? tripId = null,Object? propertyId = null,Object? user = null,Object? rating = null,Object? ratingDescription = null,Object? ratingCreated = null,}) {
   return _then(_ReviewDto(
 reviewId: null == reviewId ? _self.reviewId : reviewId // ignore: cast_nullable_to_non_nullable
+as int,tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as int,propertyId: null == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as int,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserDto,rating: null == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable

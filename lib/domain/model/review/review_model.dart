@@ -11,6 +11,7 @@ part 'review_model.g.dart';
 abstract class ReviewModel with _$ReviewModel {
   const factory ReviewModel({
     int? reviewId,
+    int? tripId,
     int? propertyId,
     UserModel? user,
     double? rating,
