@@ -25,6 +25,7 @@ import 'domain/usecases/property/add_property_usecase.dart';
 import 'domain/usecases/property/get_all_properties_usecase.dart';
 import 'domain/usecases/property/get_property_usecase.dart';
 import 'domain/usecases/property/get_search_propertiesa_usecase.dart';
+import 'domain/usecases/property/update_property_usecase.dart';
 import 'domain/usecases/review/add_review_usecase.dart';
 import 'domain/usecases/review/get_reviews_usecase.dart';
 import 'domain/usecases/trip/add_trip_usecase.dart';
@@ -120,6 +121,10 @@ void _domain() {
   locator.registerSingleton<GetPropertyUsecase>(
     GetPropertyUsecase(locator<PropertyRepository>()),
   );
+  locator.registerSingleton<UpdatePropertyUsecase>(
+    UpdatePropertyUsecase(locator<PropertyRepository>()),
+  );
+
 
   //review
   locator.registerSingleton<GetReviewsUsecase>(
@@ -163,6 +168,7 @@ void _presentation() {
       getAllPropertiesUsecase: locator<GetAllPropertiesUsecase>(),
       getSearchPropertiesUsecase: locator<GetSearchPropertiesUsecase>(),
       getPropertyUsecase: locator<GetPropertyUsecase>(),
+      updatePropertyUsecase: locator<UpdatePropertyUsecase>(),
     ),
   );
 

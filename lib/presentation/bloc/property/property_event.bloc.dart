@@ -28,3 +28,8 @@ class LoadProperty extends PropertyEvent {
   const LoadProperty(this.propertyId);
   final Map<String, dynamic> propertyId;
 }
+
+class UpdateProperty extends PropertyEvent {
+  const UpdateProperty(this.property);
+  final PropertyModel property;
+}

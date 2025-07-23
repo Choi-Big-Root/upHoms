@@ -15,14 +15,16 @@ import 'common/custom_property_amenlty.dart';
 import 'common/custom_property_app_bar.dart';
 
 class PropertyStep2Widget extends StatefulWidget {
-  const PropertyStep2Widget({super.key});
+  const PropertyStep2Widget({super.key, this.property});
 
+  final PropertyModel? property;
   @override
   State<PropertyStep2Widget> createState() => _PropertyStep2WidgetState();
 }
 
 class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
   final logger = Logger();
+  bool? isEditmode;
 
   bool _isAC = false;
   bool _isHeater = false;
@@ -60,6 +62,25 @@ class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if(widget.property != null){
+      isEditmode = true;
+      _isAC = widget.property!.amenity!.ac!;
+      _isHeater = widget.property!.amenity!.heater!;
+      _isPool = widget.property!.amenity!.pool!;
+      _isDogFriendly = widget.property!.amenity!.dogFriendly!;
+      _isWasher = widget.property!.amenity!.washer!;
+      _isDryer = widget.property!.amenity!.dryer!;
+      _isWorkOut = widget.property!.amenity!.workOut!;
+      _isHip = widget.property!.amenity!.hip!;
+      _isNightLife = widget.property!.amenity!.nightLife!;
+      _isExtraOutlets = widget.property!.amenity!.extraOutlets!;
+      _isEvCharger = widget.property!.amenity!.evCharger!;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = context.colors;
     final textScheme = Theme.of(context).textTheme;
@@ -68,7 +89,10 @@ class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
       listener: (context, state) {
         state.maybeWhen(
           editing: (data) {
-            context.push('/property_step3_widget');
+            context.push(
+              RoutePath.propertyStep3Widget, // 정의된 경로
+              extra: widget.property,
+            );
           },
           orElse: () => const SizedBox.shrink(),
         );
@@ -77,7 +101,7 @@ class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: colorScheme.secondaryBackground,
-            appBar: const CustomPropertyAppBar(),
+            appBar: CustomPropertyAppBar(isEditMode: isEditmode ?? false,),
             body: SafeArea(
               top: true,
               child: Padding(

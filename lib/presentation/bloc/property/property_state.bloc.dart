@@ -10,5 +10,6 @@ class PropertyState with _$PropertyState {
   const factory PropertyState.propertiesLoaded(List<PropertyModel> properties) = PropertiesLoaded;
   const factory PropertyState.searchPropertiesLoaded(List<PropertyModel> properties) = SearchPropertiesLoaded;
   const factory PropertyState.propertyLoaded(PropertyModel property) = PropertyLoaded;
+  const factory PropertyState.updateSuccess(PropertyModel property) = UpdateSuccess;
 
 }

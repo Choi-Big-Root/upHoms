@@ -25,4 +25,9 @@ class PropertyRepositoryImpl implements PropertyRepository {
   Future<PropertyModel> getProperty(Map<String, dynamic> propertyId) async {
     return await propertyRemoteDataSource.getProperty(propertyId);
   }
+
+  @override
+  Future<void> updateProperty(PropertyModel property) async {
+    await propertyRemoteDataSource.updateProperty(property);
+  }
 }

@@ -20,4 +20,7 @@ abstract class PropertyApiService {
 
   @POST('/get_property')
   Future<PropertyDto> getProperty(@Body() Map<String,dynamic> propertyId);
+
+  @POST('/update_property')
+  Future<void> updateProperty(@Body() PropertyDto property);
 }

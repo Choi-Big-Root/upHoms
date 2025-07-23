@@ -18,7 +18,9 @@ import 'common/custom_property_textfield.dart';
 import 'common/custom_property_textfield_dec.dart';
 
 class PropertyStep3Widget extends StatefulWidget {
-  const PropertyStep3Widget({super.key});
+  const PropertyStep3Widget({super.key, this.property});
+
+  final PropertyModel? property;
 
   @override
   State<PropertyStep3Widget> createState() => _PropertyStep3WidgetState();
@@ -28,6 +30,7 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
   final logger = Logger();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool? isEditMode;
 
   bool isLive = false;
   int _guestCount = 1;
@@ -51,11 +54,32 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
     return reqProperty;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.property != null) {
+      isEditMode = true;
+      _priceTextController.text = widget.property!.price!.toString();
+      _taxRateTextController.text = widget.property!.taxRate!.toString();
+      _cleaningFeeTextController.text = widget.property!.cleaningFee!
+          .toString();
+      _notesTextController.text = widget.property!.notes!;
+      isLive = widget.property!.isLive!;
+      _guestCount = widget.property!.minNightStay!;
+    }
+  }
+
   void _onPressedSubmit(PropertyModel property, UserModel? user) {
     if (_formKey.currentState!.validate()) {
-      context.read<PropertyBloc>().add(
-        AddProperty(_saveProperty(property, user)),
-      );
+      if (isEditMode ?? false) {
+        context.read<PropertyBloc>().add(
+          UpdateProperty(_saveProperty(property, user)),
+        );
+      } else {
+        context.read<PropertyBloc>().add(
+          AddProperty(_saveProperty(property, user)),
+        );
+      }
     }
   }
 
@@ -90,15 +114,21 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
           listener: (context, state) {
             state.maybeWhen(
               success: () {
-                context.read<MessageCubit>().showSuccessMessage('성공적으로 등록 되었습니다!');
-                context.go('/profile');
+                context.read<MessageCubit>().showSuccessMessage(
+                  '성공적으로 등록 되었습니다!',
+                );
+                if(isEditMode ?? false){
+                  context.go('/profile_my_property');
+                }else{
+                  context.go('/profile');
+                }
+
               },
               error: (err) {
                 context.read<MessageCubit>().showErrorMessage(err);
                 context.go('/profile');
               },
-              editing: (property) {
-              },
+              editing: (property) {},
               orElse: () => const SizedBox.shrink(),
             );
           },
@@ -123,7 +153,7 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
             builder: (context, state) {
               return Scaffold(
                 backgroundColor: colorScheme.secondaryBackground,
-                appBar: const CustomPropertyAppBar(),
+                appBar: CustomPropertyAppBar(isEditMode: isEditMode ?? false),
                 body: SafeArea(
                   top: true,
                   child: Form(
@@ -253,13 +283,13 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
                                     CustomPropertyTextField(
                                       controller: _taxRateTextController,
                                       hintText: '% Rate',
-                                      validator: (value) {
-                                        return AppValidators.validateRequired(
-                                          value,
-                                          '세금',
-                                          isOnlyNumber: true,
-                                        );
-                                      },
+                                      // validator: (value) {
+                                      //   return AppValidators.validateRequired(
+                                      //     value,
+                                      //     '세금',
+                                      //     isOnlyNumber: true,
+                                      //   );
+                                      // },
                                     ),
 
                                     const CustomPropertyTextFieldDec(
@@ -305,54 +335,59 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
                                       height: 1,
                                       thickness: 2,
                                     ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                            0,
-                                            0,
-                                            0,
-                                            20,
-                                          ),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: SwitchListTile.adaptive(
-                                          value: isLive,
-                                          onChanged: (newValue) async {
-                                            setState(() {
-                                              isLive = newValue;
-                                            });
-                                          },
-                                          title: Text(
-                                            'Listing is Live',
-                                            style: GoogleFonts.urbanist(
-                                              textStyle:
-                                                  textScheme.headlineSmall,
+                                    isEditMode ?? false
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsetsDirectional.fromSTEB(
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  20,
+                                                ),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: SwitchListTile.adaptive(
+                                                value: isLive,
+                                                onChanged: (newValue) async {
+                                                  setState(() {
+                                                    isLive = newValue;
+                                                  });
+                                                },
+                                                title: Text(
+                                                  'Listing is Live',
+                                                  style: GoogleFonts.urbanist(
+                                                    textStyle: textScheme
+                                                        .headlineSmall,
+                                                  ),
+                                                ),
+                                                subtitle: Text(
+                                                  'Turn this on for guests to start booking your listing.',
+                                                  style: GoogleFonts.urbanist(
+                                                    textStyle:
+                                                        textScheme.bodyMedium,
+                                                  ),
+                                                ),
+                                                tileColor: context
+                                                    .colors
+                                                    .secondaryBackground,
+                                                activeTrackColor: const Color(
+                                                  0xFF392BBA,
+                                                ),
+                                                inactiveTrackColor:
+                                                    Colors.white,
+                                                inactiveThumbColor: context
+                                                    .colors
+                                                    .secondaryText,
+                                                dense: false,
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .trailing,
+                                                contentPadding:
+                                                    const EdgeInsets.all(0),
+                                              ),
                                             ),
-                                          ),
-                                          subtitle: Text(
-                                            'Turn this on for guests to start booking your listing.',
-                                            style: GoogleFonts.urbanist(
-                                              textStyle: textScheme.bodyMedium,
-                                            ),
-                                          ),
-                                          tileColor: context
-                                              .colors
-                                              .secondaryBackground,
-                                          activeTrackColor: const Color(
-                                            0xFF392BBA,
-                                          ),
-                                          inactiveTrackColor: Colors.white,
-                                          inactiveThumbColor:
-                                              context.colors.secondaryText,
-                                          dense: false,
-                                          controlAffinity:
-                                              ListTileControlAffinity.trailing,
-                                          contentPadding: const EdgeInsets.all(
-                                            0,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                          )
+                                        : const SizedBox.shrink(),
                                   ],
                                 ),
                               ),
@@ -393,14 +428,25 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
                                     state.maybeWhen(
                                       orElse: () => const SizedBox.shrink(),
                                       editing: (data) {
-                                        _onPressedSubmit(data, userModel);
+                                        if (isEditMode ?? false) {
+                                          final editData = data.copyWith(
+                                            propertyId:
+                                                widget.property!.propertyId,
+                                          );
+                                          _onPressedSubmit(editData, userModel);
+                                          return;
+                                        } else {
+                                          _onPressedSubmit(data, userModel);
+                                        }
                                       },
                                     );
                                   },
                                   elevation: 2.0,
                                   circular: 60,
                                   size: const Size(200, 50),
-                                  text: 'PUBLISH',
+                                  text: isEditMode ?? false
+                                      ? 'Save Changes'
+                                      : 'PUBLISH',
                                   style: GoogleFonts.urbanist(
                                     textStyle: textScheme.headlineSmall
                                         ?.copyWith(color: colorScheme.tertiary),

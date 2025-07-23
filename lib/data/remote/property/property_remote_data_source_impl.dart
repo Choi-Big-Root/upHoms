@@ -89,4 +89,25 @@ class PropertyRemoteDataSourceImpl implements PropertyRemoteDataSource {
       throw Exception('An unexpected error occurred while getting search properties');
     }
   }
+
+  @override
+  Future<void> updateProperty(PropertyModel property) async {
+    try {
+      final propertyDto = PropertyMapper.toDto(property); // UserModel을 UserDto로 변환
+      logger.d(propertyDto);
+      await propertyApiService.updateProperty(propertyDto); // Retrofit 서비스를 통해 요청
+    } on DioException catch (e) {
+      // DioException을 사용하여 더 상세한 에러 처리
+      if (e.response != null) {
+        logger.e('Error Add Property: ${e.response?.statusCode} - ${e.response?.data}');
+        throw Exception('${e.response?.data}');
+      } else {
+        logger.e('Error Add Property: ${e.message}');
+        throw Exception('Failed to create user: Network error or timeout');
+      }
+    } catch (e) {
+      logger.e('Unexpected error Add Property:: $e');
+      throw Exception('An unexpected error occurred while Add Property');
+    }
+  }
 }

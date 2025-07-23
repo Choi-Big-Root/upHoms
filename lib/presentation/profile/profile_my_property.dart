@@ -1,11 +1,18 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
+import '../../core/constants.dart';
 import '../../core/custom/custom_font_weight.dart';
 import '../../core/theme/theme_extension.dart';
-import '../../core/utils/image_viewer_utils.dart';
+import '../../domain/model/property/property_model.dart';
+import '../bloc/property/property_bloc.bloc.dart';
+import '../bloc/user/user_bloc.bloc.dart';
 
 class ProfileMyProperty extends StatefulWidget {
   const ProfileMyProperty({super.key});
@@ -45,7 +52,7 @@ class _ProfileMyPropertyState extends State<ProfileMyProperty>
           hoverColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () async {
-            context.pop();
+            context.go('/profile');
           },
           child: Icon(
             Icons.arrow_back_rounded,
@@ -89,400 +96,606 @@ class _ProfileMyPropertyState extends State<ProfileMyProperty>
                     ],
                   ),
                 ),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: colorScheme.primaryBackground,
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                            0,
-                            8,
-                            0,
-                            0,
-                          ),
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            primary: false,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: 4,
-                            // 데이터로 수정
-                            itemBuilder: (context, listViewIndex) {
-                              return Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                  16,
-                                  0,
-                                  16,
-                                  12,
-                                ),
-                                child: Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: colorScheme.secondaryBackground,
-                                    boxShadow: [
-                                      const BoxShadow(
-                                        color: Color(0x32000000),
-                                        blurRadius: 4,
-                                        offset: Offset(0.0, 2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () {
-                                      // mytrips detail 이동.
-                                      context.push('/trip_details');
-                                    },
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.only(
-                                            bottomLeft: Radius.circular(0),
-                                            bottomRight: Radius.circular(0),
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8),
-                                          ),
-                                          child: CachedNetworkImage(
-                                            fadeInDuration: const Duration(
-                                              milliseconds: 500,
-                                            ),
-                                            fadeOutDuration: const Duration(
-                                              milliseconds: 500,
-                                            ),
-                                            imageUrl:
-                                                'https://picsum.photos/id/238/200/200.jpg',
-                                            width: double.infinity,
-                                            height: 140,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Padding(
+                BlocBuilder<UserBloc, UserState>(
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      orElse: () => const SizedBox.shrink(),
+                      success: (user) {
+                        return BlocBuilder<PropertyBloc, PropertyState>(
+                          builder: (context, state) {
+                            return state.maybeWhen(
+                              orElse: () => const SizedBox.shrink(),
+                              propertiesLoaded: (properties) {
+                                List<PropertyModel> propertiesWithUser =
+                                    properties
+                                        .where(
+                                          (property) =>
+                                              property.user!.uid == user.uid,
+                                        )
+                                        .toList();
+                                List<PropertyModel> propertiesIsLive =
+                                    propertiesWithUser
+                                        .where(
+                                          (property) => property.isLive == true,
+                                        )
+                                        .toList();
+                                List<PropertyModel> propertiesUnIsLive =
+                                    propertiesWithUser
+                                        .where(
+                                          (property) =>
+                                              property.isLive == false,
+                                        )
+                                        .toList();
+                                return Expanded(
+                                  child: TabBarView(
+                                    controller: _tabController,
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        color: colorScheme.primaryBackground,
+                                        child: Padding(
                                           padding:
                                               const EdgeInsetsDirectional.fromSTEB(
-                                                16,
-                                                12,
-                                                16,
+                                                0,
                                                 8,
-                                              ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Text(
-                                                '[MMMEd]',
-                                                style: GoogleFonts.urbanist(
-                                                  textStyle:
-                                                      textScheme.headlineSmall,
-                                                ),
-                                              ),
-                                              Text(
-                                                ' - ',
-                                                style: GoogleFonts.urbanist(
-                                                  textStyle:
-                                                      textScheme.headlineSmall,
-                                                ),
-                                              ),
-                                              Text(
-                                                '[MMMEd]',
-                                                style: GoogleFonts.urbanist(
-                                                  textStyle:
-                                                      textScheme.headlineSmall,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                16,
                                                 0,
-                                                16,
                                                 0,
                                               ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  right: 12,
-                                                ),
-                                                child: Text(
-                                                  '[propertyAddress]',
-                                                  style: GoogleFonts.lexendDeca(
-                                                    textStyle: textScheme
-                                                        .bodySmall
-                                                        ?.copyWith(
-                                                          color: colorScheme
-                                                              .grayIcon,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Text(
-                                                '[\$1,234.56]',
-                                                style: GoogleFonts.urbanist(
-                                                  textStyle:
-                                                      textScheme.titleMedium,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                16,
-                                                4,
-                                                16,
-                                                12,
-                                              ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Last Updated : [1]',
-                                                style: GoogleFonts.lexendDeca(
-                                                  textStyle:
-                                                      textScheme.bodyMedium,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  left: 12,
-                                                ),
-                                                child: Text(
-                                                  'Price Per Night',
-                                                  style: GoogleFonts.lexendDeca(
-                                                    textStyle:
-                                                        textScheme.bodyMedium,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: colorScheme.primaryBackground,
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                            0,
-                            8,
-                            0,
-                            0,
-                          ),
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            primary: false,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: 4,
-                            // 데이터로 수정
-                            itemBuilder: (context, listViewIndex) {
-                              return Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                  16,
-                                  0,
-                                  16,
-                                  12,
-                                ),
-                                child: Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: colorScheme.secondaryBackground,
-                                    boxShadow: [
-                                      const BoxShadow(
-                                        color: Color(0x32000000),
-                                        blurRadius: 4,
-                                        offset: Offset(0.0, 2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () {
-                                      // mytrips detail 이동.
-                                      context.push('/trip_details');
-                                    },
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                                  bottomLeft: Radius.circular(
-                                                    0,
-                                                  ),
-                                                  bottomRight: Radius.circular(
-                                                    0,
-                                                  ),
-                                                  topLeft: Radius.circular(8),
-                                                  topRight: Radius.circular(8),
-                                                ),
-                                            child: CachedNetworkImage(
-                                              fadeInDuration: const Duration(
-                                                milliseconds: 500,
-                                              ),
-                                              fadeOutDuration: const Duration(
-                                                milliseconds: 500,
-                                              ),
-                                              imageUrl:
-                                                  'https://picsum.photos/id/238/200/200.jpg',
-                                              width: double.infinity,
-                                              height: 140,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                          child: ListView.builder(
+                                            padding: EdgeInsets.zero,
+                                            primary: false,
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            itemCount: propertiesIsLive.length,
+                                            // 데이터로 수정
+                                            itemBuilder: (context, index) {
+                                              final property =
+                                                  propertiesIsLive[index];
+                                              final DateFormat
+                                              desiredFormatter = DateFormat(
+                                                'yyyy-MM-dd',
+                                              );
+                                              DateTime lastUpdatedTime =
+                                                  DateTime.parse(
+                                                    property.lastUpdated!,
+                                                  );
+                                              String lastUpdated =
+                                                  desiredFormatter.format(
+                                                    lastUpdatedTime,
+                                                  );
 
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                16,
-                                                12,
-                                                16,
-                                                8,
-                                              ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Text(
-                                                '[MMMEd]',
-                                                style: GoogleFonts.urbanist(
-                                                  textStyle:
-                                                      textScheme.headlineSmall,
-                                                ),
-                                              ),
-                                              Text(
-                                                ' - ',
-                                                style: GoogleFonts.urbanist(
-                                                  textStyle:
-                                                      textScheme.headlineSmall,
-                                                ),
-                                              ),
-                                              Text(
-                                                '[MMMEd]',
-                                                style: GoogleFonts.urbanist(
-                                                  textStyle:
-                                                      textScheme.headlineSmall,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                16,
-                                                0,
-                                                16,
-                                                0,
-                                              ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  right: 12,
-                                                ),
-                                                child: Text(
-                                                  '[propertyAddress]',
-                                                  style: GoogleFonts.lexendDeca(
-                                                    textStyle: textScheme
-                                                        .bodySmall
-                                                        ?.copyWith(
-                                                          color: colorScheme
-                                                              .grayIcon,
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsetsDirectional.fromSTEB(
+                                                      16,
+                                                      0,
+                                                      16,
+                                                      12,
+                                                    ),
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    color: colorScheme
+                                                        .secondaryBackground,
+                                                    boxShadow: [
+                                                      const BoxShadow(
+                                                        color: Color(
+                                                          0x32000000,
+                                                        ),
+                                                        blurRadius: 4,
+                                                        offset: Offset(0.0, 2),
+                                                      ),
+                                                    ],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          8,
                                                         ),
                                                   ),
-                                                ),
-                                              ),
-                                              Text(
-                                                '[\$1,234.56]',
-                                                style: GoogleFonts.urbanist(
-                                                  textStyle:
-                                                      textScheme.titleMedium,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                16,
-                                                4,
-                                                16,
-                                                12,
-                                              ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Last Updated : [1]',
-                                                style: GoogleFonts.lexendDeca(
-                                                  textStyle:
-                                                      textScheme.bodyMedium,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  left: 12,
-                                                ),
-                                                child: Text(
-                                                  'Price Per Night',
-                                                  style: GoogleFonts.lexendDeca(
-                                                    textStyle:
-                                                        textScheme.bodyMedium,
+                                                  child: InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
+                                                    onTap: () {
+                                                      // mytrips detail 이동.
+                                                      context.push(
+                                                        '/trip_details?kind=profile_property&propertyId=${property.propertyId}&mode=edit',
+                                                      );
+                                                    },
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius: const BorderRadius.only(
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                  0,
+                                                                ),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                  0,
+                                                                ),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                  8,
+                                                                ),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                  8,
+                                                                ),
+                                                          ),
+                                                          child:
+                                                              property.mainImage !=
+                                                                      null &&
+                                                                  property
+                                                                      .mainImage!
+                                                                      .startsWith(
+                                                                        'data:image',
+                                                                      )
+                                                              ? Image.memory(
+                                                                  base64Decode(
+                                                                    property
+                                                                        .mainImage!
+                                                                        .split(
+                                                                          ',',
+                                                                        )
+                                                                        .last,
+                                                                  ),
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: 140,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )
+                                                              : CachedNetworkImage(
+                                                                  fadeInDuration:
+                                                                      const Duration(
+                                                                        milliseconds:
+                                                                            500,
+                                                                      ),
+                                                                  fadeOutDuration:
+                                                                      const Duration(
+                                                                        milliseconds:
+                                                                            500,
+                                                                      ),
+                                                                  imageUrl:
+                                                                      property
+                                                                          .mainImage ??
+                                                                      'https://picsum.photos/id/238/200/200.jpg',
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: 140,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                16,
+                                                                12,
+                                                                16,
+                                                                8,
+                                                              ),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: [
+                                                              Text(
+                                                                property
+                                                                    .propertyName!,
+                                                                style: GoogleFonts.urbanist(
+                                                                  textStyle:
+                                                                      textScheme
+                                                                          .headlineSmall,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                16,
+                                                                0,
+                                                                16,
+                                                                0,
+                                                              ),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Expanded(
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets.only(
+                                                                        right:
+                                                                            12,
+                                                                      ),
+                                                                  child: Text(
+                                                                    property
+                                                                        .propertyAddress!,
+                                                                    style: GoogleFonts.lexendDeca(
+                                                                      textStyle: textScheme
+                                                                          .bodySmall
+                                                                          ?.copyWith(
+                                                                            color:
+                                                                                colorScheme.grayIcon,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                AppConstants.formatPrice(
+                                                                  property
+                                                                      .price,
+                                                                  locale:
+                                                                      'en_US',
+                                                                  symbol: '\$ ',
+                                                                ),
+                                                                style: GoogleFonts.urbanist(
+                                                                  textStyle:
+                                                                      textScheme
+                                                                          .titleMedium,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                16,
+                                                                4,
+                                                                16,
+                                                                12,
+                                                              ),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Expanded(
+                                                                child: Text(
+                                                                  'Last Updated : $lastUpdated',
+                                                                  style: GoogleFonts.lexendDeca(
+                                                                    textStyle:
+                                                                        textScheme
+                                                                            .bodyMedium,
+                                                                    fontSize:
+                                                                        12,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets.only(
+                                                                      left: 12,
+                                                                    ),
+                                                                child: Text(
+                                                                  'Price Per Night',
+                                                                  style: GoogleFonts.lexendDeca(
+                                                                    textStyle:
+                                                                        textScheme
+                                                                            .bodyMedium,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              );
+                                            },
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        color: colorScheme.primaryBackground,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                0,
+                                                8,
+                                                0,
+                                                0,
+                                              ),
+                                          child: ListView.builder(
+                                            padding: EdgeInsets.zero,
+                                            primary: false,
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            itemCount:
+                                                propertiesUnIsLive.length,
+                                            // 데이터로 수정
+                                            itemBuilder: (context, index) {
+                                              final property =
+                                                  propertiesUnIsLive[index];
+                                              final DateFormat
+                                              desiredFormatter = DateFormat(
+                                                'yyyy-MM-dd',
+                                              );
+                                              DateTime lastUpdatedTime =
+                                                  DateTime.parse(
+                                                    property.lastUpdated!,
+                                                  );
+                                              String lastUpdated =
+                                                  desiredFormatter.format(
+                                                    lastUpdatedTime,
+                                                  );
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsetsDirectional.fromSTEB(
+                                                      16,
+                                                      0,
+                                                      16,
+                                                      12,
+                                                    ),
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    color: colorScheme
+                                                        .secondaryBackground,
+                                                    boxShadow: [
+                                                      const BoxShadow(
+                                                        color: Color(
+                                                          0x32000000,
+                                                        ),
+                                                        blurRadius: 4,
+                                                        offset: Offset(0.0, 2),
+                                                      ),
+                                                    ],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          8,
+                                                        ),
+                                                  ),
+                                                  child: InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
+                                                    onTap: () {
+                                                      // mytrips detail 이동.
+                                                      context.push(
+                                                        '/trip_details?kind=profile_property&propertyId=${property.propertyId}&mode=edit',
+                                                      );
+                                                    },
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius: const BorderRadius.only(
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                  0,
+                                                                ),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                  0,
+                                                                ),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                  8,
+                                                                ),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                  8,
+                                                                ),
+                                                          ),
+                                                          child:
+                                                              property.mainImage !=
+                                                                      null &&
+                                                                  property
+                                                                      .mainImage!
+                                                                      .startsWith(
+                                                                        'data:image',
+                                                                      )
+                                                              ? Image.memory(
+                                                                  base64Decode(
+                                                                    property
+                                                                        .mainImage!
+                                                                        .split(
+                                                                          ',',
+                                                                        )
+                                                                        .last,
+                                                                  ),
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: 140,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )
+                                                              : CachedNetworkImage(
+                                                                  fadeInDuration:
+                                                                      const Duration(
+                                                                        milliseconds:
+                                                                            500,
+                                                                      ),
+                                                                  fadeOutDuration:
+                                                                      const Duration(
+                                                                        milliseconds:
+                                                                            500,
+                                                                      ),
+                                                                  imageUrl:
+                                                                      property
+                                                                          .mainImage ??
+                                                                      'https://picsum.photos/id/238/200/200.jpg',
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: 140,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                        ),
+
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                16,
+                                                                12,
+                                                                16,
+                                                                8,
+                                                              ),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: [
+                                                              Expanded(
+                                                                child: Text(
+                                                                  property
+                                                                      .propertyName!,
+                                                                  style: GoogleFonts.urbanist(
+                                                                    textStyle:
+                                                                        textScheme
+                                                                            .headlineSmall,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                16,
+                                                                0,
+                                                                16,
+                                                                0,
+                                                              ),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Expanded(
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets.only(
+                                                                        right:
+                                                                            12,
+                                                                      ),
+                                                                  child: Text(
+                                                                    property
+                                                                        .propertyAddress!,
+                                                                    style: GoogleFonts.lexendDeca(
+                                                                      textStyle: textScheme
+                                                                          .bodySmall
+                                                                          ?.copyWith(
+                                                                            color:
+                                                                                colorScheme.grayIcon,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                AppConstants.formatPrice(
+                                                                  property
+                                                                      .price,
+                                                                  locale:
+                                                                      'en_US',
+                                                                  symbol: '\$ ',
+                                                                ),
+                                                                style: GoogleFonts.urbanist(
+                                                                  textStyle:
+                                                                      textScheme
+                                                                          .titleMedium,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                16,
+                                                                4,
+                                                                16,
+                                                                12,
+                                                              ),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                'Last Updated : $lastUpdated',
+                                                                style: GoogleFonts.lexendDeca(
+                                                                  textStyle:
+                                                                      textScheme
+                                                                          .bodyMedium,
+                                                                  fontSize: 12,
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets.only(
+                                                                      left: 12,
+                                                                    ),
+                                                                child: Text(
+                                                                  'Price Per Night',
+                                                                  style: GoogleFonts.lexendDeca(
+                                                                    textStyle:
+                                                                        textScheme
+                                                                            .bodyMedium,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),

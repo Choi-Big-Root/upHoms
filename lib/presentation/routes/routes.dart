@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import '../../domain/model/property/property_model.dart';
 import '../bloc/user/user_bloc.bloc.dart';
 import '../home/home_page.dart';
 import '../my_trips/my_trips_page.dart';
@@ -134,11 +135,13 @@ final GoRouter router = GoRouter(
         final kind = state.uri.queryParameters['kind'];
         final searchText = state.uri.queryParameters['searchText'];
         final tripId = state.uri.queryParameters['tripId'];
+        final mode = state.uri.queryParameters['mode'];
         return TripDetailsWidget(
           propertyId: propertyId,
           kind: kind,
           searchText: searchText ?? '',
           tripId: tripId ?? '',
+          mode: mode ?? '',
         );
       },
     ),
@@ -172,7 +175,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.propertyEditorWrapper,
       name: 'property_editor_wrapper',
-      builder: (context, state) => const PropertyEditorWrapper(),
+      builder: (context, state) {
+        final PropertyModel? property = state.extra as PropertyModel?;
+        return  PropertyEditorWrapper(property:property );
+      }
     ),
     GoRoute(
       path: RoutePath.propertyStep1Widget,
@@ -182,12 +188,18 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.propertyStep2Widget,
       name: 'property_step2_widget',
-      builder: (context, state) => const PropertyStep2Widget(),
+      builder: (context, state) {
+        final PropertyModel? property = state.extra as PropertyModel?;
+        return  PropertyStep2Widget(property:property );
+      },
     ),
     GoRoute(
       path: RoutePath.propertyStep3Widget,
       name: 'property_step3_widget',
-      builder: (context, state) => const PropertyStep3Widget(),
+      builder: (context, state) {
+        final PropertyModel? property = state.extra as PropertyModel?;
+        return  PropertyStep3Widget(property:property );
+      },
     ),
   ],
 );

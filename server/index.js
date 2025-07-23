@@ -452,7 +452,7 @@ app.post('/add_property', (req, res) => {
             ...newPropertyRequest,
             propertyId: newPropertyId,
             createdTime: new Date().toISOString(),
-            lastUpdated: new Date().toISOString()
+            lastUpdated: new Date().toISOString(),
         };
 
         properties.push(newProperty);
@@ -684,6 +684,78 @@ app.post('/get_property', (req, res) => {
         console.error('SERVER ERROR during /get_property data retrieval:', err);
         return res.status(500).send('SERVER ERROR while processing property data for single retrieval.');
     });
+});
+app.post('/update_property', (req, res) => {
+    let updatePropertyRequest = req.body;
+
+    // JSON 형식 검증 및 파싱 (plain text로 오는 경우 대비)
+    if (typeof updatePropertyRequest === 'string') {
+        try {
+            updatePropertyRequest = JSON.parse(updatePropertyRequest);
+        } catch (e) {
+            console.error('Error parsing updatePropertyRequest as JSON string:', e);
+            return res.status(400).send('Invalid JSON format for property update. (If sending as plain text, it must be valid JSON)');
+        }
+    }
+
+    // 필수 필드 유효성 검사: propertyId는 반드시 존재해야 합니다.
+    if (updatePropertyRequest.propertyId === undefined || updatePropertyRequest.propertyId === null) {
+        return res.status(400).send('Property ID is required for update.');
+    }
+
+    const requestedPropertyId = parseInt(updatePropertyRequest.propertyId);
+    if (isNaN(requestedPropertyId)) {
+        console.error('Invalid propertyId in request body for /update_property:', updatePropertyRequest.propertyId);
+        return res.status(400).send('Valid Property ID is required for update.');
+    }
+
+    // properties.json 파일 읽기
+    fs.promises.readFile(PROPERTIES_FILE, 'utf8')
+        .then(propertiesData => {
+            let properties = [];
+            try {
+                properties = JSON.parse(propertiesData);
+            } catch (parseErr) {
+                console.error('Error parsing properties.json for /update_property:', parseErr);
+                return res.status(500).send('Property data is corrupted or malformed.');
+            }
+
+            // 요청된 propertyId에 해당하는 부동산을 찾음
+            const propertyIndex = properties.findIndex(p => parseInt(p.propertyId) === requestedPropertyId);
+
+            if (propertyIndex === -1) {
+                console.log(`Property with ID ${requestedPropertyId} not found for update.`);
+                return res.status(404).send(`Property with ID ${requestedPropertyId} not found.`);
+            }
+
+            // 기존 부동산 정보에 전달된 필드만 업데이트
+            // 클라이언트에서 보낸 필드만 반영하고, 보내지 않은 필드는 기존 값을 유지합니다.
+            const currentProperty = properties[propertyIndex];
+            const updatedProperty = {
+                ...currentProperty, // 기존 모든 필드 복사
+                ...updatePropertyRequest, // 요청에서 온 필드로 덮어쓰기
+                propertyId: requestedPropertyId, // 혹시 모를 변경 방지 (id는 유지)
+                lastUpdated: new Date().toISOString() // 마지막 업데이트 시간 기록
+            };
+
+            properties[propertyIndex] = updatedProperty; // 배열 내 부동산 정보 업데이트
+
+            // properties.json 파일에 저장
+            return fs.promises.writeFile(PROPERTIES_FILE, JSON.stringify(properties, null, 2))
+                .then(() => {
+                    console.log(`Successfully updated property with ID: ${requestedPropertyId}.`);
+                    res.status(200).json(updatedProperty); // 업데이트된 PropertyDto 반환
+                });
+        })
+        .catch(err => {
+            // properties.json 파일 자체가 없거나 읽기 오류 발생 시
+            if (err.code === 'ENOENT') {
+                console.log('properties.json not found for /update_property, no properties to update.');
+                return res.status(404).send('No property data file found.');
+            }
+            console.error('SERVER ERROR during /update_property data retrieval or update:', err);
+            return res.status(500).send('SERVER ERROR while processing property update.');
+        });
 });
 
 

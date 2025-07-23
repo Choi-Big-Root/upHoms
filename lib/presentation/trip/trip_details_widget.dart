@@ -15,6 +15,7 @@ import '../bloc/property/property_bloc.bloc.dart';
 import '../bloc/review/review_bloc.bloc.dart';
 import '../bloc/trip/trip_bloc.bloc.dart';
 import '../common_widgets/rating_bar_widget.dart';
+import '../routes/route_path.dart';
 
 class TripDetailsWidget extends StatefulWidget {
   const TripDetailsWidget({
@@ -23,12 +24,14 @@ class TripDetailsWidget extends StatefulWidget {
     required this.kind,
     this.searchText,
     this.tripId,
+    this.mode,
   });
 
   final Map<String, dynamic> propertyId;
   final String? kind;
   final String? searchText;
   final String? tripId;
+  final String? mode;
 
   @override
   State<TripDetailsWidget> createState() => _TripDetailsWidgetState();
@@ -58,7 +61,7 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (result, data) {
-        if (widget.kind == 'home') {
+        if (widget.kind == 'home' || widget.kind== 'profile_property') {
           context.read<PropertyBloc>().add(const LoadProperties());
         } else if (widget.kind == 'search') {
           context.read<PropertyBloc>().add(
@@ -887,7 +890,11 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                context.push('/trip_book_now');
+                                widget.mode != 'edit'?
+                                context.push('/trip_book_now') : context.push(
+                                  RoutePath.propertyEditorWrapper, // 정의된 경로
+                                  extra: property,
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(130, 50),
@@ -897,7 +904,7 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
                                   0,
                                   0,
                                 ),
-                                backgroundColor: colorScheme.primary,
+                                backgroundColor: widget.mode != 'edit' ? colorScheme.primary : colorScheme.secondary,
                                 elevation: 3,
                                 side: const BorderSide(
                                   color: Colors.transparent,
@@ -908,7 +915,7 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
                                 ),
                               ),
                               child: Text(
-                                'Book Now',
+                                widget.mode != 'edit'?'Book Now':'Edit Property',
                                 style: GoogleFonts.lexendDeca(
                                   textStyle: textScheme.titleSmall?.copyWith(
                                     fontWeight: CustomFontWeight.medium,

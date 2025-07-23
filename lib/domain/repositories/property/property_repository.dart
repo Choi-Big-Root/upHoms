@@ -5,4 +5,5 @@ abstract class PropertyRepository{
   Future<List<PropertyModel>> getAllProperties(); // 추가
   Future<List<PropertyModel>> getSearchProperties(Map<String, dynamic> searchText);
   Future<PropertyModel> getProperty(Map<String, dynamic> propertyId);
+  Future<void> updateProperty( PropertyModel property);
 }
