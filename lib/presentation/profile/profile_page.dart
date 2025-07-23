@@ -450,13 +450,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 },
                                 tripCount: propertiesWithUser.length,
                               ),
-                              // ProfileRoutesInkwellWidget(
-                              //   title: 'My Bookings',
-                              //   isFirstRow: false,
-                              //   onTapAction: () {
-                              //     context.push('/profile_my_bookings');
-                              //   },
-                              // ),
+                              ProfileRoutesInkwellWidget(
+                                title: 'My Bookings',
+                                isFirstRow: false,
+                                onTapAction: () {
+                                  context.push('/profile_my_bookings');
+                                },
+                              ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 20),
                                 child: ElevatedButton(

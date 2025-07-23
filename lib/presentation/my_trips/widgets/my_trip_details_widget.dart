@@ -72,6 +72,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
           listener: (context, state) {
             state.maybeWhen(
               orElse: () => const SizedBox.shrink(),
+              loading: (){},
               addReviewSuccess: () {
                 context.read<MessageCubit>().showSuccessMessage('리뷰 등록 완료!');
                 context.go('/my_trips');
@@ -83,6 +84,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
           listener: (context, state) {
             state.maybeWhen(
               orElse: () => const SizedBox.shrink(),
+              loading: (){},
               cancelTripSuccess: (data) {
                 context.read<MessageCubit>().showSuccessMessage('예약 취소 완료');
                 context.go('/my_trips');

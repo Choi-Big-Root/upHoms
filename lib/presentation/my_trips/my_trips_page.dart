@@ -18,7 +18,6 @@ import '../bloc/review/review_bloc.bloc.dart';
 import '../bloc/trip/trip_bloc.bloc.dart';
 import '../common_widgets/review_trip_widget.dart';
 import '../cubit/message_cubit.dart';
-import '../routes/routes.dart';
 
 class MyTripsPage extends StatefulWidget {
   const MyTripsPage({super.key, required this.userId});
