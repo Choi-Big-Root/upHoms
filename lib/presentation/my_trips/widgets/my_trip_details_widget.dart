@@ -70,111 +70,110 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
         BlocListener<ReviewBloc, ReviewState>(
           listener: (context, state) {
             state.maybeWhen(
-             orElse: () => const SizedBox.shrink(),
-              addReviewSuccess: (){
-               logger.d('오냐?');
-               context.read<MessageCubit>().showSuccessMessage(
-                 '리뷰 등록 완료!',
-               );
-               context.go('/my_trips');
-              }
+              orElse: () => const SizedBox.shrink(),
+              addReviewSuccess: () {
+                context.read<MessageCubit>().showSuccessMessage('리뷰 등록 완료!');
+                context.go('/my_trips');
+              },
             );
           },
         ),
       ],
-      child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (result, data) {
-          logger.d('test');
-          context.go('/my_trips');
-        },
-        child: Scaffold(
-          backgroundColor: colorScheme.secondaryBackground,
-          appBar: AppBar(
-            backgroundColor: colorScheme.secondaryBackground,
-            automaticallyImplyLeading: false,
-            leading: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: IconButton(
-                onPressed: () {
-                  context.go('/my_trips');
-                  logger.d('test2');
-                  //context.pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: Colors.black,
-                  size: 30,
-                ),
-              ),
-            ),
-            title: Text(
-              'Trip Details',
-              style: GoogleFonts.urbanist(
-                textStyle: textScheme.titleMedium?.copyWith(
-                  color: colorScheme.secondaryText,
-                ),
-              ),
-            ),
-            actions: [
-              Visibility(
-                //visible: , //예약이 완료됬을 경우에만 [true/false] 분리.
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.transparent, width: 1),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: IconButton(
-                    onPressed: () async {
-                      await showModalBottomSheet(
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        barrierColor: const Color(0xB314181B),
-                        context: context,
-                        builder: (context) {
-                          return Padding(
-                            padding: MediaQuery.viewInsetsOf(context),
-                            child: const SizedBox(
-                              height: 450,
-                              child: CancelTripWidget(tripDetails: true),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    icon: Icon(
-                      Icons.more_vert_outlined,
-                      color: colorScheme.secondaryText,
-                      size: 30,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-            centerTitle: false,
-            elevation: 0,
-          ),
-          body: BlocBuilder<TripBloc, TripState>(
-            builder: (context, state) {
-              return state.maybeWhen(
-                orElse: () => const SizedBox.shrink(),
-                getTripSuccess: (trip) {
-                  final DateFormat desiredFormatter = DateFormat('yyyy-MM-dd');
-                  DateTime dateTimeBegin = DateTime.parse(trip.tripBeginDate!);
-                  DateTime dateTimeEnd = DateTime.parse(trip.tripEndDate!);
-                  String tripBeginDate = desiredFormatter.format(dateTimeBegin);
-                  String tripEndDate = desiredFormatter.format(dateTimeEnd);
-                  final taxes = trip.tripTotal! * trip.property!.taxRate! / 100;
+      child: BlocBuilder<TripBloc, TripState>(
+        builder: (context, state) {
+          return state.maybeWhen(
+            orElse: () => const SizedBox.shrink(),
+            getTripSuccess: (trip) {
+              final DateFormat desiredFormatter = DateFormat('yyyy-MM-dd');
+              DateTime dateTimeBegin = DateTime.parse(trip.tripBeginDate!);
+              DateTime dateTimeEnd = DateTime.parse(trip.tripEndDate!);
+              String tripBeginDate = desiredFormatter.format(dateTimeBegin);
+              String tripEndDate = desiredFormatter.format(dateTimeEnd);
+              final taxes = trip.tripTotal! * trip.property!.taxRate! / 100;
 
-                  logger.d(taxes);
-                  return Column(
+              logger.d(taxes);
+              return PopScope(
+                canPop: false,
+                onPopInvokedWithResult: (result, data) {
+                  context.go('/my_trips');
+                },
+                child: Scaffold(
+                  backgroundColor: colorScheme.secondaryBackground,
+                  appBar: AppBar(
+                    backgroundColor: colorScheme.secondaryBackground,
+                    automaticallyImplyLeading: false,
+                    leading: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.transparent, width: 1),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          context.go('/my_trips');
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back_rounded,
+                          color: Colors.black,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      'Trip Details',
+                      style: GoogleFonts.urbanist(
+                        textStyle: textScheme.titleMedium?.copyWith(
+                          color: colorScheme.secondaryText,
+                        ),
+                      ),
+                    ),
+                    actions: [
+                      Visibility(
+                        //visible: , //예약이 완료됬을 경우에만 [true/false] 분리.
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: (!trip.cancelTrip! && !trip.rated!) ? IconButton(
+                            onPressed: () async {
+                              await showModalBottomSheet(
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                barrierColor: const Color(0xB314181B),
+                                context: context,
+                                builder: (context) {
+                                  return Padding(
+                                    padding: MediaQuery.viewInsetsOf(context),
+                                    child: const SizedBox(
+                                      height: 450,
+                                      child: CancelTripWidget(
+                                        tripDetails: true,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              Icons.more_vert_outlined,
+                              color: colorScheme.secondaryText,
+                              size: 30,
+                            ),
+                          ):const SizedBox.shrink(),
+                        ),
+                      ),
+                    ],
+                    centerTitle: false,
+                    elevation: 0,
+                  ),
+                  body: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
@@ -643,7 +642,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                       ],
                                     ),
                                   ),
-                                  Column(
+                                  !trip.rated! ? Column(
                                     mainAxisSize: MainAxisSize.max,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -744,7 +743,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                         ),
                                       ),
                                     ],
-                                  ),
+                                  ):const SizedBox.shrink(),
                                 ],
                               ),
                             ],
@@ -883,12 +882,12 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                         ),
                       ),
                     ],
-                  );
-                },
+                  ),
+                ),
               );
             },
-          ),
-        ),
+          );
+        },
       ),
     );
   }

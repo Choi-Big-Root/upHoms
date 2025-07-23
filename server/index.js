@@ -621,15 +621,13 @@ app.post('/add_review', (req, res) => {
                 const tripIndex = trips.findIndex(t => parseInt(t.tripId) === requestedTripId);
                 if (tripIndex !== -1) {
                     // 해당 트립의 upcoming을 false, complete를 true로 변경
-                    if (trips[tripIndex].upcoming !== false || trips[tripIndex].complete !== true) {
+
                         trips[tripIndex].upcoming = false;
                         trips[tripIndex].complete = true;
                         trips[tripIndex].rated = true;
                         tripsChanged = true; // 변경 사항 발생
                         console.log(`  - Trip ID ${requestedTripId} status updated to upcoming=false, complete=true due to review submission.`);
-                    } else {
-                        console.log(`  - Trip ID ${requestedTripId} status already updated, no change needed.`);
-                    }
+                    
                 } else {
                     console.warn(`  - Trip ID ${requestedTripId} not found in trips.json. Cannot update its status.`);
                 }
