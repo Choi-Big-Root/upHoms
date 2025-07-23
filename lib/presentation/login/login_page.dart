@@ -58,13 +58,11 @@ class _LoginPageState extends State<LoginPage> {
       body: MultiBlocListener(
         listeners: [
           BlocListener<UserBloc, UserState>(
-            listener: (BuildContext context, UserState state) {
-              state.when(
-                initial: () {},
-                loading: () {
-                  const CircularProgressIndicator();
-                },
-                success: (data) async {
+                      listener: (BuildContext context, UserState state) {
+            state.when(
+              initial: () {},
+              loading: () {},
+              success: (data) async {
                   context.read<MessageCubit>().showSuccessMessage(
                     '로그인 성공 : ${data.displayName}',
                   );

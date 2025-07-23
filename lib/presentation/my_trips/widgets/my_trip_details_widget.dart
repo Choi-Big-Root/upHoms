@@ -92,6 +92,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
         ),
       ],
       child: BlocBuilder<TripBloc, TripState>(
+        buildWhen: (previous, current) => current is GetTripSuccess,
         builder: (context, state) {
           return state.maybeWhen(
             orElse: () => const SizedBox.shrink(),
@@ -315,8 +316,10 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                           trip.property!.mainImage ?? '',
                                         );
                                       },
-                                      child:
-                                          trip.property!.mainImage != null &&
+                                      child:ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(16),
+                                          child:trip.property!.mainImage != null &&
                                               trip.property!.mainImage!
                                                   .startsWith('data:image')
                                           ? Image.memory(
@@ -350,7 +353,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                                   0.9,
                                               height: 140,
                                               fit: BoxFit.cover,
-                                            ),
+                                            ),),
                                     ),
                                   ],
                                 ),

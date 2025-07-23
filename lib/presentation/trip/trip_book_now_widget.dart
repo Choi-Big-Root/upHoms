@@ -17,7 +17,7 @@ import '../../domain/model/trip/trip_model.dart';
 import '../../domain/model/user/user_model.dart';
 import '../bloc/property/property_bloc.bloc.dart';
 import '../bloc/trip/trip_bloc.bloc.dart';
-import '../bloc/user/user_bloc.bloc.dart';
+import '../bloc/user/user_bloc.bloc.dart' hide Success;
 import '../common_widgets/breakfast_selection_grid.dart';
 import '../common_widgets/credit_card_form.dart';
 import '../common_widgets/total_widget.dart';
@@ -169,7 +169,6 @@ class _TripBookNowWidgetState extends State<TripBookNowWidget> {
           listener: (context, state) {
             state.maybeWhen(
               loading: () {
-                const CircularProgressIndicator();
               },
               error: (String message) {
                 CustomSnackBar.showTopSnackBar(
@@ -216,6 +215,7 @@ class _TripBookNowWidgetState extends State<TripBookNowWidget> {
         child: Scaffold(
           backgroundColor: colorScheme.secondaryBackground,
           body: BlocBuilder<PropertyBloc, PropertyState>(
+            buildWhen: (previous, current) => current is PropertyLoaded,
             builder: (context, state) {
               return state.maybeWhen(
                 orElse: () => const SizedBox.shrink(),
@@ -229,6 +229,7 @@ class _TripBookNowWidgetState extends State<TripBookNowWidget> {
                       taxes +
                       (property.cleaningFee ?? 0);
                   return BlocBuilder<UserBloc, UserState>(
+                    buildWhen: (previous, current) => current is Success,
                     builder: (context, state) {
                       return state.maybeWhen(
                         success: (user) {

@@ -63,12 +63,14 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
       ],
-      child: BlocBuilder<UserBloc,UserState>(
-        builder: (context,state) {
+      child: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
           return state.maybeWhen(
             success: (user) {
-              return BlocBuilder<PropertyBloc,PropertyState>(
-                builder: (context,state) {
+              return BlocBuilder<PropertyBloc, PropertyState>(
+                buildWhen: (previous, current) =>
+                    current is PropertiesLoaded,
+                builder: (context, state) {
                   return state.maybeWhen(orElse: ()=>const SizedBox.shrink(),propertiesLoaded: (properties){
                     List<PropertyModel> propertiesWithUser = properties
                         .where((property) => property.user!.uid == user.uid)

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uphoms: Flutter 프로젝트 아키텍처</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 1024px;
+            margin: 20px;
+        }
+        section {
+            background-color: #252526;
+            border: 1px solid #3c3c3c;
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 20px;
+            display: none; /* Initially hide all sections */
+            flex-direction: column;
+            min-height: 550px;
+        }
+        section.active {
+            display: flex; /* Show active section */
+        }
+        h1, h2 {
+            color: #569cd6;
+            border-bottom: 2px solid #569cd6;
+            padding-bottom: 10px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-top: 0;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            background-color: #2d2d2d;
+            margin-bottom: 12px;
+            padding: 15px;
+            border-left: 4px solid #4b39ef;
+            border-radius: 4px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        strong {
+            color: #9cdcfe;
+        }
+        code {
+            font-family: 'Consolas', 'Monaco', 'Menlo', monospace;
+            background-color: #1e1e1e;
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #ce9178;
+        }
+        pre {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 1.1em;
+            color: #d4d4d4;
+            border: 1px solid #3c3c3c;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 1024px;
+            padding: 10px 0;
+        }
+        .nav-button {
+            background-color: #569cd6;
+            color: #ffffff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #408ac9;
+        }
+        .nav-button:disabled {
+            background-color: #3c3c3c;
+            cursor: not-allowed;
+        }
+        .slide-counter {
+            font-size: 1.2em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <section class="active">
+            <h1>Uphoms: Flutter 프로젝트</h1>
+            <p style="text-align: center; font-size: 1.5em; color: #9cdcfe;">아키텍처 및 기술 스택 발표</p>
+        </section>
+
+        <section>
+            <h2>프로젝트 소개</h2>
+            <ul>
+                <li><strong>프로젝트 명:</strong> Uphoms (가제)</li>
+                <li><strong>핵심 기능:</strong> 사용자가 숙소를 검색하고, 상세 정보를 확인하며, 예약 및 리뷰를 남길 수 있는 모바일 애플리케이션입니다.</li>
+                <li><strong>기술 목표:</strong> 안정적인 아키텍처를 기반으로 확장 가능하고 유지보수가 용이한 고품질의 Flutter 앱을 개발하는 것입니다.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>시스템 아키텍처: Clean Architecture</h2>
+            <p>코드를 세 개의 주요 계층으로 분리하여 각 계층이 독립적인 역할을 수행하도록 설계했습니다.</p>
+            <ul>
+                <li><strong>Presentation Layer (UI 및 상태 관리):</strong> 사용자에게 보여지는 화면과 입력을 처리합니다. <code>BLoC 패턴</code>을 사용하여 UI와 비즈니스 로직을 분리했습니다.</li>
+                <li><strong>Domain Layer (핵심 비즈니스 로직):</strong> 앱의 가장 핵심적인 비즈니스 규칙과 데이터 모델(<code>Model</code>), 그리고 각 기능의 동작(<code>UseCase</code>)을 정의합니다. 다른 계층에 의존하지 않습니다.</li>
+                <li><strong>Data Layer (데이터 소스 및 처리):</strong> 외부 데이터(네트워크 API 등)를 가져오고 관리합니다. Domain 계층의 Repository 인터페이스(<code>Repository</code>)를 구현(<code>RepositoryImpl</code>)합니다.</li>
+            </ul>
+            <pre>
+[ Presentation (UI, BLoC) ]
+       ↓
+[   Domain (Models, UseCases, Repositories)   ]
+       ↓
+[    Data (RepositoryImpl, API, DTOs, Mappers)    ]
+            </pre>
+            <p><strong>의존성 규칙:</strong> 모든 의존성은 바깥쪽(Presentation)에서 안쪽(Data)으로만 향합니다. 이 구조 덕분에 각 계층은 독립적으로 테스트하고 수정할 수 있어 유지보수성이 크게 향상됩니다.</p>
+        </section>
+
+        <section>
+            <h2>상태 관리: BLoC 패턴</h2>
+            <p>UI와 비즈니스 로직을 분리하여 코드의 복잡성을 줄이고 테스트 용이성을 높였습니다.</p>
+            <ol>
+                <li><strong>UI:</strong> 사용자의 입력(예: 버튼 클릭)이 발생하면 <code>Event</code>를 생성하여 <code>Bloc</code>에 전달합니다.</li>
+                <li><strong>Bloc:</strong> <code>Event</code>를 수신하면, <code>UseCase</code>를 호출하여 비즈니스 로직을 처리합니다.</li>
+                <li><strong>UseCase:</strong> <code>Repository</code>를 통해 데이터를 요청하고 가공합니다.</li>
+                <li><strong>Bloc:</strong> 처리된 결과를 새로운 <code>State</code>로 만들어 UI에 전달(emit)합니다.</li>
+                <li><strong>UI:</strong> <code>BlocBuilder</code>를 통해 새로운 <code>State</code>를 감지하고, 필요한 부분만 다시 빌드하여 화면을 갱신합니다.</li>
+            </ol>
+            <p><strong>최적화:</strong> <code>buildWhen</code> 속성을 사용하여 불필요한 UI 리빌드를 방지하고, 화면 깜빡임 현상을 해결하여 성능을 최적화했습니다.</p>
+        </section>
+
+        <section>
+            <h2>데이터 모델 관계 (Model Interconnectivity)</h2>
+            <p>데이터 모델들은 독립적이지 않고, 실제 세계의 데이터를 표현하기 위해 서로 유기적으로 연결되어 있습니다. 각 모델은 다른 모델을 포함하여 복합적인 데이터 구조를 형성합니다.</p>
+            <ul>
+                <li>
+                    <strong>PropertyModel (숙소):</strong> 가장 중심이 되는 모델로, 숙소에 대한 모든 정보를 담고 있습니다.
+                    <pre><code>// lib/domain/model/property/property_model.dart
+@freezed
+abstract class PropertyModel with _$PropertyModel {
+  const factory PropertyModel({
+    // ...
+    UserModel? user, // 숙소 주인 정보
+    AmenityModel? amenity, // 편의시설 정보
+    // ...
+  }) = _PropertyModel;
+  // ...
+}</code></pre>
+                </li>
+                <li>
+                    <strong>TripModel (여행):</strong> 사용자의 예약 정보를 나타냅니다.
+                    <pre><code>// lib/domain/model/trip/trip_model.dart
+@freezed
+abstract class TripModel with _$TripModel {
+  const factory TripModel({
+    // ...
+    PropertyModel? property, // 예약된 숙소 정보
+    UserModel? user, // 예약한 사용자 정보
+    UserModel? host, // 숙소 주인 정보
+    // ...
+  }) = _TripModel;
+  // ...
+}</code></pre>
+                </li>
+                 <li>
+                    <strong>ReviewModel (리뷰):</strong> 특정 여행(Trip)에 대한 사용자의 리뷰를 나타냅니다.
+                    <pre><code>// lib/domain/model/review/review_model.dart
+@freezed
+abstract class ReviewModel with _$ReviewModel {
+  const factory ReviewModel({
+    // ...
+    UserModel? user, // 리뷰를 작성한 사용자 정보
+    // ...
+  }) = _ReviewModel;
+  // ...
+}</code></pre>
+                </li>
+                <li>
+                    <strong>UserModel, AmenityModel:</strong> 다른 모델에 포함되어 재사용되는 기본 단위 모델입니다.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>주요 사용 패키지 및 활용법 (1/2)</h2>
+            <ul>
+                <li><strong>상태 관리 및 아키텍처</strong>
+                    <ul>
+                        <li>
+                            <strong>flutter_bloc:</strong> BLoC 패턴을 쉽게 구현하기 위한 핵심 상태 관리 패키지입니다.
+                            <p><strong>사용 전 (setState):</strong> 상태 변화가 복잡해지면 UI 코드와 비즈니스 로직이 섞여 유지보수가 어려워지고, 불필요한 위젯 리빌드로 성능 저하가 발생할 수 있습니다.</p>
+                            <pre><code>// 예시: setState를 사용한 카운터
+class MyCounterWidget extends StatefulWidget {
+  @override
+  _MyCounterWidgetState createState() => _MyCounterWidgetState();
+}
+class _MyCounterWidgetState extends State&lt;MyCounterWidget&gt; {
+  int _counter = 0;
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [Text('Count: $_counter'), ElevatedButton(onPressed: _incrementCounter, child: Text('Increment'))]);
+  }
+}
+</code></pre>
+                            <p><strong>사용 후 (flutter_bloc):</strong> UI와 비즈니스 로직이 명확히 분리되어 코드 가독성과 테스트 용이성이 향상됩니다. <code>BlocBuilder</code>의 <code>buildWhen</code>을 통해 필요한 경우에만 UI를 업데이트하여 성능을 최적화합니다.</p>
+                            <pre><code>// 예시: BLoC를 사용한 카운터
+// lib/presentation/bloc/counter/counter_bloc.dart
+class CounterBloc extends Bloc&lt;CounterEvent, int&gt; {
+  CounterBloc() : super(0) {
+    on&lt;Increment&gt;((event, emit) => emit(state + 1));
+  }
+}
+// lib/presentation/my_page.dart (UI)
+BlocBuilder&lt;CounterBloc, int&gt;(
+  buildWhen: (prev, curr) => prev != curr, // 상태가 변경될 때만 빌드
+  builder: (context, count) {
+    return Text('Count: $count');
+  },
+)
+// 버튼 클릭 시 이벤트 추가
+context.read&lt;CounterBloc&gt;().add(Increment());
+</code></pre>
+                        </li>
+                        <li>
+                            <strong>get_it:</strong> 의존성 주입(DI)을 위한 서비스 로케이터입니다. <code>service_locator.dart</code>에서 Repository, UseCase, Bloc 등을 등록하여 앱 전역에서 쉽게 사용하도록 구성했습니다.
+                            <p><strong>사용 전:</strong> 각 객체를 생성할 때마다 필요한 의존성을 수동으로 전달해야 하므로, 코드의 결합도가 높아지고 변경에 취약해집니다.</p>
+                            <pre><code>// 예시: 수동 의존성 주입
+final UserApiService apiService = UserApiService(Dio());
+final UserRemoteDataSource remoteDataSource = UserRemoteDataSourceImpl(apiService);
+final UserRepository userRepository = UserRepositoryImpl(remoteDataSource);
+final CreateAccountUsecase createAccountUsecase = CreateAccountUsecase(userRepository);
+final UserBloc userBloc = UserBloc(createAccountUsecase: createAccountUsecase, ...);
+// ... 모든 계층의 객체를 수동으로 생성 및 전달
+</code></pre>
+                            <p><strong>사용 후:</strong> <code>GetIt</code>을 통해 의존성을 중앙에서 관리하고 주입하므로, 코드의 결합도가 낮아지고 테스트 및 유지보수가 용이해집니다.</p>
+                            <pre><code>// lib/service_locator.dart
+final locator = GetIt.instance;
+void setupLocator() {
+  locator.registerSingleton&lt;UserApiService&gt;(UserApiService(locator&lt;Dio&gt;()));
+  locator.registerSingleton&lt;UserRemoteDataSource&gt;(UserRemoteDataSourceImpl(locator&lt;UserApiService&gt;()));
+  locator.registerSingleton&lt;UserRepository&gt;(UserRepositoryImpl(locator&lt;UserRemoteDataSource&gt;()));
+  locator.registerSingleton&lt;CreateAccountUsecase&gt;(CreateAccountUsecase(locator&lt;UserRepository&gt;()));
+  locator.registerFactory(() => UserBloc(createUserUsecase: locator&lt;CreateAccountUsecase&gt;(), ...));
+}
+// 앱 실행 시:
+setupLocator();
+// UI에서 사용:
+BlocProvider(create: (_) => locator&lt;UserBloc&gt;(), child: MyWidget());
+</code></pre>
+                        </li>
+                        <li>
+                            <strong>go_router:</strong> URL 기반의 선언형 라우팅을 지원합니다. <code>routes.dart</code>에서 모든 경로를 중앙 관리하며, <code>ShellRoute</code>를 사용해 하단 네비게이션 바가 유지되는 화면 구조를 구현했습니다.
+                            <p><strong>사용 전 (Navigator.push):</strong> 복잡한 라우팅 로직(예: 딥 링크, 중첩 라우팅)을 수동으로 처리해야 하며, URL과 UI 상태 간의 동기화가 어렵습니다.</p>
+                            <pre><code>// 예시: 수동 라우팅
+Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+// 딥 링크 처리 시 복잡한 조건문 필요
+</code></pre>
+                            <p><strong>사용 후:</strong> 모든 라우팅 규칙을 한 곳에서 선언적으로 관리하여 코드 가독성을 높이고, 딥 링크 및 중첩 라우팅 구현을 간소화합니다.</p>
+                            <pre><code>// lib/presentation/routes/routes.dart
+final GoRouter router = GoRouter(
+  initialLocation: '/login',
+  routes: [
+    GoRoute(path: '/login', builder: (context, state) => LoginPage()),
+    ShellRoute(
+      builder: (context, state, child) => MainShell(child: child),
+      routes: [
+        GoRoute(path: '/home', builder: (context, state) => HomePage()),
+        GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
+      ],
+    ),
+  ],
+);
+// UI에서 사용:
+context.go('/home'); // 또는 context.push('/profile_edit');
+</code></pre>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>데이터 모델링</strong>
+                    <ul>
+                        <li>
+                            <strong>freezed:</strong> 불변(Immutable) 데이터 클래스를 간편하게 생성합니다. <code>copyWith</code>, <code>fromJson/toJson</code> 등의 코드를 자동으로 생성하여 데이터의 안정성을 높였습니다.
+                            <p><strong>사용 전:</strong> 데이터 클래스 생성 시 <code>equals</code>, <code>hashCode</code>, <code>toString</code>, <code>copyWith</code>, <code>fromJson/toJson</code> 등 많은 보일러플레이트 코드를 수동으로 작성해야 합니다.</p>
+                            <pre><code>// 예시: Freezed 없이 데이터 클래스 작성
+class User {
+  final String name;
+  final int age;
+  User({required this.name, required this.age});
+  User copyWith({String? name, int? age}) {
+    return User(name: name ?? this.name, age: age ?? this.age);
+  }
+  // equals, hashCode, toString 등 수동 구현 필요
+}
+</code></pre>
+                            <p><strong>사용 후:</strong> <code>@freezed</code> 어노테이션을 사용하여 필요한 코드를 자동으로 생성하므로, 개발자는 핵심 로직에 집중하고 코드의 일관성을 유지할 수 있습니다.</p>
+                            <pre><code>// lib/domain/model/user/user_model.dart
+@freezed
+abstract class UserModel with _$UserModel {
+  const factory UserModel({
+    String? userCity,
+    String? email,
+    // ...
+  }) = _UserModel;
+  factory UserModel.fromJson(Map&lt;String, dynamic&gt; json) => _$UserModelFromJson(json);
+}
+// 빌드 시 자동으로 생성되는 코드:
+// UserModel.copyWith(...), ==, hashCode, toString, fromJson, toJson 등
+</code></pre>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>주요 사용 패키지 및 활용법 (2/2)</h2>
+            <ul>
+                <li><strong>네트워킹</strong>
+                    <ul>
+                        <li>
+                            <strong>dio:</strong> 강력한 Dart HTTP 클라이언트로, 인터셉터, 타임아웃 설정 등 고급 기능을 활용했습니다.
+                            <p><strong>사용 전 (기본 http 패키지):</strong> 요청/응답 인터셉터, 타임아웃, 재시도 로직 등을 직접 구현해야 하며, 에러 처리가 번거로울 수 있습니다.</p>
+                            <pre><code>// 예시: http 패키지 사용
+import 'package:http/http.dart' as http;
+final response = await http.get(Uri.parse('https://api.example.com/data'));
+if (response.statusCode == 200) {
+  // 데이터 처리
+} else {
+  throw Exception('Failed to load data');
+}
+</code></pre>
+                            <p><strong>사용 후:</strong> <code>Dio</code>의 인터셉터 기능을 활용하여 요청/응답 로깅, 토큰 추가, 에러 처리 등을 중앙에서 관리할 수 있어 코드의 중복을 줄이고 안정성을 높입니다.</p>
+                            <pre><code>// lib/service_locator.dart (Dio 설정)
+final dio = Dio();
+dio.options.baseUrl = AppConstants.localServerUrl;
+dio.options.headers['Content-Type'] = 'application/json';
+// dio.interceptors.add(LogInterceptor()); // 로깅 인터셉터 추가 가능
+locator.registerSingleton&lt;Dio&gt;(dio);
+
+// lib/data/remote/user/user_remote_data_source_impl.dart (사용 예시)
+try {
+  final responseDto = await userApiService.getUser(userDto);
+  return UserMapper.toModel(responseDto);
+} on DioException catch (e) {
+  logger.e('Error getting user: ${e.message}');
+  throw Exception('Failed to get user: Network error or timeout');
+}
+</code></pre>
+                        </li>
+                        <li>
+                            <strong>retrofit:</strong> <code>Dio</code>를 기반으로 한 타입-세이프(type-safe) API 클라이언트 생성기입니다. API 호출 코드를 자동으로 생성해주어 생산성을 높였습니다.
+                            <p><strong>사용 전:</strong> 각 API 엔드포인트마다 요청 URL, HTTP 메서드, 헤더, 바디 등을 수동으로 구성하고 응답을 파싱해야 합니다.</p>
+                            <pre><code>// 예시: Retrofit 없이 API 서비스 작성
+class ManualApiService {
+  final Dio _dio;
+  ManualApiService(this._dio);
+  Future&lt;List&lt;PropertyDto&gt;&gt; getAllProperties() async {
+    final response = await _dio.get('/properties');
+    return (response.data as List).map((e) => PropertyDto.fromJson(e)).toList();
+  }
+}
+</code></pre>
+                            <p><strong>사용 후:</strong> 추상 클래스와 어노테이션만으로 API 인터페이스를 정의하면, <code>retrofit_generator</code>가 실제 API 호출 코드를 자동으로 생성하여 개발 시간을 단축하고 휴먼 에러를 줄입니다.
+                            <pre><code>// lib/data/remote/property/property_api_service.dart
+@RestApi()
+abstract class PropertyApiService {
+  factory PropertyApiService(Dio dio, {String baseUrl}) = _PropertyApiService;
+  @GET('/properties')
+  Future&lt;List&lt;PropertyDto&gt;&gt; getAllProperties();
+  @POST('/add_property')
+  Future&lt;void&gt; addProperty(@Body() PropertyDto property);
+}
+// 빌드 시 자동으로 _PropertyApiService 클래스 생성
+</code></pre>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>UI 및 유틸리티</strong>
+                    <ul>
+                        <li>
+                            <strong>cached_network_image:</strong> 네트워크 이미지를 캐싱하여 로딩 속도를 개선하고 데이터 사용량을 줄였습니다.
+                            <p><strong>사용 전:</strong> <code>Image.network</code>를 사용하면 이미지를 매번 네트워크에서 다시 로드하여 데이터 사용량과 로딩 시간이 증가할 수 있습니다.</p>
+                            <pre><code>// 예시: 캐싱 없이 네트워크 이미지 사용
+Image.network('https://example.com/image.jpg', fit: BoxFit.cover);
+</code></pre>
+                            <p><strong>사용 후:</strong> 이미지를 로컬에 캐싱하여 한 번 로드된 이미지는 빠르게 다시 표시되고, 오프라인 환경에서도 접근 가능하게 합니다.</p>
+                            <pre><code>// lib/presentation/home/home_page.dart
+CachedNetworkImage(
+  fadeInDuration: const Duration(milliseconds: 500),
+  fadeOutDuration: const Duration(milliseconds: 500),
+  imageUrl: property.mainImage ?? 'https://picsum.photos/id/238/200/200.jpg',
+  width: double.infinity,
+  height: 190,
+  fit: BoxFit.cover,
+)
+</code></pre>
+                        </li>
+                        <li>
+                            <strong>image_picker:</strong> 갤러리나 카메라에서 이미지를 선택하는 기능을 구현하는 데 사용했습니다. (예: 프로필 사진 변경)
+                            <p><strong>사용 전:</strong> 플랫폼별 네이티브 코드(Android/iOS)를 작성하여 이미지 선택 기능을 구현해야 하므로, 개발 복잡성이 높고 유지보수가 어렵습니다.</p>
+                            <pre><code>// 예시: ImagePicker 없이 이미지 선택 (매우 복잡)
+// Android: Java/Kotlin 코드 작성
+// iOS: Swift/Objective-C 코드 작성
+</code></pre>
+                            <p><strong>사용 후:</strong> 간단한 Dart 코드로 크로스 플랫폼 이미지 선택 기능을 구현할 수 있어 개발 시간을 단축하고 코드의 일관성을 유지합니다.</p>
+                            <pre><code>// lib/presentation/profile/profile_edit.dart
+Future&lt;void&gt; _pickImage(ImageSource source) async {
+  final ImagePicker picker = ImagePicker();
+  final XFile? image = await picker.pickImage(source: source);
+  if (image != null) {
+    // 이미지 처리 로직
+  }
+}
+</code></pre>
+                        </li>
+                        <li>
+                            <strong>intl:</strong> 숫자, 날짜, 통화 등을 지역에 맞게 포맷팅하는 데 사용했습니다. (예: 숙소 가격 표시)
+                            <p><strong>사용 전:</strong> 숫자나 날짜를 특정 형식으로 변환하기 위해 복잡한 문자열 조작이나 조건문을 사용해야 합니다.</p>
+                            <pre><code>// 예시: intl 없이 가격 포맷팅
+String price = '₩' + amount.toStringAsFixed(0); // 통화 기호, 소수점 처리 등 수동
+</code></pre>
+                            <p><strong>사용 후:</strong> 사용자의 로케일(언어 및 지역 설정)에 맞춰 통화, 날짜, 숫자 등을 자동으로 포맷팅하여 다국어 지원 및 사용자 경험을 향상시킵니다.</p>
+                            <pre><code>// lib/core/constants.dart
+class AppConstants {
+  static String formatPrice(dynamic price, {String locale = 'ko_KR', String symbol = '₩'}) {
+    final formatCurrency = NumberFormat.currency(
+      locale: locale,
+      symbol: symbol,
+      decimalDigits: 0,
+    );
+    return formatCurrency.format(price);
+  }
+}
+// UI에서 사용:
+Text(AppConstants.formatPrice(property.price, locale: 'en_US', symbol: '
+'))
+</code></pre>
+                        </li>
+                        <li>
+                            <strong>flutter_dotenv:</strong> <code>.env</code> 파일을 통해 API 키나 서버 URL 같은 민감한 정보를 코드와 분리하여 안전하게 관리했습니다.
+                            <p><strong>사용 전:</strong> API 키나 서버 URL과 같은 민감한 정보가 코드에 직접 노출되어 보안에 취약하고, 개발/운영 환경별 설정 변경이 번거롭습니다.</p>
+                            <pre><code>// 예시: .env 없이 민감 정보 관리
+const String API_BASE_URL = 'https://api.example.com/prod'; // 코드에 직접 노출
+</code></pre>
+                            <p><strong>사용 후:</strong> <code>.env</code> 파일을 사용하여 민감 정보를 코드와 분리하고, 환경 변수를 통해 각 환경에 맞는 설정을 유연하게 적용할 수 있어 보안성과 관리 효율성을 높입니다.</p>
+                            <pre><code>// .env 파일 내용
+LOCAL_SERVER_URL_ANDROID=http://10.0.2.2:3000
+LOCAL_SERVER_URL_IOS=http://localhost:3000
+IMAGE_FOLDER_PATH=/uploads
+
+// lib/core/constants.dart
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+class AppConstants {
+  static final String localServerUrl = Platform.isAndroid
+      ? dotenv.env['LOCAL_SERVER_URL_ANDROID'] ?? ''
+      : dotenv.env['LOCAL_SERVER_URL_IOS'] ?? '';
+  static final String imageFolderPath = '$localServerUrl${dotenv.env['IMAGE_FOLDER_PATH'] ?? ''}';
+}
+// main.dart에서 로드:
+Future&lt;void&gt; main() async {
+  await dotenv.load();
+  // ...
+}
+</code></pre>
+                        </li>
+                        <li>
+                            <strong>logger:</strong> 개발 중 발생하는 이벤트나 상태 변화를 쉽게 추적하고 디버깅하기 위해 사용했습니다.
+                            <p><strong>사용 전:</strong> <code>print()</code> 함수만으로는 로그 레벨(정보, 경고, 에러 등)을 구분하기 어렵고, 대량의 로그를 관리하거나 필터링하기 어렵습니다.</p>
+                            <pre><code>// 예시: print() 함수 사용
+print('User created: $user');
+print('Error: Failed to fetch data');
+</code></pre>
+                            <p><strong>사용 후:</strong> 다양한 로그 레벨(debug, info, warning, error 등)을 지원하여 로그를 체계적으로 관리하고, 개발 중 문제 발생 시 원인을 빠르게 파악할 수 있도록 돕습니다.</p>
+                            <pre><code>// lib/data/remote/user/user_remote_data_source_impl.dart
+import 'package:logger/logger.dart';
+class UserRemoteDataSourceImpl implements UserRemoteDataSource {
+  final logger = Logger();
+  // ...
+  try {
+    // ...
+  } on DioException catch (e) {
+    logger.e('Error creating user: ${e.response?.statusCode} - ${e.response?.data}');
+  } catch (e) {
+    logger.e('Unexpected error creating user: $e');
+  }
+}
+</code></pre>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>결론 및 Q&A</h2>
+            <ul>
+                <li><strong>프로젝트 요약:</strong> 본 프로젝트는 클린 아키텍처와 BLoC 패턴을 중심으로 안정적이고 확장 가능한 구조를 구축했습니다. GoRouter, Retrofit, Freezed 등 검증된 패키지를 적극적으로 활용하여 개발 효율성과 코드 품질을 동시에 높였습니다.</li>
+                <li><strong>주요 성과:</strong> 계층 분리를 통해 각 기능의 독립성을 확보하고, 상태 관리를 체계화하여 예측 가능하고 안정적인 애플리케이션을 만들었습니다.</li>
+                <li><strong>느낀 점 및 배운 점:</strong> (이 부분에 프로젝트를 진행하며 느낀 점을 자유롭게 추가해 보세요.)</li>
+            </ul>
+            <h1 style="margin-top: 50px;">Q & A</h1>
+            <p style="text-align: center; font-size: 1.2em;">질문 있으신가요?</p>
+        </section>
+    </div>
+
+    <div class="navigation">
+        <button id="prevBtn" class="nav-button">이전</button>
+        <span id="slideCounter" class="slide-counter"></span>
+        <button id="nextBtn" class="nav-button">다음</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('section');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function showSlide(n) {
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active');
+                    if (index === n) {
+                        slide.classList.add('active');
+                    }
+                });
+                updateNav();
+            }
+
+            function updateNav() {
+                slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === totalSlides - 1;
+            }
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') {
+                    nextBtn.click();
+                } else if (e.key === 'ArrowLeft') {
+                    prevBtn.click();
+                }
+            });
+
+            showSlide(currentSlide);
+        });
+    </script>
+
+</body>
+</html>

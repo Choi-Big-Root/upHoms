@@ -73,9 +73,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             listener: (BuildContext context, UserState state) {
               state.when(
                 initial: () {},
-                loading: () {
-                  const CircularProgressIndicator();
-                },
+                loading: () {},
                 success: (data) async {
                   context.read<MessageCubit>().showSuccessMessage(
                     '계정이 성공적으로 생성되었습니다!',

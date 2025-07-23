@@ -98,6 +98,7 @@ class _PropertyStep2WidgetState extends State<PropertyStep2Widget> {
         );
       },
       child: BlocBuilder<PropertyBloc, PropertyState>(
+        buildWhen: (previous, current) => current is Editing,
         builder: (context, state) {
           return Scaffold(
             backgroundColor: colorScheme.secondaryBackground,

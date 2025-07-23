@@ -78,6 +78,8 @@ class _TripSearchWidgetState extends State<TripSearchWidget> {
           elevation: 0,
         ),
         body: BlocBuilder<PropertyBloc, PropertyState>(
+            buildWhen: (previous, current) =>
+                current is SearchPropertiesLoaded,
             builder: (context, state) {
               return state.maybeWhen(
                   loading: () => const Center(child: CircularProgressIndicator(),),

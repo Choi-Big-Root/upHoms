@@ -256,9 +256,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             BlocBuilder<PropertyBloc, PropertyState>(
+              buildWhen: (previous, current) {
+                return current is PropertiesLoaded;
+              },
               builder: (context, state) {
                 return state.maybeWhen(
-                  loading: () => const Center(child: CircularProgressIndicator(),),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
                   orElse: () => const SizedBox.shrink(),
                   propertiesLoaded: (properties) {
                     return Padding(

@@ -74,6 +74,7 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
       child: Scaffold(
         backgroundColor: colorScheme.secondaryBackground,
         body: BlocBuilder<PropertyBloc, PropertyState>(
+          buildWhen: (previous, current) => current is PropertyLoaded,
           builder: (context, state) {
             return state.maybeWhen(
               orElse: () => const SizedBox.shrink(),
@@ -534,6 +535,8 @@ class _TripDetailsWidgetState extends State<TripDetailsWidget>
                                         ),
                                       ),
                                       BlocBuilder<ReviewBloc, ReviewState>(
+                                        buildWhen: (previous, current) =>
+                                            current is LoadedReviews,
                                         builder: (context, state) {
                                           return state.maybeWhen(
                                             orElse: () =>

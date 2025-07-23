@@ -57,6 +57,7 @@ class _TripReviewWidgetState extends State<TripReviewWidget> {
         elevation: 0,
       ),
       body: BlocBuilder<ReviewBloc, ReviewState>(
+        buildWhen: (previous, current) => current is LoadedReviews,
         builder: (context, state) {
           return state.maybeWhen(
             orElse: () => const SizedBox.shrink(),

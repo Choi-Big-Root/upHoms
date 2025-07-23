@@ -105,6 +105,7 @@ class _MyTripsPageState extends State<MyTripsPage>
           ),
         ],
         child: BlocBuilder<TripBloc, TripState>(
+          buildWhen: (previous, current) => current is GetTripsWithUserSuccess,
           builder: (context, state) {
             return state.maybeWhen(
               orElse: () => const SizedBox.shrink(),

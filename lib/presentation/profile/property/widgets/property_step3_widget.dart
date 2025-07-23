@@ -135,6 +135,7 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
         ),
       ],
       child: BlocBuilder<UserBloc, UserState>(
+        buildWhen: (previous, current) => current is Success,
         // UserBloc 빌더 추가
         builder: (userContext, userState) {
           UserModel? userModel;
@@ -150,6 +151,7 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
             },
           );
           return BlocBuilder<PropertyBloc, PropertyState>(
+            buildWhen: (previous, current) => current is Editing,
             builder: (context, state) {
               return Scaffold(
                 backgroundColor: colorScheme.secondaryBackground,

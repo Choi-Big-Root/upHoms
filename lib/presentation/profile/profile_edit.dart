@@ -117,9 +117,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           listener: (BuildContext context, UserState state) {
             state.when(
               initial: () {},
-              loading: () {
-                const CircularProgressIndicator();
-              },
+              loading: () {},
               success: (data) async {
                 context.read<MessageCubit>().showSuccessMessage(
                   '사용자 내용 변경 성공!',
@@ -158,6 +156,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         ),
       ],
       child: BlocBuilder<UserBloc, UserState>(
+        buildWhen: (previous, current) => current is Success,
         builder: (context, state) {
           return state.maybeWhen(
             orElse: () => const SizedBox.shrink(),

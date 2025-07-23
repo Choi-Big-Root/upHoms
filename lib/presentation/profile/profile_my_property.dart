@@ -97,11 +97,14 @@ class _ProfileMyPropertyState extends State<ProfileMyProperty>
                   ),
                 ),
                 BlocBuilder<UserBloc, UserState>(
+                  buildWhen: (previous, current) => current is Success,
                   builder: (context, state) {
                     return state.maybeWhen(
                       orElse: () => const SizedBox.shrink(),
                       success: (user) {
                         return BlocBuilder<PropertyBloc, PropertyState>(
+                          buildWhen: (previous, current) =>
+                              current is PropertiesLoaded,
                           builder: (context, state) {
                             return state.maybeWhen(
                               orElse: () => const SizedBox.shrink(),
