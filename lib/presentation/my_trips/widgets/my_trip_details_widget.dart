@@ -131,7 +131,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                     child: IconButton(
                       onPressed: () {
                         if(widget.mode != null){
-                          context.pop();
+                          context.push('/profile_my_bookings?hostId=${trip.hostId}');
                         }else{
                           context.go('/my_trips');
                         }
