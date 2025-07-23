@@ -83,6 +83,7 @@ class _ProfilePaymentEditState extends State<ProfilePaymentEdit> {
                       padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 24),
                       child: ElevatedButton(
                         onPressed: () {
+                          context.pop();
                         },
                         style: ButtonStyle(
                           backgroundColor: WidgetStateProperty.all(colorScheme.turquoise),
