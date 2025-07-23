@@ -155,7 +155,6 @@ class _TripBookNowWidgetState extends State<TripBookNowWidget> {
       complete: false,
       rated: false,
     );
-    logger.d(property.user);
 
     context.read<TripBloc>().add(AddTrip(tripModel));
   }
@@ -195,7 +194,6 @@ class _TripBookNowWidgetState extends State<TripBookNowWidget> {
             state.when(
               initial: () {},
               success: (message, onDismissed) {
-                logger.d(message);
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   CustomSnackBar.showTopSnackBar(
                     context,
@@ -230,7 +228,6 @@ class _TripBookNowWidgetState extends State<TripBookNowWidget> {
                       ((property.price ?? 0) * datesCal) +
                       taxes +
                       (property.cleaningFee ?? 0);
-                  logger.d(taxes);
                   return BlocBuilder<UserBloc, UserState>(
                     builder: (context, state) {
                       return state.maybeWhen(

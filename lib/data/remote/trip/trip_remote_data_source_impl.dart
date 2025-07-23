@@ -59,7 +59,6 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
   Future<List<TripModel>> getTripsWithUser(Map<String, dynamic> userId) async {
     try{
       final tripDtos = await tripApiService.getTripsWithUser(userId);
-      logger.d(tripDtos.toString());
       return tripDtos.map((dto) => TripMapper.toModel(dto)).toList();
     }on DioException catch (e) {
       if (e.response != null) {

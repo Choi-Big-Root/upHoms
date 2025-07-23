@@ -40,6 +40,8 @@ class PropertyBloc extends Bloc<PropertyEvent,PropertyState> {
     try {
       await _addPropertyUsecase(event.propertyModel);
       emit(const PropertyState.success());
+      final properties = await _getAllPropertiesUsecase();
+      emit(PropertyState.propertiesLoaded(properties));
     } catch (e) {
       emit(PropertyState.error(e.toString()));
     }

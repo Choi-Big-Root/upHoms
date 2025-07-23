@@ -61,7 +61,10 @@
     "bio": "123222123asdzczxcasd",
     "isHost": false,
     "numberPropertyList": [
-      8
+      8,
+      9,
+      10,
+      11
     ],
     "numberActiveBookingsList": [],
     "lastUpdated": "2025-07-23T06:10:46.920Z"

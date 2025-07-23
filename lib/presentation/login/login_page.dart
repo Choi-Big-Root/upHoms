@@ -45,7 +45,6 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onPressedLogin() {
     if (_formKey.currentState!.validate()) {
-      logger.d(_saveForm().toString());
       context.read<UserBloc>().add(GetUser(_saveForm()));
     }
   }
@@ -66,7 +65,6 @@ class _LoginPageState extends State<LoginPage> {
                   const CircularProgressIndicator();
                 },
                 success: (data) async {
-                  logger.d(data.toString());
                   context.read<MessageCubit>().showSuccessMessage(
                     '로그인 성공 : ${data.displayName}',
                   );

@@ -108,7 +108,6 @@ class _PropertyStep1WidgetState extends State<PropertyStep1Widget> {
 
   void _onPressedNextStep() {
     if (_formKey.currentState!.validate()) {
-      logger.d(_saveForm().toString());
       context.read<PropertyBloc>().add(EditingProperty(_saveForm()));
       context.push('/property_step2_widget');
     }

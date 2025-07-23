@@ -56,7 +56,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   void _onPressedCreateAccount() {
     if (_formKey.currentState!.validate()) {
-      logger.d(_saveForm().toString());
       context.read<UserBloc>().add(CreateUser(_saveForm()));
     }
   }

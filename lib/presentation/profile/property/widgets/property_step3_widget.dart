@@ -52,7 +52,6 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
   }
 
   void _onPressedSubmit(PropertyModel property, UserModel? user) {
-    //logger.d(_saveProperty(property, user));
     if (_formKey.currentState!.validate()) {
       context.read<PropertyBloc>().add(
         AddProperty(_saveProperty(property, user)),
@@ -99,7 +98,6 @@ class _PropertyStep3WidgetState extends State<PropertyStep3Widget> {
                 context.go('/profile');
               },
               editing: (property) {
-                logger.d(property);
               },
               orElse: () => const SizedBox.shrink(),
             );

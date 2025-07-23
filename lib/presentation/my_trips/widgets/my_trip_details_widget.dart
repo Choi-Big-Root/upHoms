@@ -103,7 +103,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
               String tripEndDate = desiredFormatter.format(dateTimeEnd);
               final taxes = trip.tripTotal! * trip.property!.taxRate! / 100;
 
-              logger.d(taxes);
+
               return PopScope(
                 canPop: false,
                 onPopInvokedWithResult: (result, data) {
@@ -167,7 +167,6 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                       height: 450,
                                       child: CancelTripWidget(
                                         onPressed: (cancelText){
-                                          logger.d(cancelText);
                                           final tripModel = TripModel(
                                             tripId: trip.tripId,
                                             complete: true,
@@ -702,8 +701,6 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                                     height: 450,
                                                     child: ReviewTripWidget(
                                                       onPressed: (rating, reviewText) {
-                                                        logger.d(rating);
-                                                        logger.d(reviewText);
                                                         final review =
                                                             ReviewModel(
                                                               tripId:

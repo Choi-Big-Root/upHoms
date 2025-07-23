@@ -99,7 +99,7 @@ class _ProfileRoutesInkwellWidgetState
                               ),
                               alignment: const AlignmentDirectional(0, 0),
                               child: Text(
-                                '[4]',
+                                widget.tripCount!.toString(),
                                 style: GoogleFonts.urbanist(
                                   textStyle: textScheme.bodyMedium
                                       ?.copyWith(

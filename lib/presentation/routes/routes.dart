@@ -53,12 +53,19 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/my_trips',
           builder: (BuildContext context, GoRouterState state) {
-            return BlocBuilder<UserBloc,UserState>(
-              builder: (context,state) {
+            return BlocBuilder<UserBloc, UserState>(
+              builder: (context, state) {
                 var userId;
-                state.when(initial: (){}, loading: (){}, success: (data){logger.d(data); userId = data.uid.toString();}, error: (msg){});
-                return  MyTripsPage(userId:userId);
-              }
+                state.when(
+                  initial: () {},
+                  loading: () {},
+                  success: (data) {
+                    userId = data.uid.toString();
+                  },
+                  error: (msg) {},
+                );
+                return MyTripsPage(userId: userId);
+              },
             );
           },
         ),
@@ -90,7 +97,7 @@ final GoRouter router = GoRouter(
       path: RoutePath.myTripDetails,
       name: 'my_trip_details',
       builder: (context, state) {
-        final tripId = {'tripId' : state.uri.queryParameters['tripId']};
+        final tripId = {'tripId': state.uri.queryParameters['tripId']};
         return MyTripDetailsWidget(tripId: tripId);
       },
     ),
@@ -99,7 +106,9 @@ final GoRouter router = GoRouter(
       path: RoutePath.tripSearch,
       name: 'trip_search',
       builder: (context, state) {
-        final searchText = {'searchText' : state.uri.queryParameters['searchText']};
+        final searchText = {
+          'searchText': state.uri.queryParameters['searchText'],
+        };
         return TripSearchWidget(searchText: searchText);
       },
     ),
@@ -119,11 +128,18 @@ final GoRouter router = GoRouter(
       path: RoutePath.tripDetails,
       name: 'trip_details',
       builder: (context, state) {
-        final propertyId = {'propertyId' : state.uri.queryParameters['propertyId']};
+        final propertyId = {
+          'propertyId': state.uri.queryParameters['propertyId'],
+        };
         final kind = state.uri.queryParameters['kind'];
         final searchText = state.uri.queryParameters['searchText'];
         final tripId = state.uri.queryParameters['tripId'];
-        return TripDetailsWidget(propertyId : propertyId,kind: kind,searchText: searchText??'', tripId: tripId??'');
+        return TripDetailsWidget(
+          propertyId: propertyId,
+          kind: kind,
+          searchText: searchText ?? '',
+          tripId: tripId ?? '',
+        );
       },
     ),
 

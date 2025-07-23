@@ -773,8 +773,6 @@ class _MyTripsPageState extends State<MyTripsPage>
                                                                       450,
                                                                       child: ReviewTripWidget(
                                                                         onPressed: (rating, reviewText) {
-                                                                          logger.d(rating);
-                                                                          logger.d(reviewText);
                                                                           final review =
                                                                           ReviewModel(
                                                                             tripId:
