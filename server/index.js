@@ -327,6 +327,7 @@ app.post('/user_update', (req, res) => {
         res.status(500).send('SERVER ERROR while processing user update.');
     });
 });
+
 //상품
 app.get('/properties', (req, res) => {
     Promise.all([
@@ -499,7 +500,6 @@ app.post('/add_property', (req, res) => {
         });
     });
 });
-// /property_search: 검색어로 부동산 정보 가져오기
 app.post('/property_search', (req, res) => {
     let searchText;
 
@@ -549,10 +549,12 @@ app.post('/property_search', (req, res) => {
             const propertyCity = property.propertyCity?.toString().toLowerCase() || '';
             const propertyState = property.propertyState?.toString().toLowerCase() || '';
             const propertyNeighborhood = property.propertyNeighborhood?.toString().toLowerCase() || '';
+            const propertyName = property.propertyName?.toString().toLowerCase() || '';
 
             return propertyAddress.includes(searchText) ||
                    propertyCity.includes(searchText) ||
                    propertyState.includes(searchText) ||
+                   propertyName.includes(searchText) ||
                    propertyNeighborhood.includes(searchText);
         });
 
@@ -735,6 +737,7 @@ app.post('/update_property', (req, res) => {
             return res.status(500).send('SERVER ERROR while processing property update.');
         });
 });
+
 //리뷰
 app.post('/get_reviews', (req, res) => {
     let requestedPropertyId;
@@ -902,6 +905,7 @@ app.post('/add_review', (req, res) => {
         res.status(500).send('SERVER ERROR while adding review data or updating trip status.');
     });
 });
+
 //예약
 app.post('/add_trip', (req, res) => {
     let newTripRequest = req.body;

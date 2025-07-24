@@ -827,7 +827,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                         0,
                                       ),
                                   child: Text(
-                                    'Host Info',
+                                    widget.mode==null?'Host Info':'Guest Info',
                                     style: GoogleFonts.lexendDeca(
                                       textStyle: textScheme.bodySmall
                                           ?.copyWith(
@@ -897,7 +897,7 @@ class _MyTripDetailsWidgetState extends State<MyTripDetailsWidget> {
                                               0,
                                             ),
                                         child: Text(
-                                          trip.host!.displayName!,
+                                          widget.mode==null?trip.host!.displayName!:trip.user!.displayName!,
                                           style: GoogleFonts.urbanist(
                                             textStyle: textScheme.titleSmall
                                                 ?.copyWith(
